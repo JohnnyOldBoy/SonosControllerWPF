@@ -31,12 +31,13 @@ namespace SonosController
         {
             if (TracksView.Columns.Count > 0)
             {
-                TracksView.Columns[0].Header = "Track Title";
-                TracksView.Columns[1].Header = "Artist";
-                TracksView.Columns[2].Header = "Genre";
-                TracksView.Columns[3].Header = "Album";
-                TracksView.Columns[4].Visibility = Visibility.Hidden;
+                TracksView.Columns[0].Header = "Track Number";
+                TracksView.Columns[1].Header = "Title";
+                TracksView.Columns[2].Header = "Artist";
+                TracksView.Columns[3].Header = "Genre";
+                TracksView.Columns[4].Header = "Album";
                 TracksView.Columns[5].Visibility = Visibility.Hidden;
+                TracksView.Columns[6].Visibility = Visibility.Hidden;
             }
         }
 
@@ -57,12 +58,14 @@ namespace SonosController
                 AlbumTracksCV = new ListCollectionView(AlbumTracksOC);
                 AlbumTracksCV.SortDescriptions.Add(new SortDescription("TrackNumber", ListSortDirection.Ascending));
                 AlbumTracksView.ItemsSource = AlbumTracksCV;
-                AlbumTracksView.Columns[4].DisplayIndex = 0;
 
                 AlbumTracksView.Columns[0].Header = "Title";
                 AlbumTracksView.Columns[1].Header = "Artist";
                 AlbumTracksView.Columns[2].Header = "Genre";
                 AlbumTracksView.Columns[4].Header = "Track Number";
+
+                AlbumTracksView.Columns[4].DisplayIndex = 0;
+
 
                 AlbumTracksView.Columns[3].Visibility = Visibility.Hidden;
                 AlbumTracksView.Columns[5].Visibility = Visibility.Hidden;
@@ -79,6 +82,10 @@ namespace SonosController
             AlbumsView.Columns[1].Header = "Artist";
             AlbumsView.Columns[2].Visibility = Visibility.Hidden;
             AlbumsView.Columns[3].Visibility = Visibility.Hidden;
+        }
+
+        private void ArtistTreeView_Loaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

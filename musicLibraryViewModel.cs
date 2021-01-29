@@ -3,6 +3,7 @@ using Services;
 using System.Collections.ObjectModel;
 using MusicData;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace SonosController
 {
@@ -14,6 +15,14 @@ namespace SonosController
         {
             get { return musicLibrary; }
             set { musicLibrary = value; }
+        }
+
+        private List<string> _ArtistsList;
+
+        public List<string> ArtistsList 
+        { 
+            get => _ArtistsList; 
+            set => _ArtistsList = value; 
         }
 
         private ObservableCollection<TrackDisplay> _TracksOC;
@@ -62,9 +71,19 @@ namespace SonosController
                 _TracksOC.Add(trackDisplay);
             }
 
+            _ArtistsList = new List<string>();
+            {
+                foreach (Artist artist in artists.ArtistList)
+                {
+                    _ArtistsList.Add(artist.ArtistName);
+                }
+            }
+
             _AlbumsOC = new ObservableCollection<Album>();
+            
             foreach (Album album in albums.AlbumList)
             {
+
                 _AlbumsOC.Add(album);
             }
 
