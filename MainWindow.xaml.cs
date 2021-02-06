@@ -13,7 +13,6 @@ namespace SonosController
     public partial class MainWindow : Window
     {
         private readonly mainWindowViewModel _viewModel;
-        //private ServiceUtils serviceUtils = new ServiceUtils();
 
         public MainWindow()
         {

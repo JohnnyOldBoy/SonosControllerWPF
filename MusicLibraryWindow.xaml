@@ -18,19 +18,62 @@
                     <DataGrid Grid.Column="0" Name="AlbumsView" 
                               ItemsSource="{Binding AlbumsOC}"
                               Grid.IsSharedSizeScope="True" 
-                              IsReadOnly="True" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="AlbumsView_SelectionChanged" Loaded="AlbumsView_Loaded_1">
+                              IsReadOnly="True" 
+                              AutoGenerateColumns="False"
+                              SelectedItem="{Binding SelectedAlbum}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Album" Binding="{Binding AlbumName}"/>
+                            <DataGridTextColumn Header="Artist" Binding="{Binding AlbumArtist}"/>
+                            <DataGridTextColumn Binding="{Binding AlbumUrl}" Visibility="Hidden"/>
+                            <DataGridTextColumn Binding="{Binding AlbumId}" Visibility="Hidden"/>
+                        </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
-                              ItemsSource="{Binding AlbumTracksCV}"
+                              ItemsSource="{Binding TracksCollectionView}"
                               Grid.IsSharedSizeScope="True" 
+                              AutoGenerateColumns="False"
                               IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Track Number" Binding="{Binding Track.TrackNumber}"/>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"/>
+                            <DataGridTextColumn Header="Artist" Binding="{Binding Track.ArtistName}"/>
+                            <DataGridTextColumn Header="Genre" Binding="{Binding Track.Genres}"/>
+                        </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Artists" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5">
-                    <TreeView Name="ArtistTreeView"
-                              ItemsSource="{Binding ArtistsList}" Loaded="ArtistTreeView_Loaded"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TreeView Name="ArtistsTreeView"
+                        ItemsSource="{Binding ArtistsList}" 
+                        SelectedItemChanged="TreeView_SelectedItemChanged">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding AlbumNames}">
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}"/>
+                                    </DataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                                <TextBlock Text="{Binding Artist.ArtistName}"/>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <DataGrid Grid.Column="1" Name="ArtistAlbumTracksView"
+                              ItemsSource="{Binding TracksCollectionView}"
+                              Grid.IsSharedSizeScope="True" 
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Track Number" Binding="{Binding Track.TrackNumber}"/>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"/>
+                            <DataGridTextColumn Header="Artist" Binding="{Binding Track.ArtistName}"/>
+                            <DataGridTextColumn Header="Genre" Binding="{Binding Track.Genres}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Tracks" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -38,8 +81,17 @@
                     <DataGrid Name="TracksView" 
                               ItemsSource="{Binding TracksOC}"
                               Grid.IsSharedSizeScope="True" 
-                              IsReadOnly="True" Loaded="TracksView_Loaded">
+                              IsReadOnly="True" 
+                              AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Track Number" Binding="{Binding Track.TrackNumber}"/>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"/>
+                            <DataGridTextColumn Header="Artist" Binding="{Binding Track.ArtistName}"/>
+                            <DataGridTextColumn Header="Genre" Binding="{Binding Track.Genres}"/>
+                            <DataGridTextColumn Header="Album" Binding="{Binding AlbumName}"/>
+                        </DataGrid.Columns>
                     </DataGrid>
+
                 </Grid>
             </TabItem>
         </TabControl>

@@ -1,11 +1,12 @@
-﻿using Devices;
+﻿using GalaSoft.MvvmLight;
+using Devices;
 using Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace SonosController
 {
-    sealed class mainWindowViewModel : INotifyPropertyChanged
+    sealed class mainWindowViewModel : ViewModelBase
     {
         public ServiceUtils serviceUtils;
 
