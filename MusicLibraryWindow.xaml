@@ -24,8 +24,6 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Album" Binding="{Binding AlbumName}"/>
                             <DataGridTextColumn Header="Artist" Binding="{Binding AlbumArtist}"/>
-                            <DataGridTextColumn Binding="{Binding AlbumUrl}" Visibility="Hidden"/>
-                            <DataGridTextColumn Binding="{Binding AlbumId}" Visibility="Hidden"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
@@ -49,13 +47,12 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TreeView Name="ArtistsTreeView"
-                        ItemsSource="{Binding ArtistsList}" 
-                        SelectedItemChanged="TreeView_SelectedItemChanged">
+                        ItemsSource="{Binding ArtistsListOC}">
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding AlbumNames}">
+                            <HierarchicalDataTemplate ItemsSource="{Binding AlbumNamePairs}">
                                 <HierarchicalDataTemplate.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}"/>
+                                        <TextBlock Text="{Binding AlbumName}"/>
                                     </DataTemplate>
                                 </HierarchicalDataTemplate.ItemTemplate>
                                 <TextBlock Text="{Binding Artist.ArtistName}"/>
@@ -94,7 +91,22 @@
 
                 </Grid>
             </TabItem>
+            <TabItem Header="Genres" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid  Background="#FFE5E5E5">
+                    <ListBox Name="listBox4" VerticalAlignment="Center" HorizontalAlignment="Center" ItemsSource="{Binding ArtistsListOC}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Expander Header="{Binding Artist.ArtistName}" HorizontalAlignment="Left" VerticalAlignment="Top" Name="Expander1" IsExpanded="False">
+                                    <Expander>
+                                        <BindingMode >
+                                            
+                                        </BindingMode></Expander>
+                                </Expander>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
         </TabControl>
-
     </Grid>
 </Window>

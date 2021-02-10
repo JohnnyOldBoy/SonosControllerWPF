@@ -20,10 +20,5 @@ namespace SonosController
             // The DataContext serves as the starting point of Binding Paths
             DataContext = _viewModel;
         }
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            MessageBox.Show(ArtistsTreeView.SelectedItem.ToString());
-        }
     }
 }
