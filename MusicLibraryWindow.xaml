@@ -52,7 +52,7 @@
                             <HierarchicalDataTemplate ItemsSource="{Binding AlbumNamePairs}">
                                 <HierarchicalDataTemplate.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding AlbumName}"/>
+                                        <TextBlock Text="{Binding AlbumName}" />
                                     </DataTemplate>
                                 </HierarchicalDataTemplate.ItemTemplate>
                                 <TextBlock Text="{Binding Artist.ArtistName}"/>
