@@ -79,7 +79,7 @@
                             <HierarchicalDataTemplate ItemsSource="{Binding AlbumNamePairs}"
                                                       DataType="{x:Type viewModels:ArtistViewModel}">
                                 <HierarchicalDataTemplate.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type viewModels:AlbumViewModel}">
+                                    <DataTemplate>
                                         <TextBlock Text="{Binding AlbumName}"/>
                                     </DataTemplate>
                                 </HierarchicalDataTemplate.ItemTemplate>
