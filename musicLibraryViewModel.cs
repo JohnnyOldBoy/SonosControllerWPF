@@ -186,11 +186,7 @@ namespace SonosController
 
             if (e.PropertyName == nameof(SelectedAlbum))
             {
-                AlbumTracksCollectionView.Refresh();
-            }
-            if (e.PropertyName == nameof(SelectedGenre))
-            {
-                GenreTracksCollectionView.Refresh();
+                TracksCollectionView.Refresh();
             }
         }
     }
