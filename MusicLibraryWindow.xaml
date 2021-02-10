@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SonosController"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:musicData="clr-namespace:MusicData;assembly=MusicData"
+        xmlns:services="clr-namespace:Services;assembly=Services"
+        xmlns:services1="clr-namespace:Services"
+        xmlns:viewModels="clr-namespace:SonosControllerWPF.ViewModels"
         mc:Ignorable="d"
-        Title="Music Library" Height="768" Width="1024">
+        Title="Music Library" Height="768" Width="1024"
+        d:DataContext="{d:DesignInstance local:MusicLibraryViewModel}">
     <Grid>
         <TabControl>
             <TabItem Header="Albums">
@@ -16,14 +21,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <DataGrid Grid.Column="0" Name="AlbumsView" 
-                              ItemsSource="{Binding AlbumsOC}"
+                              ItemsSource="{Binding Albums}"
                               Grid.IsSharedSizeScope="True" 
                               IsReadOnly="True" 
                               AutoGenerateColumns="False"
                               SelectedItem="{Binding SelectedAlbum}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Album" Binding="{Binding AlbumName}"/>
-                            <DataGridTextColumn Header="Artist" Binding="{Binding AlbumArtist}"/>
+                            <DataGridTextColumn Header="Artist" Binding="{Binding Album.AlbumArtist}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
@@ -47,11 +52,18 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TreeView Name="ArtistsTreeView"
-                        ItemsSource="{Binding ArtistsListOC}">
+                        ItemsSource="{Binding Artists}">
+                        <TreeView.Resources>
+                            <Style TargetType="TreeViewItem">
+                                <Setter Property="IsSelected"
+                                        Value="{Binding IsSelected}"/>
+                            </Style>
+                        </TreeView.Resources>
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding AlbumNamePairs}">
+                            <HierarchicalDataTemplate ItemsSource="{Binding AlbumNamePairs}"
+                                                      DataType="{x:Type viewModels:ArtistViewModel}">
                                 <HierarchicalDataTemplate.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate DataType="{x:Type viewModels:AlbumViewModel}">
                                         <TextBlock Text="{Binding AlbumName}"/>
                                     </DataTemplate>
                                 </HierarchicalDataTemplate.ItemTemplate>

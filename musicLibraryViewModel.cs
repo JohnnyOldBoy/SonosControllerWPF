@@ -1,148 +1,82 @@
 ﻿using GalaSoft.MvvmLight;
 using MusicData;
 using Services;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
+using SonosController.ViewModels;
+using SonosControllerWPF.ViewModels;
 
 namespace SonosController
 {
-    sealed class musicLibraryViewModel : ViewModelBase
+    sealed class MusicLibraryViewModel : ViewModelBase
     {
-        private MusicLibrary musicLibrary = new MusicLibrary();
+        private MusicLibrary _musicLibrary = new MusicLibrary();
         
-        public MusicLibrary MusicLibrary
+        private AlbumViewModel _selectedAlbum;
+        public AlbumViewModel SelectedAlbum
         {
-            get => musicLibrary; 
-            set => musicLibrary = value;
-        }
-
-        private Album selectedAlbum;
-        public Album SelectedAlbum
-        {
-            get => selectedAlbum;
+            get => _selectedAlbum;
             set
             {
-                selectedAlbum = value;
+                _selectedAlbum = value;
                 RaisePropertyChanged("SelectedAlbum");
 
             }
         }
 
-        private AlbumInfo selectedArtistSelectedAlbum;
-        public AlbumInfo SelectedArtistSelectedAlbum
+        private AlbumViewModel _selectedArtistSelectedAlbum;
+        public AlbumViewModel SelectedArtistSelectedAlbum
         {
-            get => selectedArtistSelectedAlbum;
+            get => _selectedArtistSelectedAlbum;
             set
             {
-                selectedArtistSelectedAlbum = value;
+                _selectedArtistSelectedAlbum = value;
                 RaisePropertyChanged("SelectedArtistAlbum");
 
             }
         }
 
-        private ObservableCollection<ArtistDisplay> _ArtistsListOC;
+        private ObservableCollection<ArtistViewModel> artists;
 
-        public ObservableCollection<ArtistDisplay> ArtistsListOC
-        { 
-            get => _ArtistsListOC;
-            set { _ArtistsListOC = value;
-                RaisePropertyChanged(nameof(ArtistsListOC));
-            }
-        }
+        public ObservableCollection<ArtistViewModel> Artists { get; } = new ObservableCollection<ArtistViewModel>();
 
-        private ObservableCollection<TrackDisplay> _TracksOC;
+        public ObservableCollection<TrackViewModel> Tracks { get; } = new ObservableCollection<TrackViewModel>();
         
-        public ObservableCollection<TrackDisplay> TracksOC
+        public ObservableCollection<AlbumViewModel> Albums { get; } = new ObservableCollection<AlbumViewModel>();
+        
+        public ICollectionView TracksCollectionView { get; }
+
+        public MusicLibraryViewModel()
         {
-            get { return _TracksOC; }
-            set
+
+            foreach (var track in _musicLibrary.TrackInfo.TrackList.OrderBy(s => _musicLibrary.GetAlbumTitle(s.AlbumId)).ThenBy(s => s.TrackNumber))
             {
-                _TracksOC = value;
-                RaisePropertyChanged(nameof(TracksOC));
+                var trackViewModel = new TrackViewModel(track, _musicLibrary.GetAlbumTitle(track.AlbumId));
+                Tracks.Add(trackViewModel);
             }
-        }
-
-        private ObservableCollection<Album> _AlbumsOC;
-
-        public ObservableCollection<Album> AlbumsOC
-        {
-            get { return _AlbumsOC; }
-            set
+            
+            foreach (var album in _musicLibrary.AlbumInfo.AlbumList.OrderBy(s => s.AlbumName))
             {
-                _AlbumsOC = value;
-                RaisePropertyChanged(nameof(AlbumsOC));
-            }
-        }
-
-        private ObservableCollection<string> _AlbumTracksOC;
-
-        public ObservableCollection<string> AlbumTracksOC
-        {
-            get
-            {
-                return _AlbumTracksOC; 
-            }
-            set
-            {
-                _AlbumTracksOC = value;
-                RaisePropertyChanged(nameof(AlbumTracksOC));
-            }
-        }
-
-        private ICollectionView _tracksCollectionView;
-        public ICollectionView TracksCollectionView
-        {
-            get { return _tracksCollectionView; }
-
-            set
-            {
-                _tracksCollectionView = value;
-                RaisePropertyChanged(nameof(TracksCollectionView));
-            }
-        }
-
-        public musicLibraryViewModel()
-        {
-            Albums albums = musicLibrary.AlbumInfo;
-            Artists artists = musicLibrary.ArtistInfo;
-            Tracks tracks = musicLibrary.TrackInfo;
-
-            TracksOC = new ObservableCollection<TrackDisplay>();
-            foreach (Track track in tracks.TrackList.OrderBy(s => musicLibrary.GetAlbumTitle(s.AlbumId)).ThenBy(s => s.TrackNumber))
-            {
-                TrackDisplay trackDisplay = new TrackDisplay();
-                trackDisplay.Track = track;
-                trackDisplay.AlbumName = musicLibrary.GetAlbumTitle(trackDisplay.Track.AlbumId);
-                TracksOC.Add(trackDisplay);
-            }
-
-            _AlbumsOC = new ObservableCollection<Album>();
-
-            foreach (Album album in albums.AlbumList.OrderBy(s => s.AlbumName))
-            {
-
-                _AlbumsOC.Add(album);
+                Albums.Add(new AlbumViewModel(album));
             }
 
             PropertyChanged += OnPropertyChangedHandler;
 
 
-            //TracksCollectionView = new ListCollectionView(TracksOC);
-            //SelectedAlbum = AlbumsOC[0];
+            //TracksCollectionView = new ListCollectionView(Tracks);
+            //SelectedAlbum = Albums[0];
             //TracksCollectionView.Filter = t =>
             //{
-            //    if (t is TrackDisplay trackDisplay)
+            //    if (t is TrackViewModel trackDisplay)
             //    {
             //        if (trackDisplay.Track.AlbumId == SelectedAlbum.AlbumId)
             //        {
             //            return true;
             //        }
             //    }
-            //    //if (t is AlbumInfo albumInfo)
+            //    //if (t is AlbumViewModel albumInfo)
             //    //{
             //    //    if (trackDisplay.Track.AlbumId == )
             //    //    {
@@ -154,36 +88,64 @@ namespace SonosController
             //    return false;
             //};
 
-            TracksCollectionView = new ListCollectionView(TracksOC);
-            SelectedAlbum = AlbumsOC[0];
-            TracksCollectionView.Filter = t =>
+            TracksCollectionView = new ListCollectionView(Tracks);
+            SelectedAlbum = Albums.FirstOrDefault();
+
+            //Don't use fields to initialize stuff, use properties, they have the PropertyChanged call inside
+            foreach (var artist in _musicLibrary.ArtistInfo.ArtistList.OrderBy(s => s.ArtistName))
             {
-                if (t is TrackDisplay trackDisplay)
+                var artistDisplay = new ArtistViewModel(artist);
+
+                foreach (var album in _musicLibrary.AlbumInfo.AlbumList.Where(a => artist.ArtistAlbums.Contains(a.AlbumId)))
                 {
-                    if (trackDisplay.Track.AlbumId == SelectedAlbum.AlbumId)
-                    {
-                        return true;
-                    }
+                    var albumViewModel = new AlbumViewModel(album);
+                    albumViewModel.IsSelectedChanged += IsSelectedItemChanged;
+                    artistDisplay.AlbumNamePairs.Add(albumViewModel);
                 }
 
-                return false;
-            };
-
-            _ArtistsListOC = new ObservableCollection<ArtistDisplay>();
-
-            foreach (Artist artist in artists.ArtistList.OrderBy(s => s.ArtistName))
-            {
-                ArtistDisplay artistDisplay = new ArtistDisplay();
-                artistDisplay.Artist = artist;
-                foreach (string albumId in artist.ArtistAlbums)
-                {
-                    AlbumInfo albumInfo = new AlbumInfo();
-                    albumInfo.AlbumId = albumId;
-                    albumInfo.AlbumName = musicLibrary.GetAlbumTitle(albumId);
-                    artistDisplay.AlbumNamePairs.Add(albumInfo);
-                }
-                ArtistsListOC.Add(artistDisplay);
+                artistDisplay.IsSelectedChanged += IsSelectedItemChanged;
+                Artists.Add(artistDisplay);
             }
+        }
+
+        private void IsSelectedItemChanged(object sender, IsSelectedItemChangedEventArgs e)
+        {
+            if (e.Item.IsSelected)
+            {
+                if (e.Item is ArtistViewModel artist)
+                {
+
+                    TracksCollectionView.Filter = t =>
+                    {
+                        if (t is TrackViewModel trackDisplay)
+                        {
+                            if (trackDisplay.Track.ArtistName == artist.Artist.ArtistName)
+                            {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    };
+                    
+                }
+                else if (e.Item is AlbumViewModel album)
+                {
+                    TracksCollectionView.Filter = t =>
+                    {
+                        if (t is TrackViewModel trackDisplay)
+                        {
+                            if (trackDisplay.Track.AlbumId == album.AlbumId)
+                            {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    };
+                }
+            }
+            TracksCollectionView.Refresh();
         }
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)

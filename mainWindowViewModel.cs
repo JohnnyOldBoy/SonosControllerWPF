@@ -3,6 +3,7 @@ using Devices;
 using Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 
 namespace SonosController
 {
@@ -29,8 +30,11 @@ namespace SonosController
             {
                 _ZonePlayersOC.Add(zonePlayer);
             }
-
-            ZoneGroupTopology zoneGroupTopology = serviceUtils.GetZoneGroupTopology(zonePlayers.ZonePlayersList[0].PlayerIpAddress);
+            if (zonePlayers.ZonePlayersList.Any())
+            {
+                ZoneGroupTopology zoneGroupTopology =
+                    serviceUtils.GetZoneGroupTopology(zonePlayers.ZonePlayersList[0].PlayerIpAddress);
+            }
         }
 
         protected void OnPropertyChange(string propertyName)
