@@ -75,7 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\AlbumViewModel.cs" />
-    <Compile Include="ViewModels\ArtistDisplay.cs" />
+    <Compile Include="ViewModels\ArtistViewModel.cs" />
     <Compile Include="ViewModels\IsSelectedItemChangedEventArgs.cs" />
     <Compile Include="ViewModels\ITreeViewItemViewModel.cs" />
     <Compile Include="ViewModels\TrackViewModel.cs" />

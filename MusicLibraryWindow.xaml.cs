@@ -16,7 +16,7 @@ namespace SonosController
             Top = SystemParameters.WorkArea.Top;
             Width = SystemParameters.WorkArea.Width;
             Height = SystemParameters.WorkArea.Height;
-            _viewModel = new musicLibraryViewModel();
+            _viewModel = new MusicLibraryViewModel();
             // The DataContext serves as the starting point of Binding Paths
             DataContext = _viewModel;
         }
