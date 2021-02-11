@@ -1,59 +1,49 @@
 ﻿using GalaSoft.MvvmLight;
 using MusicData;
 using Services;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 
 namespace SonosController
 {
     sealed class musicLibraryViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Creating the object specific to SonosControllerWPF from MusicData object instances created by Services.MusicLibrary
+        /// </summary>
+ 
+        // Get the Music Library
         private MusicLibrary musicLibrary = new MusicLibrary();
         
-        public MusicLibrary MusicLibrary
-        {
-            get => musicLibrary; 
-            set => musicLibrary = value;
-        }
-
-        private Album selectedAlbum;
+        // Local object to hold the selected album from the Albums tab
+        private Album _SelectedAlbum;
         public Album SelectedAlbum
         {
-            get => selectedAlbum;
+            get => _SelectedAlbum;
             set
             {
-                selectedAlbum = value;
+                _SelectedAlbum = value;
                 RaisePropertyChanged("SelectedAlbum");
-
             }
         }
 
-        private AlbumInfo selectedArtistSelectedAlbum;
+        // Local object to hold the selected album from the Artists tab
+        private AlbumInfo _SelectedArtistSelectedAlbum;
         public AlbumInfo SelectedArtistSelectedAlbum
         {
-            get => selectedArtistSelectedAlbum;
+            get => _SelectedArtistSelectedAlbum;
             set
             {
-                selectedArtistSelectedAlbum = value;
+                _SelectedArtistSelectedAlbum = value;
                 RaisePropertyChanged("SelectedArtistAlbum");
-
             }
         }
 
-        private ObservableCollection<ArtistDisplay> _ArtistsListOC;
 
-        public ObservableCollection<ArtistDisplay> ArtistsListOC
-        { 
-            get => _ArtistsListOC;
-            set { _ArtistsListOC = value;
-                RaisePropertyChanged(nameof(ArtistsListOC));
-            }
-        }
-
+        // Local object to hold Track info with additional data for display
+        // purposes. Used to populate TracksView on the Tracks tab
         private ObservableCollection<TrackDisplay> _TracksOC;
         
         public ObservableCollection<TrackDisplay> TracksOC
@@ -66,6 +56,22 @@ namespace SonosController
             }
         }
 
+        // Local object to holde the Observable Collection equivalent of
+        // the Artists object instance. Used to populate ArtistsTreeView
+        // on the Artists tab
+        private ObservableCollection<ArtistDisplay> _ArtistsListOC;
+
+        public ObservableCollection<ArtistDisplay> ArtistsListOC
+        { 
+            get => _ArtistsListOC;
+            set { _ArtistsListOC = value;
+                RaisePropertyChanged(nameof(ArtistsListOC));
+            }
+        }
+
+        // Local object to holde the Observable Collection equivalent of
+        // the Albums object instance. Used to populate AlbumsView on the
+        // Albums tab
         private ObservableCollection<Album> _AlbumsOC;
 
         public ObservableCollection<Album> AlbumsOC
@@ -78,40 +84,32 @@ namespace SonosController
             }
         }
 
-        private ObservableCollection<string> _AlbumTracksOC;
-
-        public ObservableCollection<string> AlbumTracksOC
+        // Local object to hold a set of tracks for a selected album in
+        // AlbumsView on the Albums tab
+        private ICollectionView _AlbumTracksCollectionView;
+        public ICollectionView AlbumTracksCollectionView
         {
-            get
+            get 
             {
-                return _AlbumTracksOC; 
+                return _AlbumTracksCollectionView; 
             }
             set
             {
-                _AlbumTracksOC = value;
-                RaisePropertyChanged(nameof(AlbumTracksOC));
-            }
-        }
-
-        private ICollectionView _tracksCollectionView;
-        public ICollectionView TracksCollectionView
-        {
-            get { return _tracksCollectionView; }
-
-            set
-            {
-                _tracksCollectionView = value;
-                RaisePropertyChanged(nameof(TracksCollectionView));
+                _AlbumTracksCollectionView = value;
+                RaisePropertyChanged(nameof(_AlbumTracksCollectionView));
             }
         }
 
         public musicLibraryViewModel()
         {
+            // Get the Albums, Artists and Tracks objects from MusicLibrary
             Albums albums = musicLibrary.AlbumInfo;
             Artists artists = musicLibrary.ArtistInfo;
             Tracks tracks = musicLibrary.TrackInfo;
 
+            // Build the underlying object for TracksView on the Tracks tab
             TracksOC = new ObservableCollection<TrackDisplay>();
+
             foreach (Track track in tracks.TrackList.OrderBy(s => musicLibrary.GetAlbumTitle(s.AlbumId)).ThenBy(s => s.TrackNumber))
             {
                 TrackDisplay trackDisplay = new TrackDisplay();
@@ -120,6 +118,7 @@ namespace SonosController
                 TracksOC.Add(trackDisplay);
             }
 
+            // Build the underlying object for AlbumsView on the Albums tab
             _AlbumsOC = new ObservableCollection<Album>();
 
             foreach (Album album in albums.AlbumList.OrderBy(s => s.AlbumName))
@@ -128,35 +127,10 @@ namespace SonosController
                 _AlbumsOC.Add(album);
             }
 
-            PropertyChanged += OnPropertyChangedHandler;
-
-
-            //TracksCollectionView = new ListCollectionView(TracksOC);
-            //SelectedAlbum = AlbumsOC[0];
-            //TracksCollectionView.Filter = t =>
-            //{
-            //    if (t is TrackDisplay trackDisplay)
-            //    {
-            //        if (trackDisplay.Track.AlbumId == SelectedAlbum.AlbumId)
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //    //if (t is AlbumInfo albumInfo)
-            //    //{
-            //    //    if (trackDisplay.Track.AlbumId == )
-            //    //    {
-            //    //        return true;
-            //    //    }
-            //    //}
-
-
-            //    return false;
-            //};
-
-            TracksCollectionView = new ListCollectionView(TracksOC);
+            // Create and populate the underlying object for AlbumTracksView on the Albums tab
+            AlbumTracksCollectionView = new ListCollectionView(TracksOC);
             SelectedAlbum = AlbumsOC[0];
-            TracksCollectionView.Filter = t =>
+            AlbumTracksCollectionView.Filter = t =>
             {
                 if (t is TrackDisplay trackDisplay)
                 {
@@ -169,6 +143,7 @@ namespace SonosController
                 return false;
             };
 
+            // Create and populate the underlying object for ArtistsTreeView on the Artists tab
             _ArtistsListOC = new ObservableCollection<ArtistDisplay>();
 
             foreach (Artist artist in artists.ArtistList.OrderBy(s => s.ArtistName))
@@ -184,6 +159,8 @@ namespace SonosController
                 }
                 ArtistsListOC.Add(artistDisplay);
             }
+
+            PropertyChanged += OnPropertyChangedHandler;
         }
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
@@ -191,13 +168,8 @@ namespace SonosController
             
             if (e.PropertyName == nameof(SelectedAlbum))
             {
-                TracksCollectionView.Refresh();
+                AlbumTracksCollectionView.Refresh();
             }
-            //if (e.PropertyName == nameof(SelectedArtistSelectedAlbum))
-            //{
-            //    MessageBox.Show(SelectedArtistSelectedAlbum.AlbumName);
-            //    //TracksCollectionView.Refresh();
-            //}
         }
     }
 }

@@ -27,7 +27,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
-                              ItemsSource="{Binding TracksCollectionView}"
+                              ItemsSource="{Binding AlbumTracksCollectionView}"
                               Grid.IsSharedSizeScope="True" 
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
@@ -60,7 +60,6 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                     <DataGrid Grid.Column="1" Name="ArtistAlbumTracksView"
-                              ItemsSource="{Binding TracksCollectionView}"
                               Grid.IsSharedSizeScope="True" 
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
