@@ -6,33 +6,9 @@
         xmlns:local="clr-namespace:SonosController"
         xmlns:viewModels="clr-namespace:SonosController.ViewModels"
         mc:Ignorable="d"
-        Title="Music Library" Height="768" Width="1024"
-        d:DataContext="{d:DesignInstance local:MusicLibraryViewModel}">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources.xaml"/> <!-- F12 on the filename-->
-                <!--<ResourceDictionary>
-                    <Style TargetType="{x:Type DataGridRow}" x:Key="Row1">
-                        <Setter Property="Background"
-                                Value="Red"/>
-                    </Style>
-                </ResourceDictionary>-->
-            </ResourceDictionary.MergedDictionaries>
-            
-            <!-- styles could be named (below) or unnamed (above)
-            you can use named styles for specific controls (by setting their Style property via {StaticResource}
-            while unnamed ones (but TYPED) will pre-set all instances of the type with the Settters you provide
-            -->
-            
-        </ResourceDictionary>
-        <!-- You can put your styles inside a resourcedictionary -->
-        <!-- or straight within your resources -->
-        <!-- to do that you need to create a merged Dictionary -->
-        
-    </Window.Resources>
-    <Grid >
-        <TabControl x:Name="MusicLibrary" >
+        Title="Music Library" Height="768" Width="1024">
+    <Grid>
+        <TabControl>
             <TabItem Header="Albums">
                 <Grid >
                     <Grid.ColumnDefinitions>
@@ -40,13 +16,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <DataGrid Grid.Column="0" Name="AlbumsView" 
-                              ItemsSource="{Binding Albums}"
+                              ItemsSource="{Binding AlbumsOC}"
+                              Grid.IsSharedSizeScope="True" 
+                              IsReadOnly="True" 
+                              AutoGenerateColumns="False"
                               SelectedItem="{Binding SelectedAlbum}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Album" 
-                                                Binding="{Binding AlbumName}"/>
-                            <DataGridTextColumn Header="Artist" 
-                                                Binding="{Binding Album.AlbumArtist}"/>
+                            <DataGridTextColumn Header="Album" Binding="{Binding AlbumName}"/>
+                            <DataGridTextColumn Header="Artist" Binding="{Binding AlbumArtist}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
@@ -80,7 +57,7 @@
                                                       DataType="{x:Type viewModels:ArtistViewModel}">
                                 <HierarchicalDataTemplate.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding AlbumName}"/>
+                                        <TextBlock Text="{Binding AlbumName}" />
                                     </DataTemplate>
                                 </HierarchicalDataTemplate.ItemTemplate>
                                 <TextBlock Text="{Binding Artist.ArtistName}"/>
