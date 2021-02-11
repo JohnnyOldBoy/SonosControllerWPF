@@ -1,4 +1,5 @@
 ﻿using System;
+using SonosControllerWPF.ViewModels;
 
 namespace SonosController.ViewModels
 {

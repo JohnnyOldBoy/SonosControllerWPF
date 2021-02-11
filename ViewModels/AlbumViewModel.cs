@@ -1,4 +1,5 @@
 ﻿using MusicData;
+using SonosController.ViewModels;
 
 namespace SonosController.ViewModels
 {

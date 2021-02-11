@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using SonosController.ViewModels;
+using SonosControllerWPF.ViewModels;
 
 namespace SonosController
 {
@@ -188,6 +190,11 @@ namespace SonosController
             {
                 TracksCollectionView.Refresh();
             }
+            //if (e.PropertyName == nameof(SelectedArtistSelectedAlbum))
+            //{
+            //    MessageBox.Show(SelectedArtistSelectedAlbum.AlbumName);
+            //    //TracksCollectionView.Refresh();
+            //}
         }
     }
 }
