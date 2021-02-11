@@ -7,7 +7,7 @@ namespace SonosController
     /// </summary>
     public partial class MusicLibraryWindow : Window
     {
-        private readonly musicLibraryViewModel _viewModel;
+        private readonly MusicLibraryViewModel _viewModel;
 
         public MusicLibraryWindow()
         {
