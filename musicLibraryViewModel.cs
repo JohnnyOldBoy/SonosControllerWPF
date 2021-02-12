@@ -1,12 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
-using MusicData;
 using Services;
+using SonosController.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using SonosController.ViewModels;
-using SonosControllerWPF.ViewModels;
 
 namespace SonosController
 {
@@ -38,15 +36,15 @@ namespace SonosController
             }
         }
 
-        private ObservableCollection<ArtistViewModel> artists;
-
         public ObservableCollection<ArtistViewModel> Artists { get; } = new ObservableCollection<ArtistViewModel>();
 
         public ObservableCollection<TrackViewModel> Tracks { get; } = new ObservableCollection<TrackViewModel>();
         
         public ObservableCollection<AlbumViewModel> Albums { get; } = new ObservableCollection<AlbumViewModel>();
         
-        public ICollectionView TracksCollectionView { get; }
+        public ICollectionView ArtistTracksCollectionView { get; }
+
+        public ICollectionView AlbumTracksCollectionView { get; }
 
         public MusicLibraryViewModel()
         {
@@ -65,33 +63,36 @@ namespace SonosController
             PropertyChanged += OnPropertyChangedHandler;
 
 
-            //TracksCollectionView = new ListCollectionView(Tracks);
-            //SelectedAlbum = Albums[0];
-            //TracksCollectionView.Filter = t =>
-            //{
-            //    if (t is TrackViewModel trackDisplay)
-            //    {
-            //        if (trackDisplay.Track.AlbumId == SelectedAlbum.AlbumId)
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //    //if (t is AlbumViewModel albumInfo)
-            //    //{
-            //    //    if (trackDisplay.Track.AlbumId == )
-            //    //    {
-            //    //        return true;
-            //    //    }
-            //    //}
+            ArtistTracksCollectionView = new ListCollectionView(Tracks);
 
+            ArtistTracksCollectionView.Filter = t =>
+            {
+                if (t is TrackViewModel trackDisplay)
+                {
+                    if (trackDisplay.Track.AlbumId != "")
+                    {
+                        return false;
+                    }
+                }
 
-            //    return false;
-            //};
+                return false;
+            };
+            
+            AlbumTracksCollectionView = new ListCollectionView(Tracks);
 
-            TracksCollectionView = new ListCollectionView(Tracks);
             SelectedAlbum = Albums.FirstOrDefault();
+            AlbumTracksCollectionView.Filter = t =>
+            {
+                if (t is TrackViewModel trackDisplay)
+                {
+                    if (SelectedAlbum != null && trackDisplay.Track.AlbumId == SelectedAlbum.AlbumId)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            };
 
-            //Don't use fields to initialize stuff, use properties, they have the PropertyChanged call inside
             foreach (var artist in _musicLibrary.ArtistInfo.ArtistList.OrderBy(s => s.ArtistName))
             {
                 var artistDisplay = new ArtistViewModel(artist);
@@ -115,23 +116,24 @@ namespace SonosController
                 if (e.Item is ArtistViewModel artist)
                 {
 
-                    TracksCollectionView.Filter = t =>
+                    ArtistTracksCollectionView.Filter = t =>
                     {
                         if (t is TrackViewModel trackDisplay)
                         {
                             if (trackDisplay.Track.ArtistName == artist.Artist.ArtistName)
                             {
-                                return true;
+                                return false; //To clear the selected album track grid if what is selected is not an album
                             }
                         }
 
                         return false;
                     };
-                    
+
                 }
                 else if (e.Item is AlbumViewModel album)
                 {
-                    TracksCollectionView.Filter = t =>
+
+                    ArtistTracksCollectionView.Filter = t =>
                     {
                         if (t is TrackViewModel trackDisplay)
                         {
@@ -145,21 +147,16 @@ namespace SonosController
                     };
                 }
             }
-            TracksCollectionView.Refresh();
+            ArtistTracksCollectionView.Refresh();
         }
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
         {
-            
+
             if (e.PropertyName == nameof(SelectedAlbum))
             {
-                TracksCollectionView.Refresh();
+                AlbumTracksCollectionView.Refresh();
             }
-            //if (e.PropertyName == nameof(SelectedArtistSelectedAlbum))
-            //{
-            //    MessageBox.Show(SelectedArtistSelectedAlbum.AlbumName);
-            //    //TracksCollectionView.Refresh();
-            //}
         }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using MusicData;
+﻿using MusicData;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using GalaSoft.MvvmLight;
-using SonosController.ViewModels;
 
-namespace SonosControllerWPF.ViewModels
+namespace SonosController.ViewModels
 {
     public class ArtistViewModel : TreeViewItemViewModelBase
     {

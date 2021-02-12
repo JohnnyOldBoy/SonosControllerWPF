@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using SonosController.ViewModels;
+﻿using System.ComponentModel;
 
-namespace SonosControllerWPF.ViewModels
+namespace SonosController.ViewModels
 {
     public interface ITreeViewItemViewModel : INotifyPropertyChanged
     {

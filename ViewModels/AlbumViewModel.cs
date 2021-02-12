@@ -1,8 +1,6 @@
-﻿using GalaSoft.MvvmLight;
-using MusicData;
-using SonosController.ViewModels;
+﻿using MusicData;
 
-namespace SonosControllerWPF.ViewModels
+namespace SonosController.ViewModels
 {
     public class AlbumViewModel : TreeViewItemViewModelBase
     {

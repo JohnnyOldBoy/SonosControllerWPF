@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using SonosControllerWPF.ViewModels;
 
 namespace SonosController.ViewModels
 {

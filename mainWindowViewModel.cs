@@ -18,7 +18,9 @@ namespace SonosController
             set { _ZonePlayersOC = value; }
         }
 
+#pragma warning disable CS0108 // 'mainWindowViewModel.PropertyChanged' hides inherited member 'ObservableObject.PropertyChanged'. Use the new keyword if hiding was intended.
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS0108 // 'mainWindowViewModel.PropertyChanged' hides inherited member 'ObservableObject.PropertyChanged'. Use the new keyword if hiding was intended.
 
         public mainWindowViewModel()
         {
@@ -37,7 +39,9 @@ namespace SonosController
             }
         }
 
+#pragma warning disable CS0628 // 'mainWindowViewModel.OnPropertyChange(string)': new protected member declared in sealed type
         protected void OnPropertyChange(string propertyName)
+#pragma warning restore CS0628 // 'mainWindowViewModel.OnPropertyChange(string)': new protected member declared in sealed type
         {
             if (PropertyChanged != null)
             {

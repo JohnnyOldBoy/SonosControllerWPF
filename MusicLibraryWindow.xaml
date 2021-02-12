@@ -8,12 +8,12 @@
         xmlns:musicData="clr-namespace:MusicData;assembly=MusicData"
         xmlns:services="clr-namespace:Services;assembly=Services"
         xmlns:services1="clr-namespace:Services"
-        xmlns:viewModels="clr-namespace:SonosControllerWPF.ViewModels"
+        xmlns:viewModels="clr-namespace:SonosController.ViewModels"
         mc:Ignorable="d"
         Title="Music Library" Height="768" Width="1024"
         d:DataContext="{d:DesignInstance local:MusicLibraryViewModel}">
     <Grid>
-        <TabControl>
+        <TabControl x:Name="MusicLibrary">
             <TabItem Header="Albums">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
@@ -32,7 +32,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
-                              ItemsSource="{Binding TracksCollectionView}"
+                              ItemsSource="{Binding AlbumTracksCollectionView}"
                               Grid.IsSharedSizeScope="True" 
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
@@ -72,7 +72,7 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                     <DataGrid Grid.Column="1" Name="ArtistAlbumTracksView"
-                              ItemsSource="{Binding TracksCollectionView}"
+                              ItemsSource="{Binding ArtistTracksCollectionView}"
                               Grid.IsSharedSizeScope="True" 
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
@@ -88,7 +88,7 @@
             <TabItem Header="Tracks" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid Name="TracksView" 
-                              ItemsSource="{Binding TracksOC}"
+                              ItemsSource="{Binding Tracks}"
                               Grid.IsSharedSizeScope="True" 
                               IsReadOnly="True" 
                               AutoGenerateColumns="False">
@@ -112,7 +112,8 @@
                                     <Expander>
                                         <BindingMode >
                                             
-                                        </BindingMode></Expander>
+                                        </BindingMode>
+                                    </Expander>
                                 </Expander>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
