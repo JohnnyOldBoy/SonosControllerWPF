@@ -92,7 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MusicLibraryViewModel.cs" />
-    <Compile Include="mainWindowViewModel.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

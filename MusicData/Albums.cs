@@ -6,7 +6,7 @@ namespace MusicData
     [Serializable()]
     public class Albums
     {
-        List<Album> albumList = new List<Album>();
+        private List<Album> albumList = new List<Album>();
         public List<Album> AlbumList
         {
             get => albumList;

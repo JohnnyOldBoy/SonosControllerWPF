@@ -12,7 +12,7 @@ namespace SonosController
 
     public partial class MainWindow : Window
     {
-        private readonly mainWindowViewModel _viewModel;
+        private readonly MainWindowViewModel _viewModel;
 
         public MainWindow()
         {
@@ -21,7 +21,7 @@ namespace SonosController
             Top = SystemParameters.WorkArea.Top;
             Width = SystemParameters.WorkArea.Width;
             Height = SystemParameters.WorkArea.Height;
-            _viewModel = new mainWindowViewModel();
+            _viewModel = new MainWindowViewModel();
             // The DataContext serves as the starting point of Binding Paths
             DataContext = _viewModel;
         }

@@ -36,15 +36,30 @@ namespace SonosController
             }
         }
 
+        private string _selectedGenre;
+        public string SelectedGenre
+        {
+            get => _selectedGenre;
+            set
+            {
+                _selectedGenre = value;
+                RaisePropertyChanged("SelectedGenre");
+            }
+        }
+
         public ObservableCollection<ArtistViewModel> Artists { get; } = new ObservableCollection<ArtistViewModel>();
 
         public ObservableCollection<TrackViewModel> Tracks { get; } = new ObservableCollection<TrackViewModel>();
         
         public ObservableCollection<AlbumViewModel> Albums { get; } = new ObservableCollection<AlbumViewModel>();
+
+        public ObservableCollection<string> Genres { get; } = new ObservableCollection<string>();
         
         public ICollectionView ArtistTracksCollectionView { get; }
 
         public ICollectionView AlbumTracksCollectionView { get; }
+
+        public ICollectionView GenreTracksCollectionView { get; }
 
         public MusicLibraryViewModel()
         {
@@ -58,6 +73,11 @@ namespace SonosController
             foreach (var album in _musicLibrary.AlbumInfo.AlbumList.OrderBy(s => s.AlbumName))
             {
                 Albums.Add(new AlbumViewModel(album));
+            }
+
+            foreach (var genre in _musicLibrary.GenreInfo.GenreList.OrderBy(s => s))
+            {
+                Genres.Add(genre);
             }
 
             PropertyChanged += OnPropertyChangedHandler;
@@ -90,6 +110,20 @@ namespace SonosController
                         return true;
                     }
                 }
+                return false;
+            };
+
+            GenreTracksCollectionView = new ListCollectionView(Tracks);
+            SelectedGenre = Genres.FirstOrDefault();
+            GenreTracksCollectionView.Filter = t =>
+            {
+                if (t is TrackViewModel trackDisplay)
+                {
+                    if (SelectedGenre != null && trackDisplay.Genre == SelectedGenre)
+                    {
+                        return true;
+                    }
+                 }
                 return false;
             };
 
@@ -156,6 +190,10 @@ namespace SonosController
             if (e.PropertyName == nameof(SelectedAlbum))
             {
                 AlbumTracksCollectionView.Refresh();
+            }
+            if (e.PropertyName == nameof(SelectedGenre))
+            {
+                GenreTracksCollectionView.Refresh();
             }
         }
     }
