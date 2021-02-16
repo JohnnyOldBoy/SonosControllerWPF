@@ -7,24 +7,36 @@
         mc:Ignorable="d"
         Title="Sonos Controller" >
     <Grid Background="LightBlue">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Column="0" Grid.Row="0" Name="tabControl1" >
-            <TabItem Header="Rooms" Name="tabItem1">
+        <TabControl>
+            <TabItem Header="Rooms" Name="TopologyTab">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
                         <GradientStop Color="White" Offset="1"/>
                     </LinearGradientBrush>
                 </TabItem.Background>
+                <Grid>
+                <StackPanel 
+                    Orientation="Vertical">
+                        <!--<ListBox ItemsSource="{Binding ZoneGroupCollection}"/>
+                        <ListBox.ItemTemplate>
+                        
+                    </ListBox.ItemTemplate>-->
+                        <ListBox x:Name="listBox" ItemsSource="{Binding ZoneGroupCollection}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ZoneGroupName}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Grid>
             </TabItem>
-
-            <TabItem Header="Devices" Name="tabItem2">
+            <TabItem Header="Devices" Name="DevicesTab">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -36,7 +48,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <ListBox Name="zonePlayersList" ItemsSource="{Binding ZonePlayersOC}" SelectionChanged="zonePlayersList_SelectionChanged">
+                    <ListBox Name="ZonePlayersList" ItemsSource="{Binding ZonePlayersCollection}" SelectionChanged="zonePlayersList_SelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -74,9 +86,6 @@
                 </Grid>
              </TabItem>
         </TabControl>
-        <Button Grid.Column="0" Grid.Row="1" Name="MusicLibraryBtn" Content="Browse Music Library" HorizontalAlignment="Left" VerticalAlignment="Center" Click="MusicLibraryBtn_Click"/>
+        <Button Grid.Row="1" Name="MusicLibraryBtn" Content="Browse Music Library" HorizontalAlignment="Left" VerticalAlignment="Center" Click="MusicLibraryBtn_Click"/>
     </Grid>
-
-
-
 </Window>

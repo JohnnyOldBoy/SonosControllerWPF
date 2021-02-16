@@ -79,10 +79,15 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\AlbumViewModel.cs" />
     <Compile Include="ViewModels\ArtistViewModel.cs" />
+    <Compile Include="ViewModels\SelectedIndexChangedEventArgs - Copy.cs" />
     <Compile Include="ViewModels\IsSelectedItemChangedEventArgs.cs" />
+    <Compile Include="ViewModels\IListBoxItemViewModel.cs" />
     <Compile Include="ViewModels\ITreeViewItemViewModel.cs" />
     <Compile Include="ViewModels\TrackViewModel.cs" />
+    <Compile Include="ViewModels\ListBoxItemViewModelBase.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModelBase.cs" />
+    <Compile Include="ViewModels\DeviceViewModel.cs" />
+    <Compile Include="ViewModels\ZoneGroupViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -9,31 +9,43 @@ namespace SonosController
 {
     sealed class MainWindowViewModel : ViewModelBase
     {
-        public ServiceUtils serviceUtils;
+        public ServiceUtils _serviceUtils;
 
-        private ObservableCollection<ZonePlayer> _ZonePlayersOC;
-        public ObservableCollection<ZonePlayer> ZonePlayersOC
+        private ObservableCollection<ZonePlayer> _zonePlayersCollection;
+        public ObservableCollection<ZonePlayer> ZonePlayersCollection
         {
-            get { return _ZonePlayersOC; }
-            set { _ZonePlayersOC = value; }
+            get { return _zonePlayersCollection; }
+            set { _zonePlayersCollection = value; }
+        }
+
+        private ObservableCollection<ZoneGroup> _zoneGroupCollection;
+        public ObservableCollection<ZoneGroup> ZoneGroupCollection 
+        { 
+            get => _zoneGroupCollection; 
+            set => _zoneGroupCollection = value; 
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainWindowViewModel()
         {
-            serviceUtils = new ServiceUtils();
-            ZonePlayers zonePlayers = serviceUtils.GetZonePlayers();
-            _ZonePlayersOC = new ObservableCollection<ZonePlayer>();
+            _serviceUtils = new ServiceUtils();
+            ZonePlayers zonePlayers = _serviceUtils.GetZonePlayers();
+            ZonePlayersCollection = new ObservableCollection<ZonePlayer>();
             
             foreach (ZonePlayer zonePlayer in zonePlayers.ZonePlayersList)
             {
-                _ZonePlayersOC.Add(zonePlayer);
+                ZonePlayersCollection.Add(zonePlayer);
             }
             if (zonePlayers.ZonePlayersList.Any())
             {
                 ZoneGroupTopology zoneGroupTopology =
-                    serviceUtils.GetZoneGroupTopology(zonePlayers.ZonePlayersList[0].PlayerIpAddress);
+                    _serviceUtils.GetZoneGroupTopology(zonePlayers.ZonePlayersList[0].PlayerIpAddress);
+                ZoneGroupCollection = new ObservableCollection<ZoneGroup>();
+                foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
+                {
+                    ZoneGroupCollection.Add(zoneGroup);
+                }
             }
         }
 

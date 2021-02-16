@@ -20,7 +20,6 @@ namespace SonosController
             {
                 _selectedAlbum = value;
                 RaisePropertyChanged("SelectedAlbum");
-
             }
         }
 
@@ -32,7 +31,6 @@ namespace SonosController
             {
                 _selectedArtistSelectedAlbum = value;
                 RaisePropertyChanged("SelectedArtistAlbum");
-
             }
         }
 
@@ -114,6 +112,7 @@ namespace SonosController
             };
 
             GenreTracksCollectionView = new ListCollectionView(Tracks);
+
             SelectedGenre = Genres.FirstOrDefault();
             GenreTracksCollectionView.Filter = t =>
             {
@@ -159,7 +158,6 @@ namespace SonosController
                                 return false; //To clear the selected album track grid if what is selected is not an album
                             }
                         }
-
                         return false;
                     };
 
@@ -176,7 +174,6 @@ namespace SonosController
                                 return true;
                             }
                         }
-
                         return false;
                     };
                 }

@@ -32,9 +32,9 @@ namespace SonosController
 
         private void zonePlayersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ZonePlayer zonePlayer = _viewModel.ZonePlayersOC[zonePlayersList.SelectedIndex];
+            ZonePlayer zonePlayer = _viewModel.ZonePlayersCollection[ZonePlayersList.SelectedIndex];
             
-            DetailsView.ItemsSource = _viewModel.serviceUtils.getPlayerDetails(zonePlayer);
+            DetailsView.ItemsSource = _viewModel._serviceUtils.getPlayerDetails(zonePlayer);
         }
 
         private void MusicLibraryBtn_Click(object sender, RoutedEventArgs e)

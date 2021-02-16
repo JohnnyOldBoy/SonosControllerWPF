@@ -1,6 +1,5 @@
 ﻿using MusicData;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace SonosController.ViewModels
 {
@@ -14,13 +13,7 @@ namespace SonosController.ViewModels
             AlbumNamePairs = new ObservableCollection<AlbumViewModel>();
         }
 
-        private void OnIsSelectedChanged(object sender, PropertyChangedEventArgs e)
-        {
-            
-        }
-
         public Artist Artist { get; }
-
 
         public ObservableCollection<AlbumViewModel> AlbumNamePairs
         {
