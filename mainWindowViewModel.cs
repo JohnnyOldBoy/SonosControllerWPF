@@ -1,9 +1,12 @@
-﻿using GalaSoft.MvvmLight;
-using Devices;
+﻿using Devices;
+using GalaSoft.MvvmLight;
 using Services;
+using SonosController.ViewModels;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 
 namespace SonosController
 {
@@ -11,11 +14,15 @@ namespace SonosController
     {
         public ServiceUtils _serviceUtils;
 
-        private ObservableCollection<ZonePlayer> _zonePlayersCollection;
-        public ObservableCollection<ZonePlayer> ZonePlayersCollection
+        private ObservableCollection<ZonePlayer> _zonePlayerCollection;
+        public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
-            get { return _zonePlayersCollection; }
-            set { _zonePlayersCollection = value; }
+            get { return _zonePlayerCollection; }
+            set
+            {
+                _zonePlayerCollection = value;
+                RaisePropertyChanged("SelctedZonePlayer");
+            }
         }
 
         private ObservableCollection<ZoneGroup> _zoneGroupCollection;
@@ -25,18 +32,42 @@ namespace SonosController
             set => _zoneGroupCollection = value; 
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private ZonePlayer _selectedZonePlayer;
+        public ZonePlayer SelectedZonePlayer
+        {
+            get => _selectedZonePlayer;
+            set
+            {
+                _selectedZonePlayer = value;
+                RaisePropertyChanged("SelectedZonePlayer");
+            }
+        }
+
+        private ObservableCollection<ZonePlayerDetail> _zonePlayerDetailsView;
+
+        public ObservableCollection<ZonePlayerDetail> ZonePlayerDetailsView 
+        { 
+            get => _zonePlayerDetailsView; 
+            set => _zonePlayerDetailsView = value;
+        }
+
+        public ICollectionView ZonePlayerDetailsViewCollection { get; }
+
+        //public event PropertyChangedEventHandler PropertyChanged;
 
         public MainWindowViewModel()
         {
             _serviceUtils = new ServiceUtils();
+
+            PropertyChanged += OnPropertyChangedHandler;
+
             ZonePlayers zonePlayers = _serviceUtils.GetZonePlayers();
-            ZonePlayersCollection = new ObservableCollection<ZonePlayer>();
-            
+            ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
             foreach (ZonePlayer zonePlayer in zonePlayers.ZonePlayersList)
             {
-                ZonePlayersCollection.Add(zonePlayer);
+                ZonePlayerCollection.Add(zonePlayer);
             }
+
             if (zonePlayers.ZonePlayersList.Any())
             {
                 ZoneGroupTopology zoneGroupTopology =
@@ -47,13 +78,45 @@ namespace SonosController
                     ZoneGroupCollection.Add(zoneGroup);
                 }
             }
+
+
+            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.getPlayerDetails(zonePlayers);
+            ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
+            SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
+            if (SelectedZonePlayer != null)
+            {
+                ZonePlayerDetailsViewCollection.Filter = t =>
+                {
+                    if (t is ZonePlayerDetail zonePlayerDetail)
+                    {
+                        if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                ZonePlayerDetailsViewCollection.Refresh();
+            }
+
         }
 
-        protected void OnPropertyChange(string propertyName)
+        private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
         {
-            if (PropertyChanged != null)
+            if (e.PropertyName == nameof(SelectedZonePlayer))
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                ZonePlayerDetailsViewCollection.Filter = t =>
+                {
+                    if (t is ZonePlayerDetail zonePlayerDetail)
+                    {
+                        if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                ZonePlayerDetailsViewCollection.Refresh();
             }
         }
 

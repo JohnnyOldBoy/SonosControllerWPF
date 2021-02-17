@@ -26,17 +26,6 @@ namespace SonosController
             DataContext = _viewModel;
         }
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
-
-        private void zonePlayersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ZonePlayer zonePlayer = _viewModel.ZonePlayersCollection[ZonePlayersList.SelectedIndex];
-            
-            DetailsView.ItemsSource = _viewModel._serviceUtils.getPlayerDetails(zonePlayer);
-        }
-
         private void MusicLibraryBtn_Click(object sender, RoutedEventArgs e)
         {
             MusicLibraryWindow musicLibraryWindow = new MusicLibraryWindow();

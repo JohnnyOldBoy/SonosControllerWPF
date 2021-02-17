@@ -48,7 +48,9 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <ListBox Name="ZonePlayersList" ItemsSource="{Binding ZonePlayersCollection}" SelectionChanged="zonePlayersList_SelectionChanged">
+                    <ListBox Name="ZonePlayersList" 
+                             ItemsSource="{Binding ZonePlayerCollection}" 
+                             SelectedItem="{Binding SelectedZonePlayer}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -77,10 +79,17 @@
                                 <GradientStop Color="White" Offset="1"/>
                             </LinearGradientBrush>
                         </Grid.Background>
-                        <DataGrid Name="DetailsView" 
+                        <DataGrid Name="DetailsView"
+                                  AutoGenerateColumns="False"
+                                  ItemsSource="{Binding ZonePlayerDetailsViewCollection}"
                                   HeadersVisibility="None" 
                                   Grid.IsSharedSizeScope="True" 
                                   IsReadOnly="True" Background="White">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Detail" Binding="{Binding DetailName}"/>
+                                <DataGridTextColumn Header="Value" Binding="{Binding DetailValue}"/>
+                            
+                            </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
                 </Grid>

@@ -12,9 +12,9 @@
         mc:Ignorable="d"
         Title="Music Library" Height="768" Width="1024"
         d:DataContext="{d:DesignInstance local:MusicLibraryViewModel}">
-    <Window.Resources>
+    <!--<Window.Resources>
         <CollectionViewSource x:Key="TrackGenres" Source="{Binding Tracks}" />
-    </Window.Resources>
+    </Window.Resources>-->
     <Grid>
         <TabControl x:Name="MusicLibrary">
             <TabItem Header="Albums">

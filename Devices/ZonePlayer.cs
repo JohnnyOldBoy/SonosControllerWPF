@@ -58,7 +58,7 @@
             set => uUID = value;
         }
 
-        string playerIpAddress;
+        private string playerIpAddress;
         public string PlayerIpAddress
         {
             get => playerIpAddress;
