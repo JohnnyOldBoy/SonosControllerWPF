@@ -1,11 +1,13 @@
 ﻿using Devices;
 using GalaSoft.MvvmLight;
+using MusicData;
 using Services;
 using SonosController.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 
 namespace SonosController
@@ -14,6 +16,10 @@ namespace SonosController
     {
         public ServiceUtils _serviceUtils;
 
+        /// <summary>
+        /// Devices tab. A device is any Sonos product that can participate in a Sonos system, this includes all players -
+        /// Play: 1, Play: 3, Play: 5, Beam etc and also non palyer devices such as Boost and Bridge.
+        /// </summary>
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
@@ -24,14 +30,6 @@ namespace SonosController
                 RaisePropertyChanged("SelctedZonePlayer");
             }
         }
-
-        private ObservableCollection<ZoneGroup> _zoneGroupCollection;
-        public ObservableCollection<ZoneGroup> ZoneGroupCollection 
-        { 
-            get => _zoneGroupCollection; 
-            set => _zoneGroupCollection = value; 
-        }
-
         private ZonePlayer _selectedZonePlayer;
         public ZonePlayer SelectedZonePlayer
         {
@@ -45,15 +43,53 @@ namespace SonosController
 
         private ObservableCollection<ZonePlayerDetail> _zonePlayerDetailsView;
 
-        public ObservableCollection<ZonePlayerDetail> ZonePlayerDetailsView 
-        { 
-            get => _zonePlayerDetailsView; 
+        public ObservableCollection<ZonePlayerDetail> ZonePlayerDetailsView
+        {
+            get => _zonePlayerDetailsView;
             set => _zonePlayerDetailsView = value;
         }
 
         public ICollectionView ZonePlayerDetailsViewCollection { get; }
 
-        //public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// Rooms tab. A room is basically a single zone player or a groups of zone players, this will include stereo pairs.
+        /// Devices such as Boost and Bridge are not normally visible here.
+        /// /// </summary>
+
+        private ObservableCollection<ZoneGroup> _zoneGroupCollection;
+        public ObservableCollection<ZoneGroup> ZoneGroupCollection
+        {
+            get => _zoneGroupCollection;
+            set
+            {
+                _zoneGroupCollection = value;
+                RaisePropertyChanged("SelectedZoneGroup");
+            }
+        }
+
+        private ZoneGroup _selectedZoneGroup;
+        public ZoneGroup SelectedZoneGroup
+        {
+            get => _selectedZoneGroup;
+            set
+            {
+                _selectedZoneGroup = value;
+                RaisePropertyChanged("SelectedZoneGroup");
+            }
+        }
+
+        public ICollectionView ZoneGroupQueueViewCollection { get; }
+
+        /// <summary>
+        /// Shared
+        /// </summary>
+
+        private ZonePlayers _zonePlayers;
+        public ZonePlayers ZonePlayers
+        {
+            get => _zonePlayers;
+            set => _zonePlayers = value;
+        }
 
         public MainWindowViewModel()
         {
@@ -61,26 +97,15 @@ namespace SonosController
 
             PropertyChanged += OnPropertyChangedHandler;
 
-            ZonePlayers zonePlayers = _serviceUtils.GetZonePlayers();
+            // Devices
+            ZonePlayers = _serviceUtils.GetZonePlayers();
             ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
-            foreach (ZonePlayer zonePlayer in zonePlayers.ZonePlayersList)
+            foreach (ZonePlayer zonePlayer in ZonePlayers.ZonePlayersList)
             {
                 ZonePlayerCollection.Add(zonePlayer);
             }
 
-            if (zonePlayers.ZonePlayersList.Any())
-            {
-                ZoneGroupTopology zoneGroupTopology =
-                    _serviceUtils.GetZoneGroupTopology(zonePlayers.ZonePlayersList[0].PlayerIpAddress);
-                ZoneGroupCollection = new ObservableCollection<ZoneGroup>();
-                foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
-                {
-                    ZoneGroupCollection.Add(zoneGroup);
-                }
-            }
-
-
-            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.getPlayerDetails(zonePlayers);
+            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.getPlayerDetails(ZonePlayers);
             ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
             SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
             if (SelectedZonePlayer != null)
@@ -99,6 +124,44 @@ namespace SonosController
                 ZonePlayerDetailsViewCollection.Refresh();
             }
 
+            // Rooms
+            if (ZonePlayers.ZonePlayersList.Any())
+            {
+                ZoneGroupTopology zoneGroupTopology =
+                    _serviceUtils.GetZoneGroupTopology(ZonePlayers.ZonePlayersList[0].PlayerIpAddress);
+                ZoneGroupCollection = new ObservableCollection<ZoneGroup>();
+                foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
+                {
+                    ZoneGroupCollection.Add(zoneGroup);
+                }
+            }
+            SelectedZoneGroup = ZoneGroupCollection.FirstOrDefault();
+
+            List<QueueItem> queueItemList = new List<QueueItem>();
+            foreach (ZoneGroup zoneGroup in ZoneGroupCollection)
+            {
+                ZonePlayer SelectedZoneGroupCoordinator = _serviceUtils.getPlayerByUUID(ZonePlayers, zoneGroup.ZoneGroupCoordinator);
+                PlayerQueue playerQueue = _serviceUtils.getPlayerQueue(zoneGroup, SelectedZoneGroupCoordinator.PlayerIpAddress);
+                
+                foreach (QueueItem queueItem in playerQueue.QueueItems)
+                {
+                    queueItemList.Add(queueItem);
+                }
+            }
+            ZoneGroupQueueViewCollection = new ListCollectionView(queueItemList);
+
+            ZoneGroupQueueViewCollection.Filter = t =>
+            {
+                if (t is QueueItem queueItem)
+                {
+                    if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            ZoneGroupQueueViewCollection.Refresh();
         }
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
@@ -118,8 +181,24 @@ namespace SonosController
                 };
                 ZonePlayerDetailsViewCollection.Refresh();
             }
+            if (e.PropertyName == nameof(SelectedZoneGroup))
+            {
+                if (SelectedZoneGroup != null && ZoneGroupQueueViewCollection != null)
+                {
+                    ZoneGroupQueueViewCollection.Filter = t =>
+                    {
+                        if (t is QueueItem queueItem)
+                        {
+                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                    ZoneGroupQueueViewCollection.Refresh();
+                }
+            }
         }
-
-
     }
 }

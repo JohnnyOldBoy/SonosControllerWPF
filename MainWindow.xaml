@@ -20,20 +20,36 @@
                     </LinearGradientBrush>
                 </TabItem.Background>
                 <Grid>
-                <StackPanel 
-                    Orientation="Vertical">
-                        <!--<ListBox ItemsSource="{Binding ZoneGroupCollection}"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox 
+                        Grid.Column="0" 
+                        Name="RoomsListBox" 
+                        ItemsSource="{Binding ZoneGroupCollection}"
+                        SelectedItem="{Binding SelectedZoneGroup}">
                         <ListBox.ItemTemplate>
-                        
-                    </ListBox.ItemTemplate>-->
-                        <ListBox x:Name="listBox" ItemsSource="{Binding ZoneGroupCollection}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding ZoneGroupName}"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </StackPanel>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ZoneGroupName}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ListBox Name="QueueListBox"
+                             Grid.Column="1"
+                             ItemsSource="{Binding ZoneGroupQueueViewCollection}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Expander x:Name="expander" Header="{Binding QiTitle}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding QiArtist}"/>
+                                        <TextBlock Text="{Binding QiAlbum}"/>
+                                        <TextBlock Text="{Binding QiUri}"/>
+                                    </StackPanel>
+                                </Expander>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Devices" Name="DevicesTab">
@@ -88,12 +104,12 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Detail" Binding="{Binding DetailName}"/>
                                 <DataGridTextColumn Header="Value" Binding="{Binding DetailValue}"/>
-                            
+
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
                 </Grid>
-             </TabItem>
+            </TabItem>
         </TabControl>
         <Button Grid.Row="1" Name="MusicLibraryBtn" Content="Browse Music Library" HorizontalAlignment="Left" VerticalAlignment="Center" Click="MusicLibraryBtn_Click"/>
     </Grid>

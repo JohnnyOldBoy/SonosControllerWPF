@@ -7,7 +7,7 @@ namespace Devices
     public class ZoneGroupTopology
     {
         //private ZonePlayers players;
-        ZoneGroupTopology zoneGroupTopology;
+        //ZoneGroupTopology zoneGroupTopology;
 
         //        public ZoneGroupTopology(ref ZonePlayers zonePlayers)
         //public ZoneGroupTopology()
