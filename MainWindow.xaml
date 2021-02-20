@@ -28,10 +28,27 @@
                         Grid.Column="0" 
                         Name="RoomsListBox" 
                         ItemsSource="{Binding ZoneGroupCollection}"
-                        SelectedItem="{Binding SelectedZoneGroup}">
+                        SelectedItem="{Binding SelectedZoneGroup}" HorizontalAlignment="Left" Width="377" 
+                        >
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Style.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="5"/>
+                                        <Setter Property="BorderBrush" Value="CornflowerBlue"/>
+                                        <Setter Property="Padding" Value="20,20,20,20"/>
+                                    </Style>
+                                </Style.Resources>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding ZoneGroupName}"/>
+                               <StackPanel Grid.Column="0">
+                                    <TextBlock 
+                                        Text="{Binding ZoneGroupName}"
+                                        FontSize="20" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding ZoneGroupMemberNames}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -40,7 +57,7 @@
                              ItemsSource="{Binding ZoneGroupQueueViewCollection}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Expander x:Name="expander" Header="{Binding QiTitle}">
+                                <Expander x:Name="QueueExpander" Header="{Binding QiTitle}">
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock Text="{Binding QiArtist}"/>
                                         <TextBlock Text="{Binding QiAlbum}"/>

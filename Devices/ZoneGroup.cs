@@ -33,6 +33,13 @@ namespace Devices
             set => zoneGroupMemeberList = value;
         }
 
+        private string zoneGroupMemberNames = string.Empty;
+        public string ZoneGroupMemberNames 
+        { 
+            get => zoneGroupMemberNames; 
+            set => zoneGroupMemberNames = value; 
+        }
+
     }
 
 }
