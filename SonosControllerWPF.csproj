@@ -83,6 +83,7 @@
     <Compile Include="ViewModels\ITreeViewItemViewModel.cs" />
     <Compile Include="ViewModels\TrackViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModelBase.cs" />
+    <Compile Include="ViewModels\ZoneGroupViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -146,6 +147,5 @@
       <Name>MusicData</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,7 +15,7 @@ namespace SonosController
     sealed class MainWindowViewModel : ViewModelBase
     {
         public ServiceUtils _serviceUtils;
-
+        #region
         /// <summary>
         /// Devices tab. A device is any Sonos product that can participate in a Sonos system, this includes all players -
         /// Play: 1, Play: 3, Play: 5, Beam etc and also non palyer devices such as Boost and Bridge.
@@ -51,6 +51,8 @@ namespace SonosController
 
         public ICollectionView ZonePlayerDetailsViewCollection { get; }
 
+        #endregion
+        #region
         /// <summary>
         /// Rooms tab. A room is basically a single zone player or a groups of zone players, this will include stereo pairs.
         /// Devices such as Boost and Bridge are not normally visible here.
@@ -80,6 +82,8 @@ namespace SonosController
 
         public ICollectionView ZoneGroupQueueViewCollection { get; }
 
+        public ObservableCollection<ZoneGroupViewModel> zoneGroupViewModels { get; } = new ObservableCollection<ZoneGroupViewModel>();
+        #endregion
         /// <summary>
         /// Shared
         /// </summary>
@@ -96,7 +100,7 @@ namespace SonosController
             _serviceUtils = new ServiceUtils();
 
             PropertyChanged += OnPropertyChangedHandler;
-
+            #region
             // Devices
             ZonePlayers = _serviceUtils.GetZonePlayers();
             ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
@@ -123,20 +127,24 @@ namespace SonosController
                 };
                 ZonePlayerDetailsViewCollection.Refresh();
             }
-
-            // Rooms
+            #endregion
+            #region
+            // Rooms and group managemeent
             if (ZonePlayers.ZonePlayersList.Any())
             {
                 ZoneGroupTopology zoneGroupTopology =
-                    _serviceUtils.GetZoneGroupTopology(ZonePlayers.ZonePlayersList[0].PlayerIpAddress);
+                    _serviceUtils.GetZoneGroupTopology(ZonePlayers.ZonePlayersList.FirstOrDefault().PlayerIpAddress);
                 ZoneGroupCollection = new ObservableCollection<ZoneGroup>();
                 foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
                 {
                     ZoneGroupCollection.Add(zoneGroup);
+                    ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(ZonePlayers, zoneGroup);
+                    zoneGroupViewModels.Add(zoneGroupViewModel);
                 }
             }
             SelectedZoneGroup = ZoneGroupCollection.FirstOrDefault();
 
+            //Queues
             List<QueueItem> queueItemList = new List<QueueItem>();
             foreach (ZoneGroup zoneGroup in ZoneGroupCollection)
             {
@@ -163,6 +171,7 @@ namespace SonosController
             };
             ZoneGroupQueueViewCollection.Refresh();
         }
+        #endregion
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
         {
