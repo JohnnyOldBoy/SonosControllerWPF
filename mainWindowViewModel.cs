@@ -151,11 +151,22 @@ namespace SonosController
                 ZonePlayer SelectedZoneGroupCoordinator = _serviceUtils.getPlayerByUUID(ZonePlayers, zoneGroup.ZoneGroupCoordinator);
                 PlayerQueue playerQueue = _serviceUtils.getPlayerQueue(zoneGroup, SelectedZoneGroupCoordinator.PlayerIpAddress);
                 
-                foreach (QueueItem queueItem in playerQueue.QueueItems)
+                if (playerQueue.QueueItems.Count == 0)
                 {
-                    queueItemList.Add(queueItem);
+                    QueueItem emptyQueueItem = new QueueItem();
+                    emptyQueueItem.QiTitle = "Queue empty";
+                    emptyQueueItem.ZoneGroupCoordinator = SelectedZoneGroupCoordinator.UUID;
+                    queueItemList.Add(emptyQueueItem);
+                }
+                else
+                {
+                    foreach (QueueItem queueItem in playerQueue.QueueItems)
+                    {
+                        queueItemList.Add(queueItem);
+                    }
                 }
             }
+
             ZoneGroupQueueViewCollection = new ListCollectionView(queueItemList);
 
             ZoneGroupQueueViewCollection.Filter = t =>

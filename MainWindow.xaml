@@ -6,19 +6,20 @@
          xmlns:local="clr-namespace:SonosController"
         mc:Ignorable="d"
         Title="Sonos Controller" >
+    <Window.Resources>
+        <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Window.Resources>
     <Grid Background="LightBlue">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <TabControl>
-            <TabItem Header="Rooms" Name="TopologyTab">
-                <TabItem.Background>
-                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </TabItem.Background>
+            <TabItem Header="Rooms" Name="TopologyTab" Background="White">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -54,58 +55,60 @@
                                                     <Setter Property="Control.Template">
                                                         <Setter.Value>
                                                             <ControlTemplate>
-                                                                <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="10" StrokeDashArray="1 2"/>
+                                                                <Rectangle Margin="2" 
+                                                                           SnapsToDevicePixels="true" 
+                                                                           Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" 
+                                                                           StrokeThickness="10" 
+                                                                           StrokeDashArray="1 2"/>
                                                             </ControlTemplate>
                                                         </Setter.Value>
                                                     </Setter>
                                                 </Style>
-                                                <SolidColorBrush x:Key="Button.Static.Background" Color="AliceBlue"/>
-                                                <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-                                                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="AliceBlue"/>
-                                                <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-                                                <SolidColorBrush x:Key="Button.Pressed.Background" Color="AliceBlue"/>
-                                                <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-                                                <SolidColorBrush x:Key="Button.Disabled.Background" Color="AliceBlue"/>
-                                                <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-                                                <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
                                             </Button.Resources>
-                                            <Button.Background>
-                                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
-                                            </Button.Background>
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}">
                                                     <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-                                                    <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-                                                    <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-                                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                                                    <Setter Property="BorderThickness" Value="1"/>
                                                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                                                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                                                     <Setter Property="Padding" Value="1"/>
                                                     <Setter Property="Template">
                                                         <Setter.Value>
                                                             <ControlTemplate TargetType="{x:Type Button}">
-                                                                <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="5" SnapsToDevicePixels="true">
-                                                                    <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                                <Border x:Name="border" 
+                                                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                        Background="{TemplateBinding Background}" 
+                                                                        CornerRadius="5" 
+                                                                        SnapsToDevicePixels="true">
+                                                                    <ContentPresenter x:Name="contentPresenter" 
+                                                                                      Focusable="False" 
+                                                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                                                      Margin="{TemplateBinding Padding}" 
+                                                                                      RecognizesAccessKey="True" 
+                                                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                                                 </Border>
                                                                 <ControlTemplate.Triggers>
                                                                     <Trigger Property="IsDefaulted" Value="true">
                                                                         <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                                                                     </Trigger>
-                                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                                    <Trigger Property="IsMouseOver" Value="True">
                                                                         <Setter Property="Background" TargetName="border" Value="AliceBlue"/>
-                                                                        <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                                                                        <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
                                                                         <Setter Property="Foreground" Value="Black"/>
+                                                                        <Setter Property="BorderThickness" Value="0,0,2,2"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                                        <Setter Property="Background" TargetName="border" Value="AliceBlue"/>
+                                                                        <Setter Property="BorderBrush" TargetName="border" Value="DarkGray"/>
+                                                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                                                        <Setter Property="BorderThickness" Value="0,0,2,2"/>
                                                                     </Trigger>
                                                                     <Trigger Property="IsPressed" Value="true">
-                                                                        <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                                                        <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                                                                        <Setter Property="Background" TargetName="border" Value="AliceBlue"/>
+                                                                        <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
                                                                         <Setter Property="Foreground" Value="Black"/>
-                                                                    </Trigger>
-                                                                    <Trigger Property="IsEnabled" Value="false">
-                                                                        <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                                                        <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                                                        <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                                                                        <Setter Property="BorderThickness" Value="2,2,0,0"/>
                                                                     </Trigger>
                                                                 </ControlTemplate.Triggers>
                                                             </ControlTemplate>
@@ -127,30 +130,36 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <ListBox Name="QueueListBox"
-                             Grid.Column="1"
-                             ItemsSource="{Binding ZoneGroupQueueViewCollection}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Expander x:Name="QueueExpander" Header="{Binding QiTitle}">
-                                    <StackPanel Orientation="Vertical" Margin="30,0,0,0">
-                                        <TextBlock Text="{Binding QiArtist}"/>
-                                        <TextBlock Text="{Binding QiAlbum}"/>
-                                        <TextBlock Text="{Binding QiUri}"/>
-                                    </StackPanel>
-                                </Expander>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding SelectedZoneGroup.ZoneGroupName}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Margin="5"/>
+                            <TextBlock Text="- Queue"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Margin="5"/>
+                        </StackPanel>
+                        <ListBox Name="QueueListBox"
+                                 Grid.Column="1"
+                                 ItemsSource="{Binding ZoneGroupQueueViewCollection}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Expander x:Name="QueueExpander" Header="{Binding QiTitle}">
+                                        <StackPanel Orientation="Vertical" Margin="30,0,0,0">
+                                            <TextBlock Text="{Binding QiArtist}"/>
+                                            <TextBlock Text="{Binding QiAlbum}"/>
+                                            <TextBlock Text="{Binding QiUri}"/>
+                                        </StackPanel>
+                                    </Expander>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Devices" Name="DevicesTab">
-                <TabItem.Background>
-                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </TabItem.Background>
+            <TabItem Header="Devices" Name="DevicesTab" Background="White">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -195,23 +204,18 @@
                                       AutoGenerateColumns="False"
                                       ItemsSource="{Binding ZonePlayerDetailsViewCollection}"
                                       HeadersVisibility="Column" 
+                                      CanUserSortColumns="False"
                                       Grid.IsSharedSizeScope="True" 
                                       IsReadOnly="True" 
                                       Background="White" 
-                                      GridLinesVisibility="None" SelectionMode="Single" SelectionUnit="Cell">
-                                <DataGrid.CellStyle>
-                                    <Style TargetType="DataGridCell">
-                                        <Setter Property="Margin" Value="1"/>
-                                        <Setter Property="BorderBrush" Value="LightGray"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                    </Style>
-                                </DataGrid.CellStyle>
+                                      GridLinesVisibility="None" 
+                                      SelectionMode="Single" 
+                                      SelectionUnit="Cell"
+                                      CellStyle="{StaticResource DataGridCellStyle}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Detail" 
-                                                        CanUserSort="False"
                                                         Binding="{Binding DetailName}"/>
                                     <DataGridTextColumn Header="Value" 
-                                                        CanUserSort="False"
                                                         Binding="{Binding DetailValue}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
@@ -227,8 +231,26 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Expander x:Name="GroupExpander" Header="{Binding ZoneGroupName}">
-                                                <DataGrid ItemsSource="{Binding ZoneGroupMembers}">
-                                                    
+                                                <DataGrid ItemsSource="{Binding ZoneGroupMembers}" 
+                                                          SelectionMode="Single"
+                                                          SelectionUnit="Cell"
+                                                          CanUserSortColumns="False" 
+                                                          HeadersVisibility="Column" 
+                                                          Grid.IsSharedSizeScope="True" 
+                                                          IsReadOnly="True"
+                                                          AutoGenerateColumns="False"
+                                                          GridLinesVisibility="None"
+                                                          CellStyle="{StaticResource DataGridCellStyle}">
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="UUID" 
+                                                        Binding="{Binding UUID}"/>
+                                                        <DataGridTextColumn Header="Member name" 
+                                                        Binding="{Binding ZoneName}"/>
+                                                        <DataGridCheckBoxColumn Header="Coordinator" 
+                                                        Binding="{Binding IsCoordinator}"/>
+                                                        <DataGridCheckBoxColumn Header="Not visible" 
+                                                        Binding="{Binding Invisible}"/>
+                                                    </DataGrid.Columns>
                                                 </DataGrid>
                                             </Expander>
                                         </DataTemplate>
@@ -236,7 +258,7 @@
                                 </ListBox>
                             </Expander>
                             <Expander Header="Stereo pairs" Margin="20,0,0,0">
-                                
+
                             </Expander>
                         </StackPanel>
                     </Grid>

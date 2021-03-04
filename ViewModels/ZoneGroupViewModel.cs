@@ -40,19 +40,18 @@ namespace SonosController.ViewModels
         {
             ObservableCollection<ZoneGroupMember> zoneGroupMembers = new ObservableCollection<ZoneGroupMember>();
 
-            foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList)
+            //Add the group coordinator first
+            ZoneGroupMember zoneGroupCoordinator = zoneGroup.ZoneGroupMemeberList.Find(x => x.IsCoordinator == true);
+            zoneGroupMembers.Add(zoneGroupCoordinator); 
+            //Add the rest of the members that are not invisible
+            foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList.FindAll(x => x.IsCoordinator == false).FindAll(x => x.Invisible == false))
             {
-                if (zoneGroupMember.IsCoordinator)
-                {
-                    zoneGroupMembers.Add(zoneGroupMember);
-                }
+                zoneGroupMembers.Add(zoneGroupMember);
             }
-            foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList)
+            //Add the invisible members last
+            foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList.FindAll(x => x.IsCoordinator == false).FindAll(x => x.Invisible == true))
             {
-                if (!zoneGroupMember.IsCoordinator)
-                {
-                    zoneGroupMembers.Add(zoneGroupMember);
-                }
+                zoneGroupMembers.Add(zoneGroupMember);
             }
 
             return zoneGroupMembers;
