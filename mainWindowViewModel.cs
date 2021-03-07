@@ -143,6 +143,7 @@ namespace SonosController
                 }
             }
             SelectedZoneGroup = ZoneGroupCollection.FirstOrDefault();
+            SelectedZoneGroup.IsSelected = true;
 
             //Queues
             List<QueueItem> queueItemList = new List<QueueItem>();

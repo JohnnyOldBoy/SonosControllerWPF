@@ -31,6 +31,5 @@ namespace SonosController
             MusicLibraryWindow musicLibraryWindow = new MusicLibraryWindow();
             musicLibraryWindow.Show();
         }
-
     }
 }

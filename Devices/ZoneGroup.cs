@@ -40,6 +40,13 @@ namespace Devices
             set => zoneGroupMemberNames = value; 
         }
 
+        private bool isSelected = false;
+        public bool IsSelected 
+        { 
+            get => isSelected; 
+            set => isSelected = value; 
+        }
+
     }
 
 }
