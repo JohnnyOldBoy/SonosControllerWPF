@@ -16,7 +16,7 @@
     <Grid Background="LightBlue">
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <TabControl>
             <TabItem Header="Rooms" Name="TopologyTab" Background="White">
@@ -218,7 +218,7 @@
                                        FontWeight="Bold"
                                        Margin="10,0,0,0"/>
                             <Expander Header="Groups" Margin="20,0,0,0">
-                                <ListBox ItemsSource="{Binding zoneGroupViewModels}"
+                                <ListBox ItemsSource="{Binding ZoneGroupViewModels}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
@@ -250,13 +250,83 @@
                                 </ListBox>
                             </Expander>
                             <Expander Header="Stereo pairs" Margin="20,0,0,0">
-
+                                <ListBox ItemsSource="{Binding StereoPairViewModels}"
+                                         BorderBrush="White">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Expander x:Name="GroupExpander" Header="{Binding PairName}">
+                                                <DataGrid ItemsSource="{Binding StereoPair}"
+                                                          SelectionMode="Single"
+                                                          SelectionUnit="Cell"
+                                                          CanUserSortColumns="False" 
+                                                          HeadersVisibility="Column" 
+                                                          Grid.IsSharedSizeScope="True" 
+                                                          IsReadOnly="True"
+                                                          AutoGenerateColumns="False"
+                                                          GridLinesVisibility="None"
+                                                          CellStyle="{StaticResource DataGridCellStyle}">
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Left Channel" Binding="{Binding LeftUUID}"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+                                            </Expander>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </Expander>
                         </StackPanel>
                     </Grid>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button Grid.Row="1" Name="MusicLibraryBtn" Content="Browse Music Library" HorizontalAlignment="Left" VerticalAlignment="Center" Click="MusicLibraryBtn_Click"/>
+        <Grid Grid.Row="1" >
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="AliceBlue"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="3,3,3,3"/>
+                    <Setter Property="Padding" Value="2,2,2,2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border CornerRadius="3"
+                                        Background="AliceBlue"
+                                        BorderBrush="Black"
+                                        BorderThickness="2">
+                                    <Grid x:Name="grid" VerticalAlignment="Center">
+                                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"
+                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="AliceBlue"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="AliceBlue"/>
+                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Background" Value="AliceBlue"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="grid" Property="Opacity" Value="0.5"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+            <Button Name="MusicLibraryBtn" 
+                    Content="Browse Music Library" 
+                    Click="MusicLibraryBtn_Click">
+        </Button>
+        </Grid>
     </Grid>
 </Window>

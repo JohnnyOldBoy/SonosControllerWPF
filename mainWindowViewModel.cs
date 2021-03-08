@@ -82,7 +82,9 @@ namespace SonosController
 
         public ICollectionView ZoneGroupQueueViewCollection { get; }
 
-        public ObservableCollection<ZoneGroupViewModel> zoneGroupViewModels { get; } = new ObservableCollection<ZoneGroupViewModel>();
+        public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels { get; } = new ObservableCollection<ZoneGroupViewModel>();
+
+        public ObservableCollection<StereoPairViewModel> StereoPairViewModels { get; } = new ObservableCollection<StereoPairViewModel>();
         #endregion
         /// <summary>
         /// Shared
@@ -139,7 +141,18 @@ namespace SonosController
                 {
                     ZoneGroupCollection.Add(zoneGroup);
                     ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(ZonePlayers, zoneGroup);
-                    zoneGroupViewModels.Add(zoneGroupViewModel);
+                    ZoneGroupViewModels.Add(zoneGroupViewModel);
+                }
+                if (zoneGroupTopology.StereoPairs.StereoPairsList.Count > 0)
+                {
+                    foreach (StereoPair stereoPair in zoneGroupTopology.StereoPairs.StereoPairsList)
+                    {
+                        StereoPairViewModel stereoPairViewModel = new StereoPairViewModel();
+                        stereoPairViewModel.PairName = stereoPair.PairName;
+                        stereoPairViewModel.StereoPair.Add(stereoPair);
+                        StereoPairViewModels.Add(stereoPairViewModel);
+                    }
+                    
                 }
             }
             SelectedZoneGroup = ZoneGroupCollection.FirstOrDefault();

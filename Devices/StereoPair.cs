@@ -33,5 +33,6 @@
             get => rightUUID;
             set => rightUUID = value;
         }
+
     }
 }
