@@ -2,7 +2,65 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SonosController">
     <Style TargetType="DataGrid">
-        <Setter Property="Background"
-                Value="DeepPink"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserReorderColumns" Value="False"/>
+        <Setter Property="CanUserSortColumns" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+    </Style>
+    <Style TargetType="DataGridCell">
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+    <Style TargetType="TabItem">
+        <Setter Property="Background" Value="White"/>
+    </Style>
+    <Style TargetType="Grid">
+        <Setter Property="Background" Value="White"/>
+    </Style>
+    <Style TargetType="Button">
+        <Setter Property="Background" Value="AliceBlue"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="3,3,3,3"/>
+        <Setter Property="Padding" Value="2,2,2,2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border CornerRadius="3"
+                                        Background="AliceBlue"
+                                        BorderBrush="Black"
+                                        BorderThickness="2">
+                        <Grid x:Name="grid" VerticalAlignment="Center">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"
+                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="AliceBlue"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Background" Value="AliceBlue"/>
+                            <Setter Property="Foreground" Value="DarkGray"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="AliceBlue"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="grid" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

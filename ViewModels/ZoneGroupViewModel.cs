@@ -1,10 +1,11 @@
 ﻿using Devices;
+using GalaSoft.MvvmLight;
 using Services;
 using System.Collections.ObjectModel;
 
 namespace SonosController.ViewModels
 {
-    public class ZoneGroupViewModel
+    public class ZoneGroupViewModel : ViewModelBase
     {
         public ZoneGroupViewModel(ZonePlayers zonePlayers, ZoneGroup zoneGroup)
         {
@@ -18,23 +19,35 @@ namespace SonosController.ViewModels
         private string _zoneGroupName = string.Empty;
         public string ZoneGroupName 
         { 
-            get => _zoneGroupName; 
-            set => _zoneGroupName = value; 
+            get => _zoneGroupName;
+            set
+            {
+                _zoneGroupName = value;
+                RaisePropertyChanged(nameof(ZoneGroupName));
+            }
         }
 
         private ZonePlayer _zoneGroupCoordinator;
 
         public ZonePlayer ZoneGroupCoordinator 
         { 
-            get => _zoneGroupCoordinator; 
-            set => _zoneGroupCoordinator = value; 
+            get => _zoneGroupCoordinator;
+            set
+            {
+                _zoneGroupCoordinator = value;
+                RaisePropertyChanged(nameof(ZoneGroupCoordinator));
+            }
         }
 
         private ObservableCollection<ZoneGroupMember> _zoneGroupMembers;
         public ObservableCollection<ZoneGroupMember> ZoneGroupMembers 
         { 
-            get => _zoneGroupMembers; 
-            set => _zoneGroupMembers = value; 
+            get => _zoneGroupMembers;
+            set
+            {
+                _zoneGroupMembers = value;
+                RaisePropertyChanged(nameof(ZoneGroupMembers));
+            }
         }
 
         private ObservableCollection<ZoneGroupMember> getZoneGroupMembers(ZoneGroup zoneGroup)

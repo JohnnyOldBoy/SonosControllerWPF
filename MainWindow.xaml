@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="Sonos Controller">
     <Window.Resources>
-        <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
-            <Setter Property="Margin" Value="1"/>
-            <Setter Property="BorderBrush" Value="LightGray"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="LightBlue">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="30"/>
@@ -28,19 +28,17 @@
                     <DataGrid Grid.Column="0" 
                               ItemsSource="{Binding ZoneGroupCollection}" 
                               SelectedItem="{Binding SelectedZoneGroup}"
-                              AutoGenerateColumns="False" 
-                              Background="White"
-                              IsReadOnly="True" 
-                              HorizontalGridLinesBrush="White"
-                              VerticalGridLinesBrush="White"
-                              SelectionMode="Single"
                               HeadersVisibility="None">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="BorderBrush" Value="White"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="BorderBrush" Value="White"/>
-                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="Background" Value="White"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -195,15 +193,7 @@
                             <DataGrid Name="DetailsView"
                                       AutoGenerateColumns="False"
                                       ItemsSource="{Binding ZonePlayerDetailsViewCollection}"
-                                      HeadersVisibility="Column" 
-                                      CanUserSortColumns="False"
-                                      Grid.IsSharedSizeScope="True" 
-                                      IsReadOnly="True" 
-                                      Background="White" 
-                                      GridLinesVisibility="None" 
-                                      SelectionMode="Single" 
-                                      SelectionUnit="Cell"
-                                      CellStyle="{StaticResource DataGridCellStyle}">
+                                      HeadersVisibility="Column">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Detail" 
                                                         Binding="{Binding DetailName}"/>
@@ -224,15 +214,7 @@
                                         <DataTemplate>
                                             <Expander x:Name="GroupExpander" Header="{Binding ZoneGroupName}">
                                                 <DataGrid ItemsSource="{Binding ZoneGroupMembers}" 
-                                                          SelectionMode="Single"
-                                                          SelectionUnit="Cell"
-                                                          CanUserSortColumns="False" 
-                                                          HeadersVisibility="Column" 
-                                                          Grid.IsSharedSizeScope="True" 
-                                                          IsReadOnly="True"
-                                                          AutoGenerateColumns="False"
-                                                          GridLinesVisibility="None"
-                                                          CellStyle="{StaticResource DataGridCellStyle}">
+                                                          GridLinesVisibility="None">
                                                     <DataGrid.Columns>
                                                         <DataGridTextColumn Header="UUID" 
                                                         Binding="{Binding UUID}"/>
@@ -255,20 +237,16 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Expander x:Name="GroupExpander" Header="{Binding PairName}">
-                                                <DataGrid ItemsSource="{Binding StereoPair}"
-                                                          SelectionMode="Single"
-                                                          SelectionUnit="Cell"
-                                                          CanUserSortColumns="False" 
-                                                          HeadersVisibility="Column" 
-                                                          Grid.IsSharedSizeScope="True" 
-                                                          IsReadOnly="True"
-                                                          AutoGenerateColumns="False"
-                                                          GridLinesVisibility="None"
-                                                          CellStyle="{StaticResource DataGridCellStyle}">
-                                                    <DataGrid.Columns>
-                                                        <DataGridTextColumn Header="Left Channel" Binding="{Binding LeftUUID}"/>
-                                                    </DataGrid.Columns>
-                                                </DataGrid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <DataGrid ItemsSource="{Binding StereoPair}"
+                                                              GridLinesVisibility="None">
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Header="Left Channel" Binding="{Binding LeftUUID}"/>
+                                                            <DataGridTextColumn Header="Right Channel" Binding="{Binding RightUUID}"/>
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                    <Button Content="Separate" Command="{Binding SeparateSteroPair}" />
+                                                </StackPanel>
                                             </Expander>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -280,49 +258,6 @@
             </TabItem>
         </TabControl>
         <Grid Grid.Row="1" >
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Background" Value="AliceBlue"/>
-                    <Setter Property="HorizontalAlignment" Value="Left"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="Margin" Value="3,3,3,3"/>
-                    <Setter Property="Padding" Value="2,2,2,2"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border CornerRadius="3"
-                                        Background="AliceBlue"
-                                        BorderBrush="Black"
-                                        BorderThickness="2">
-                                    <Grid x:Name="grid" VerticalAlignment="Center">
-                                        <ContentPresenter Margin="{TemplateBinding Padding}"
-                                                          HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center"
-                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                    </Grid>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="AliceBlue"/>
-                                        <Setter Property="Foreground" Value="Black"/>
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="AliceBlue"/>
-                                        <Setter Property="Foreground" Value="DarkGray"/>
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter Property="Background" Value="AliceBlue"/>
-                                        <Setter Property="Foreground" Value="Black"/>
-                                    </Trigger>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter TargetName="grid" Property="Opacity" Value="0.5"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Grid.Resources>
             <Button Name="MusicLibraryBtn" 
                     Content="Browse Music Library" 
                     Click="MusicLibraryBtn_Click">

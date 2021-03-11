@@ -12,23 +12,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/> <!-- F12 on the filename-->
-                <ResourceDictionary>
-                    <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Foreground"
-                                Value="Yellow"/>
-                        <Setter Property="Background"
-                                Value="Black"/>
-                    </Style>
-                    <Style TargetType="{x:Type DataGridRow}">
+                <!--<ResourceDictionary>
+                    <Style TargetType="{x:Type DataGridRow}" x:Key="Row1">
                         <Setter Property="Background"
                                 Value="Red"/>
                     </Style>
-                    <Style x:Key="TabItemStyle1" 
-                           TargetType="TabItem">
-                        <Setter Property="Background"
-                                Value="Blue"/>
-                    </Style>
-                </ResourceDictionary>
+                </ResourceDictionary>-->
             </ResourceDictionary.MergedDictionaries>
             
             <!-- styles could be named (below) or unnamed (above)
@@ -44,8 +33,7 @@
     </Window.Resources>
     <Grid >
         <TabControl x:Name="MusicLibrary" >
-            <TabItem Header="Albums"
-                     Style="{StaticResource TabItemStyle1}">
+            <TabItem Header="Albums">
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -53,9 +41,6 @@
                     </Grid.ColumnDefinitions>
                     <DataGrid Grid.Column="0" Name="AlbumsView" 
                               ItemsSource="{Binding Albums}"
-                              Grid.IsSharedSizeScope="True" 
-                              IsReadOnly="True" 
-                              AutoGenerateColumns="False"
                               SelectedItem="{Binding SelectedAlbum}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Album" 
@@ -65,19 +50,11 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
-                              ItemsSource="{Binding AlbumTracksCollectionView}"
-                              Grid.IsSharedSizeScope="True" 
-                              AutoGenerateColumns="False"
-                              CellStyle="{StaticResource Cell1}"
-                              RowStyle="{StaticResource Row1}"
-                              IsReadOnly="True">
-                        
+                              ItemsSource="{Binding AlbumTracksCollectionView}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Track Number" 
-                                                Binding="{Binding Track.TrackNumber}"
-                                                CellStyle="{StaticResource Cell1}"/>
-                            <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"
-                                                CellStyle="{StaticResource Cell1}"/>
+                                                Binding="{Binding Track.TrackNumber}"/>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"/>
                             <DataGridTextColumn Header="Artist" Binding="{Binding Track.ArtistName}"/>
                             <DataGridTextColumn Header="Genre" Binding="{Binding Genre}"/>
                         </DataGrid.Columns>
@@ -85,7 +62,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Artists">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -111,11 +88,7 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                     <DataGrid Grid.Column="1" Name="ArtistAlbumTracksView"
-                              ItemsSource="{Binding ArtistTracksCollectionView}"
-                              Grid.IsSharedSizeScope="True" 
-                              CellStyle="{StaticResource Cell1}"
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True">
+                              ItemsSource="{Binding ArtistTracksCollectionView}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Track Number" Binding="{Binding Track.TrackNumber}"/>
                             <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"/>
@@ -126,13 +99,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Tracks">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <DataGrid Name="TracksView" 
-                              ItemsSource="{Binding Tracks}"
-                              Grid.IsSharedSizeScope="True" 
-                              CellStyle="{StaticResource Cell1}"
-                              IsReadOnly="True" 
-                              AutoGenerateColumns="False">
+                              ItemsSource="{Binding Tracks}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Track Number" Binding="{Binding Track.TrackNumber}"/>
                             <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"/>
@@ -144,7 +113,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Genres">
-                <Grid  Background="#FFE5E5E5">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -154,10 +123,7 @@
                              ItemsSource="{Binding Genres}"
                              SelectedItem="{Binding SelectedGenre}"/>
                     <DataGrid Grid.Column="1" 
-                              ItemsSource="{Binding GenreTracksCollectionView}"
-                              Grid.IsSharedSizeScope="True" 
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True">
+                              ItemsSource="{Binding GenreTracksCollectionView}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Track Number" Binding="{Binding Track.TrackNumber}"/>
                             <DataGridTextColumn Header="Title" Binding="{Binding Track.Title}"/>

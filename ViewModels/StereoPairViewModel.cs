@@ -1,14 +1,18 @@
 ﻿using Devices;
-using Services;
-using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
 
 namespace SonosController.ViewModels
 {
-    //Make sure your VIEWMODELS derive from ViewModelBase
-    //Do the same with zonegroupviewmodel
     public class StereoPairViewModel : ViewModelBase
     {
+        public StereoPairViewModel()
+        {
+            SeparateSteroPair = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(SeparateSteroPairMethod);
+        }
+
         private string _pairName = string.Empty;
 
         public string PairName 
@@ -30,6 +34,17 @@ namespace SonosController.ViewModels
                 _stereoPair = value; 
                 RaisePropertyChanged(nameof(StereoPair));
             }
+        }
+
+        public ICommand SeparateSteroPair
+        {
+            get;
+            private set;
+        }
+
+        private void SeparateSteroPairMethod()
+        {
+            MessageBox.Show("You Have Clicked the button");
         }
     }
 }
