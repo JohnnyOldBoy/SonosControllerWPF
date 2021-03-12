@@ -190,10 +190,12 @@
                                        FontSize="15"
                                        FontWeight="Bold"
                                        Margin="10,0,0,0"/>
-                            <DataGrid Name="DetailsView"
+                            <DataGrid Name="DetailsView" 
+                                      Margin="10,0,0,0"
                                       AutoGenerateColumns="False"
                                       ItemsSource="{Binding ZonePlayerDetailsViewCollection}"
-                                      HeadersVisibility="Column">
+                                      CanUserSortColumns="False"
+                                      HeadersVisibility="Column" HorizontalAlignment="Left">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Detail" 
                                                         Binding="{Binding DetailName}"/>
@@ -214,6 +216,7 @@
                                         <DataTemplate>
                                             <Expander x:Name="GroupExpander" Header="{Binding ZoneGroupName}">
                                                 <DataGrid ItemsSource="{Binding ZoneGroupMembers}" 
+                                                          CanUserSortColumns="False"
                                                           GridLinesVisibility="None">
                                                     <DataGrid.Columns>
                                                         <DataGridTextColumn Header="UUID" 
@@ -239,6 +242,7 @@
                                             <Expander x:Name="GroupExpander" Header="{Binding PairName}">
                                                 <StackPanel Orientation="Horizontal">
                                                     <DataGrid ItemsSource="{Binding StereoPair}"
+                                                              CanUserSortColumns="False"
                                                               GridLinesVisibility="None">
                                                         <DataGrid.Columns>
                                                             <DataGridTextColumn Header="Left Channel" Binding="{Binding LeftUUID}"/>

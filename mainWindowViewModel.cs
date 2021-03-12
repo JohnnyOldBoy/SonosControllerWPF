@@ -111,7 +111,7 @@ namespace SonosController
                 ZonePlayerCollection.Add(zonePlayer);
             }
 
-            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.getPlayerDetails(ZonePlayers);
+            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayers);
             ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
             SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
             if (SelectedZonePlayer != null)
@@ -150,6 +150,7 @@ namespace SonosController
                         StereoPairViewModel stereoPairViewModel = new StereoPairViewModel();
                         stereoPairViewModel.PairName = stereoPair.PairName;
                         stereoPairViewModel.StereoPair.Add(stereoPair);
+                        stereoPairViewModel.ZonePlayers = ZonePlayers;
                         StereoPairViewModels.Add(stereoPairViewModel);
                     }
                     
@@ -162,8 +163,8 @@ namespace SonosController
             List<QueueItem> queueItemList = new List<QueueItem>();
             foreach (ZoneGroup zoneGroup in ZoneGroupCollection)
             {
-                ZonePlayer SelectedZoneGroupCoordinator = _serviceUtils.getPlayerByUUID(ZonePlayers, zoneGroup.ZoneGroupCoordinator);
-                PlayerQueue playerQueue = _serviceUtils.getPlayerQueue(zoneGroup, SelectedZoneGroupCoordinator.PlayerIpAddress);
+                ZonePlayer SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayers, zoneGroup.ZoneGroupCoordinator);
+                PlayerQueue playerQueue = _serviceUtils.GetPlayerQueue(zoneGroup, SelectedZoneGroupCoordinator.PlayerIpAddress);
                 
                 if (playerQueue.QueueItems.Count == 0)
                 {

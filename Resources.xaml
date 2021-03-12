@@ -5,7 +5,6 @@
         <Setter Property="Background" Value="White"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="CanUserReorderColumns" Value="False"/>
-        <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="GridLinesVisibility" Value="None"/>
         <Setter Property="Grid.IsSharedSizeScope" Value="True"/>

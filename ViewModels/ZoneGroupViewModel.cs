@@ -9,7 +9,7 @@ namespace SonosController.ViewModels
     {
         public ZoneGroupViewModel(ZonePlayers zonePlayers, ZoneGroup zoneGroup)
         {
-            ZoneGroupCoordinator = _serviceUtils.getPlayerByUUID(zonePlayers, zoneGroup.ZoneGroupCoordinator);
+            ZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(zonePlayers, zoneGroup.ZoneGroupCoordinator);
             ZoneGroupName = ZoneGroupCoordinator.RoomName;
             ZoneGroupMembers = getZoneGroupMembers(zoneGroup);
         }
