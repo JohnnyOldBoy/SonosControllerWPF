@@ -1,9 +1,11 @@
 ﻿using Devices;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using Services;
 using System.Windows;
 using System.Windows.Input;
+using System;
 
 namespace SonosController.ViewModels
 {
@@ -11,9 +13,11 @@ namespace SonosController.ViewModels
     {
         public StereoPairViewModel()
         {
-            SeparateSteroPair = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(SeparateSteroPairMethod);
+            SeparateSteroPair = new RelayCommand(SeparateSteroPairMethod);
         }
 
+        private string leftUUID = string.Empty;
+        private string rightUUID = string.Empty;
         private string _pairName = string.Empty;
 
         public string PairName 
@@ -53,7 +57,7 @@ namespace SonosController.ViewModels
             get;
             private set;
         }
-
+        
         private void SeparateSteroPairMethod()
         {
             ServiceUtils serviceUtils = new ServiceUtils();

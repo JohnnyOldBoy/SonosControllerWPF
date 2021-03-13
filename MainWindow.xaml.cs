@@ -25,11 +25,5 @@ namespace SonosController
             // The DataContext serves as the starting point of Binding Paths
             DataContext = _viewModel;
         }
-
-        private void MusicLibraryBtn_Click(object sender, RoutedEventArgs e)
-        {
-            MusicLibraryWindow musicLibraryWindow = new MusicLibraryWindow();
-            musicLibraryWindow.Show();
-        }
     }
 }

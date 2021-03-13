@@ -234,7 +234,15 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </Expander>
-                            <Expander Header="Stereo pairs" Margin="20,0,0,0">
+                            <Expander Margin="20,0,0,0">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Stereo pairs"/>
+                                        <Button Content="Create stereo pair" 
+                                                Command="{Binding CommandEx}" 
+                                                CommandParameter="CreateStereoPair"/>
+                                    </StackPanel>
+                                </Expander.Header>
                                 <ListBox ItemsSource="{Binding StereoPairViewModels}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
@@ -249,7 +257,8 @@
                                                             <DataGridTextColumn Header="Right Channel" Binding="{Binding RightUUID}"/>
                                                         </DataGrid.Columns>
                                                     </DataGrid>
-                                                    <Button Content="Separate" Command="{Binding SeparateSteroPair}" />
+                                                    <Button Name="CreateSteroPairBtn"
+                                                            Content="Separate"/>
                                                 </StackPanel>
                                             </Expander>
                                         </DataTemplate>
@@ -264,8 +273,9 @@
         <Grid Grid.Row="1" >
             <Button Name="MusicLibraryBtn" 
                     Content="Browse Music Library" 
-                    Click="MusicLibraryBtn_Click">
-        </Button>
+                    Command="{Binding CommandEx}"
+                    CommandParameter="ViewMusicLibrary">
+            </Button>
         </Grid>
     </Grid>
 </Window>

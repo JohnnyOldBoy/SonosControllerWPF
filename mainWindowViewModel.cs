@@ -1,5 +1,6 @@
 ﻿using Devices;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using MusicData;
 using Services;
 using SonosController.ViewModels;
@@ -9,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace SonosController
 {
@@ -85,6 +87,8 @@ namespace SonosController
         public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels { get; } = new ObservableCollection<ZoneGroupViewModel>();
 
         public ObservableCollection<StereoPairViewModel> StereoPairViewModels { get; } = new ObservableCollection<StereoPairViewModel>();
+
+
         #endregion
         /// <summary>
         /// Shared
@@ -97,9 +101,33 @@ namespace SonosController
             set => _zonePlayers = value;
         }
 
+        public CommandEx CommandEx
+        {
+            get;
+            set;
+        }
+
+        public void CommandExMethod(object parameter)
+        {
+            if (parameter as string  == "ViewMusicLibrary")
+            {
+                MusicLibraryWindow musicLibraryWindow = new MusicLibraryWindow();
+                musicLibraryWindow.Show();
+            }
+            if (parameter as string == "CreateStereoPair")
+            {
+                CreateStereoPairWindow createStereoPairWindow = new CreateStereoPairWindow();
+                createStereoPairWindow.Show();
+            }
+        }
+
         public MainWindowViewModel()
         {
             _serviceUtils = new ServiceUtils();
+
+            CommandEx = new CommandEx();
+            CommandEx.CanExecuteFunc = obj => true;
+            CommandEx.ExecuteFunc = CommandExMethod;
 
             PropertyChanged += OnPropertyChangedHandler;
             #region
