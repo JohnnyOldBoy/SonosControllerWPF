@@ -5,8 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SonosController"
         mc:Ignorable="d"
-        Title="CreateSteroPair" Height="450" Width="800">
+        Title="Create Stereo Pair">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0"
+                 Name="ZonePlayersList" 
+                 ItemsSource="{Binding ZonePlayerCollection}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="300"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0"
+                               Source="{Binding IconURL}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                        <StackPanel Orientation="Vertical"
+                                    Grid.Column="1" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="{Binding RoomName}" FontWeight="Bold" FontSize="16"/>
+                            <TextBlock Text="{Binding ModelName}" FontSize="14"/>
+                            <TextBlock Text="{Binding PlayerIpAddress}" FontSize="14"/>
+                        </StackPanel>
+                        <CheckBox Grid.Column="2" 
+                                  IsChecked="False" 
+                                  VerticalAlignment="Center"
+                                  Command="{Binding Path=DataContext.IsChecked,     
+                                  RelativeSource={RelativeSource AncestorType=Window},     
+                                  Mode=Default}"
+                                  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
+                        </CheckBox>
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Grid.Row="1" 
+                Content="Pair"
+                Command="{Binding CreateSteroPair}"/>
     </Grid>
 </Window>

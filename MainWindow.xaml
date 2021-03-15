@@ -274,8 +274,7 @@
             <Button Name="MusicLibraryBtn" 
                     Content="Browse Music Library" 
                     Command="{Binding CommandEx}"
-                    CommandParameter="ViewMusicLibrary">
-            </Button>
+                    CommandParameter="ViewMusicLibrary"/>
         </Grid>
     </Grid>
 </Window>

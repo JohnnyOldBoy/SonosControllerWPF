@@ -83,6 +83,7 @@
     <Compile Include="ViewModels\AlbumViewModel.cs" />
     <Compile Include="ViewModels\ArtistViewModel.cs" />
     <Compile Include="ViewModels\CommandEx.cs" />
+    <Compile Include="ViewModels\CreateStereoPairViewModel.cs" />
     <Compile Include="ViewModels\IsSelectedItemChangedEventArgs.cs" />
     <Compile Include="ViewModels\ITreeViewItemViewModel.cs" />
     <Compile Include="ViewModels\StereoPairViewModel.cs" />

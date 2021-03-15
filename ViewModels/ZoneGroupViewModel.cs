@@ -14,7 +14,7 @@ namespace SonosController.ViewModels
             ZoneGroupMembers = getZoneGroupMembers(zoneGroup);
         }
 
-        private ServiceUtils _serviceUtils = new ServiceUtils();
+        private readonly ServiceUtils _serviceUtils = new ServiceUtils();
 
         private string _zoneGroupName = string.Empty;
         public string ZoneGroupName 

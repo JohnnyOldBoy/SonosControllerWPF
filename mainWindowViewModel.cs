@@ -16,7 +16,7 @@ namespace SonosController
 {
     sealed class MainWindowViewModel : ViewModelBase
     {
-        public ServiceUtils _serviceUtils;
+        private readonly ServiceUtils _serviceUtils;
         #region
         /// <summary>
         /// Devices tab. A device is any Sonos product that can participate in a Sonos system, this includes all players -
@@ -125,9 +125,11 @@ namespace SonosController
         {
             _serviceUtils = new ServiceUtils();
 
-            CommandEx = new CommandEx();
-            CommandEx.CanExecuteFunc = obj => true;
-            CommandEx.ExecuteFunc = CommandExMethod;
+            CommandEx = new CommandEx
+            {
+                CanExecuteFunc = obj => true,
+                ExecuteFunc = CommandExMethod
+            };
 
             PropertyChanged += OnPropertyChangedHandler;
             #region
@@ -175,8 +177,10 @@ namespace SonosController
                 {
                     foreach (StereoPair stereoPair in zoneGroupTopology.StereoPairs.StereoPairsList)
                     {
-                        StereoPairViewModel stereoPairViewModel = new StereoPairViewModel();
-                        stereoPairViewModel.PairName = stereoPair.PairName;
+                        StereoPairViewModel stereoPairViewModel = new StereoPairViewModel
+                        {
+                            PairName = stereoPair.PairName
+                        };
                         stereoPairViewModel.StereoPair.Add(stereoPair);
                         stereoPairViewModel.ZonePlayers = ZonePlayers;
                         StereoPairViewModels.Add(stereoPairViewModel);
@@ -196,9 +200,11 @@ namespace SonosController
                 
                 if (playerQueue.QueueItems.Count == 0)
                 {
-                    QueueItem emptyQueueItem = new QueueItem();
-                    emptyQueueItem.QiTitle = "Queue empty";
-                    emptyQueueItem.ZoneGroupCoordinator = SelectedZoneGroupCoordinator.UUID;
+                    QueueItem emptyQueueItem = new QueueItem
+                    {
+                        QiTitle = "Queue empty",
+                        ZoneGroupCoordinator = SelectedZoneGroupCoordinator.UUID
+                    };
                     queueItemList.Add(emptyQueueItem);
                 }
                 else
@@ -210,18 +216,19 @@ namespace SonosController
                 }
             }
 
-            ZoneGroupQueueViewCollection = new ListCollectionView(queueItemList);
-
-            ZoneGroupQueueViewCollection.Filter = t =>
+            ZoneGroupQueueViewCollection = new ListCollectionView(queueItemList)
             {
-                if (t is QueueItem queueItem)
+                Filter = t =>
                 {
-                    if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator)
+                    if (t is QueueItem queueItem)
                     {
-                        return true;
+                        if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator)
+                        {
+                            return true;
+                        }
                     }
+                    return false;
                 }
-                return false;
             };
             ZoneGroupQueueViewCollection.Refresh();
         }
