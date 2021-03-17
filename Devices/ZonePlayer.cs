@@ -71,13 +71,5 @@
             get => iconURL;
             set => iconURL = value;
         }
-
-        //private PlayerQueue queue;
-        //public PlayerQueue Queue
-        //{
-        //  get => queue;
-        //  set => queue = value;
-        //}
-
     }
 }

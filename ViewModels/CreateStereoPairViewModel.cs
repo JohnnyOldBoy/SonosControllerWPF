@@ -4,13 +4,16 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
 namespace SonosController.ViewModels
 {
-    public class CreateStereoPairViewModel : ViewModelBase
+    public class CreateStereoPairViewModel : ViewModelBase, INotifyPropertyChanged
     {
+        private List<string> zoneGroupMembersUuids = new List<string>();
+
         public CreateStereoPairViewModel()
         {
             CreateSteroPair = new RelayCommand(CreateStereoPairMethod);
@@ -19,6 +22,14 @@ namespace SonosController.ViewModels
             ZonePlayers = _serviceUtils.GetZonePlayers();
             ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
             ZoneGroupTopology _zoneGroupTopology = _serviceUtils.GetZoneGroupTopology(ZonePlayers.ZonePlayersList[0].PlayerIpAddress);
+
+            foreach (ZoneGroup zoneGroup in _zoneGroupTopology.ZoneGroupList)
+            {
+                foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList)
+                {
+                    zoneGroupMembersUuids.Add(zoneGroupMember.UUID);
+                }
+            }
 
             foreach (ZonePlayer zonePlayer in ZonePlayers.ZonePlayersList)
             {
@@ -34,7 +45,7 @@ namespace SonosController.ViewModels
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
-            get { return _zonePlayerCollection; }
+            get => _zonePlayerCollection;
             set
             {
                 _zonePlayerCollection = value;
@@ -49,34 +60,40 @@ namespace SonosController.ViewModels
             set => _zonePlayers = value;
         }
 
+        private StereoPair _newStereoPair;
+        public StereoPair NewStereoPair
+        {
+            get => _newStereoPair;
+            set
+            {
+                _newStereoPair = value;
+                RaisePropertyChanged(nameof(NewStereoPair));
+            }
+        }
+
         private bool isVisible(ZoneGroupTopology _zoneGroupTopology, string UUID)
         {
-            StereoPairs stereoPairs = _zoneGroupTopology.StereoPairs;
-            if (stereoPairs != null)
+            bool deviceVisible = false;
+
+            int zoneGroupMemberUuidPos = zoneGroupMembersUuids.IndexOf(UUID);
+            if (zoneGroupMemberUuidPos > -1)
             {
-                foreach (StereoPair stereoPair in stereoPairs.StereoPairsList)
+                deviceVisible = true;
+            }
+            else
+            {
+                StereoPairs stereoPairs = _zoneGroupTopology.StereoPairs;
+                if (stereoPairs != null)
                 {
-                    if (stereoPair.LeftUUID == UUID || stereoPair.RightUUID == UUID)
+                    StereoPair stereoPair = stereoPairs.StereoPairsList.Find(x => x.LeftUUID == UUID || x.RightUUID == UUID);
+                    if (stereoPair != null)
                     {
-                        return false;
-                        break;
+                        deviceVisible = false;
                     }
                 }
             }
 
-            List<ZoneGroup> zoneGroupList = _zoneGroupTopology.ZoneGroupList;
-            foreach (ZoneGroup zoneGroup in zoneGroupList)
-            {
-                foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList)
-                {
-                    if (zoneGroupMember.UUID == UUID && zoneGroupMember.Invisible)
-                    {
-                        return false;
-                        break;
-                    }
-                }
-            }
-            return true;
+            return deviceVisible;
         }
 
         public ICommand CreateSteroPair
@@ -107,15 +124,54 @@ namespace SonosController.ViewModels
             }
         }
 
+        //private bool _buttonIsEnabled = true;
+        //public bool ButtonIsEnabled 
+        //{
+        //    get => _buttonIsEnabled;
+        //    set 
+        //    { 
+        //            _buttonIsEnabled = value;
+        //            RaisePropertyChanged(nameof(ButtonIsEnabled));
+        //    }
+        //}
+
         public void IsCheckedMethod(object parameter)
         {
-            if ((bool)parameter == true)
+            if (parameter as string != string.Empty)
             {
-                MessageBox.Show("True");
-            }
-            else
-            {
-                MessageBox.Show("False");
+                string[] parameters = parameter.ToString().Split('|');
+
+                bool isChecked = bool.Parse(parameters[0]);
+                if (isChecked)
+                {
+                    {
+                        if (IsCheckedCount == 0)
+                        {
+                            _newStereoPair = new StereoPair();
+                            _newStereoPair.LeftUUID = parameters[1];
+                            _newStereoPair.PairName = parameters[2];
+                            _isCheckedCount += 1;
+                        }
+                        else if (IsCheckedCount == 1)
+                        {
+                            _newStereoPair.RightUUID = parameters[1];
+                            _isCheckedCount += 1;
+                        }
+
+                        if (IsCheckedCount > 2)
+                        {
+                            MessageBox.Show("Please select a maximum of two players to pair");
+                        }
+                    }
+                }
+                else
+                {
+                    if (IsCheckedCount > 0)
+                    {
+                        _isCheckedCount -= 1;
+                    }
+
+                }
             }
         }
     }

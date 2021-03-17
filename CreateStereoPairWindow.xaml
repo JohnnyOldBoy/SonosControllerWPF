@@ -4,21 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SonosController"
+        xmlns:viewmodels="clr-namespace:SonosController.ViewModels"
         mc:Ignorable="d"
         Title="Create Stereo Pair">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary>
+                    <viewmodels:ParamConverter x:Key="paramConverter"></viewmodels:ParamConverter>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="0"
+        <ListBox Grid.Column="0"
+                 Grid.Row="0"
                  Name="ZonePlayersList" 
                  ItemsSource="{Binding ZonePlayerCollection}">
             <ListBox.ItemTemplate>
@@ -43,18 +52,30 @@
                         </StackPanel>
                         <CheckBox Grid.Column="2" 
                                   IsChecked="False" 
+                                  Tag="{Binding UUID}"
                                   VerticalAlignment="Center"
                                   Command="{Binding Path=DataContext.IsChecked,     
                                   RelativeSource={RelativeSource AncestorType=Window},     
-                                  Mode=Default}"
-                                  CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
+                                  Mode=Default}">
+                            <CheckBox.CommandParameter>
+                                <MultiBinding Converter="{StaticResource paramConverter}">
+                                    <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}"/>
+                                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
+                                    <Binding Path="{Binding Path=RoomName}"/>
+                                </MultiBinding>
+                            </CheckBox.CommandParameter>
                         </CheckBox>
 
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Row="1" 
+        <DataGrid Grid.Column="1"
+                  Grid.Row="0">
+            
+        </DataGrid>
+        <Button Grid.Column="1"
+                Grid.Row="1" 
                 Content="Pair"
                 Command="{Binding CreateSteroPair}"/>
     </Grid>
