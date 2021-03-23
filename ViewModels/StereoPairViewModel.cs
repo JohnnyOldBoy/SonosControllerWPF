@@ -62,7 +62,7 @@ namespace SonosController.ViewModels
         {
             ServiceUtils serviceUtils = new ServiceUtils();
             string response = serviceUtils.SeparateStereoPair(ZonePlayers, StereoPair[0].LeftUUID);
-            MessageBox.Show(response);
+            //MessageBox.Show(response);
         }
     }
 }

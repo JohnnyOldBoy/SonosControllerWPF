@@ -10,16 +10,15 @@ namespace SonosController.ViewModels
         {
             bool isChecked = false;
             string UUID = string.Empty;
-            string roomName = string.Empty;
             isChecked = (values[0] != null && values[0] != DependencyProperty.UnsetValue) ? (bool)values[0] : false;
             UUID = (values[1] != null && values[1] != DependencyProperty.UnsetValue) ? values[1].ToString() : "";
             if (isChecked == true)
             {
-                return "True" + "|" + UUID + roomName;
+                return "True" + "|" + UUID;
             }
             else
             {
-                return "False" + "|" + UUID + roomName;
+                return "False" + "|" + UUID;
             }
         }
 

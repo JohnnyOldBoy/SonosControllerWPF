@@ -61,7 +61,6 @@
                                 <MultiBinding Converter="{StaticResource paramConverter}">
                                     <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}"/>
                                     <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
-                                    <Binding Path="{Binding Path=RoomName}"/>
                                 </MultiBinding>
                             </CheckBox.CommandParameter>
                         </CheckBox>

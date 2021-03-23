@@ -13,9 +13,12 @@ namespace SonosController.ViewModels
     public class CreateStereoPairViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private List<string> zoneGroupMembersUuids = new List<string>();
+        private string _leftUUID = string.Empty;
+        private string _rightUUID = string.Empty;
 
         public CreateStereoPairViewModel()
         {
+
             CreateSteroPair = new RelayCommand(CreateStereoPairMethod);
             IsChecked = new RelayCommand<object>(IsCheckedMethod);
 
@@ -60,16 +63,6 @@ namespace SonosController.ViewModels
             set => _zonePlayers = value;
         }
 
-        private StereoPair _newStereoPair;
-        public StereoPair NewStereoPair
-        {
-            get => _newStereoPair;
-            set
-            {
-                _newStereoPair = value;
-                RaisePropertyChanged(nameof(NewStereoPair));
-            }
-        }
 
         private bool isVisible(ZoneGroupTopology _zoneGroupTopology, string UUID)
         {
@@ -104,7 +97,7 @@ namespace SonosController.ViewModels
 
         public void CreateStereoPairMethod()
         {
-            MessageBox.Show("Hello Billy");
+            _serviceUtils.CreateStereoPair(ZonePlayers, _leftUUID, _rightUUID);
         }
 
         public ICommand IsChecked
@@ -120,20 +113,9 @@ namespace SonosController.ViewModels
             set
             {
                 _isCheckedCount = value;
-                RaisePropertyChanged(nameof(IsCheckedCount));
+                //RaisePropertyChanged(nameof(IsCheckedCount));
             }
         }
-
-        //private bool _buttonIsEnabled = true;
-        //public bool ButtonIsEnabled 
-        //{
-        //    get => _buttonIsEnabled;
-        //    set 
-        //    { 
-        //            _buttonIsEnabled = value;
-        //            RaisePropertyChanged(nameof(ButtonIsEnabled));
-        //    }
-        //}
 
         public void IsCheckedMethod(object parameter)
         {
@@ -145,20 +127,16 @@ namespace SonosController.ViewModels
                 if (isChecked)
                 {
                     {
-                        if (IsCheckedCount == 0)
+                        _isCheckedCount += 1;
+                        if (IsCheckedCount == 1)
                         {
-                            _newStereoPair = new StereoPair();
-                            _newStereoPair.LeftUUID = parameters[1];
-                            _newStereoPair.PairName = parameters[2];
-                            _isCheckedCount += 1;
+                            _leftUUID = parameters[1];
                         }
-                        else if (IsCheckedCount == 1)
+                        else if (IsCheckedCount == 2)
                         {
-                            _newStereoPair.RightUUID = parameters[1];
-                            _isCheckedCount += 1;
+                            _rightUUID = parameters[1];
                         }
-
-                        if (IsCheckedCount > 2)
+                        else if (IsCheckedCount > 2)
                         {
                             MessageBox.Show("Please select a maximum of two players to pair");
                         }
@@ -174,5 +152,20 @@ namespace SonosController.ViewModels
                 }
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // NotifyPropertyChanged will raise the PropertyChanged event passing the
+        // source property that is being updated.
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                StereoPairViewModel stereoPairViewModel = new StereoPairViewModel();
+                stereoPairViewModel.RaisePropertyChanged(nameof(StereoPair));
+            }
+        }
     }
+
 }

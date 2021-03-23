@@ -249,7 +249,7 @@
                                         <DataTemplate>
                                             <Expander x:Name="GroupExpander" Header="{Binding PairName}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <DataGrid ItemsSource="{Binding StereoPair}"
+                                                    <DataGrid ItemsSource="{Binding StereoPair, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                               CanUserSortColumns="False"
                                                               GridLinesVisibility="None">
                                                         <DataGrid.Columns>
@@ -257,8 +257,9 @@
                                                             <DataGridTextColumn Header="Right Channel" Binding="{Binding RightUUID}"/>
                                                         </DataGrid.Columns>
                                                     </DataGrid>
-                                                    <Button Name="CreateSteroPairBtn"
-                                                            Content="Separate"/>
+                                                    <Button Name="SeparateSteroPairBtn"
+                                                            Command="{Binding SeparateSteroPair}" Content="Separate"
+                                                            />
                                                 </StackPanel>
                                             </Expander>
                                         </DataTemplate>
