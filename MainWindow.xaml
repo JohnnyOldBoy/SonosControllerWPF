@@ -243,7 +243,7 @@
                                                 CommandParameter="CreateStereoPair"/>
                                     </StackPanel>
                                 </Expander.Header>
-                                <ListBox ItemsSource="{Binding StereoPairViewModels"
+                                <ListBox ItemsSource="{Binding StereoPairViewModels}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
