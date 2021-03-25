@@ -14,8 +14,12 @@ using System.Windows.Input;
 
 namespace SonosController
 {
-    sealed class MainWindowViewModel : ViewModelBase
+    sealed class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
+        private static MainWindowViewModel _instance = new MainWindowViewModel();
+        public static MainWindowViewModel Instance
+        { get { return _instance; } }
+
         private readonly ServiceUtils _serviceUtils;
         #region
         /// <summary>
@@ -86,7 +90,16 @@ namespace SonosController
 
         public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels { get; } = new ObservableCollection<ZoneGroupViewModel>();
 
-        public ObservableCollection<StereoPairViewModel> StereoPairViewModels { get; } = new ObservableCollection<StereoPairViewModel>();
+        private ObservableCollection<StereoPairViewModel> _stereoPairViewModels;
+        public ObservableCollection<StereoPairViewModel> StereoPairViewModels
+        {
+            get => _stereoPairViewModels;
+            set
+            {
+                _stereoPairViewModels = value;
+                RaisePropertyChanged("StereoPairViewModels");
+            }
+        }
 
 
         #endregion
@@ -109,7 +122,7 @@ namespace SonosController
 
         public void CommandExMethod(object parameter)
         {
-            if (parameter as string  == "ViewMusicLibrary")
+            if (parameter as string == "ViewMusicLibrary")
             {
                 MusicLibraryWindow musicLibraryWindow = new MusicLibraryWindow();
                 musicLibraryWindow.Show();
@@ -175,9 +188,10 @@ namespace SonosController
                 }
                 if (zoneGroupTopology.StereoPairs.StereoPairsList.Count > 0)
                 {
+                    StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
                     foreach (StereoPair stereoPair in zoneGroupTopology.StereoPairs.StereoPairsList)
                     {
-                        StereoPairViewModel stereoPairViewModel = new StereoPairViewModel
+                        StereoPairViewModel stereoPairViewModel = new StereoPairViewModel()
                         {
                             PairName = stereoPair.PairName
                         };
@@ -185,7 +199,7 @@ namespace SonosController
                         stereoPairViewModel.ZonePlayers = ZonePlayers;
                         StereoPairViewModels.Add(stereoPairViewModel);
                     }
-                    
+
                 }
             }
             SelectedZoneGroup = ZoneGroupCollection.FirstOrDefault();
@@ -197,7 +211,7 @@ namespace SonosController
             {
                 ZonePlayer SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayers, zoneGroup.ZoneGroupCoordinator);
                 PlayerQueue playerQueue = _serviceUtils.GetPlayerQueue(zoneGroup, SelectedZoneGroupCoordinator.PlayerIpAddress);
-                
+
                 if (playerQueue.QueueItems.Count == 0)
                 {
                     QueueItem emptyQueueItem = new QueueItem
@@ -269,6 +283,10 @@ namespace SonosController
                     ZoneGroupQueueViewCollection.Refresh();
                 }
             }
+            //if (e.PropertyName == nameof(StereoPairViewModels))
+            //{
+            //    this.PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
+            //}
         }
     }
 }

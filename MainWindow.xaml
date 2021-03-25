@@ -243,13 +243,13 @@
                                                 CommandParameter="CreateStereoPair"/>
                                     </StackPanel>
                                 </Expander.Header>
-                                <ListBox ItemsSource="{Binding StereoPairViewModels}"
+                                <ListBox ItemsSource="{Binding StereoPairViewModels"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Expander x:Name="GroupExpander" Header="{Binding PairName}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <DataGrid ItemsSource="{Binding StereoPair, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                    <DataGrid ItemsSource="{Binding StereoPair}"
                                                               CanUserSortColumns="False"
                                                               GridLinesVisibility="None">
                                                         <DataGrid.Columns>

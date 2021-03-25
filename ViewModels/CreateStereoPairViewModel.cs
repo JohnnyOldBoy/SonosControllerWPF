@@ -98,6 +98,25 @@ namespace SonosController.ViewModels
         public void CreateStereoPairMethod()
         {
             _serviceUtils.CreateStereoPair(ZonePlayers, _leftUUID, _rightUUID);
+            StereoPair stereoPair = new StereoPair()
+            {
+                LeftUUID = _leftUUID,
+                RightUUID = _rightUUID,
+                PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
+                ChannelMapSet =_leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF"
+            };
+            StereoPairViewModel stereoPairViewModel = new StereoPairViewModel();
+            stereoPairViewModel.PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName;
+            stereoPairViewModel.StereoPair.Add(stereoPair);
+            if (MainWindowViewModel.Instance.StereoPairViewModels != null)
+            {
+                MainWindowViewModel.Instance.StereoPairViewModels.Add(stereoPairViewModel);
+            }
+            else
+            {
+                MainWindowViewModel.Instance.StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
+                MainWindowViewModel.Instance.StereoPairViewModels.Add(stereoPairViewModel);
+            }
         }
 
         public ICommand IsChecked
@@ -161,9 +180,7 @@ namespace SonosController.ViewModels
         {
             if (PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                StereoPairViewModel stereoPairViewModel = new StereoPairViewModel();
-                stereoPairViewModel.RaisePropertyChanged(nameof(StereoPair));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }
