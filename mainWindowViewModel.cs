@@ -283,10 +283,6 @@ namespace SonosController
                     ZoneGroupQueueViewCollection.Refresh();
                 }
             }
-            //if (e.PropertyName == nameof(StereoPairViewModels))
-            //{
-            //    this.PropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
-            //}
         }
     }
 }
