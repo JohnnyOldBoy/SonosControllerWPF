@@ -87,10 +87,13 @@
     <Compile Include="ViewModels\IsSelectedItemChangedEventArgs.cs" />
     <Compile Include="ViewModels\ITreeViewItemViewModel.cs" />
     <Compile Include="ViewModels\ParamConverter.cs" />
+    <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\StereoPairViewModel.cs" />
     <Compile Include="ViewModels\TrackViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModelBase.cs" />
+    <Compile Include="ViewModels\ZoneGroupTopologyViewModel.cs" />
     <Compile Include="ViewModels\ZoneGroupViewModel.cs" />
+    <Compile Include="ViewModels\ZonePlayersViewModel.cs" />
     <Page Include="CreateStereoPairWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

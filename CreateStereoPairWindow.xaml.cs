@@ -13,8 +13,8 @@ namespace SonosController
         public CreateStereoPairWindow()
         {
             InitializeComponent();
-            _viewModel = new CreateStereoPairViewModel();
-            DataContext = _viewModel;
+            //_viewModel = new CreateStereoPairViewModel();
+            //DataContext = _viewModel;
         }
     }
 }

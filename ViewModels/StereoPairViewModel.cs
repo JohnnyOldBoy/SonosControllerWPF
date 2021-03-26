@@ -1,23 +1,30 @@
 ﻿using Devices;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using System.Collections.ObjectModel;
 using Services;
-using System.Windows;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
-using System;
 
 namespace SonosController.ViewModels
 {
-    public class StereoPairViewModel : ViewModelBase
+    public class StereoPairViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public StereoPairViewModel()
+        public StereoPairViewModel(ZoneGroupTopologyViewModel parentViewModel)
         {
             SeparateSteroPair = new RelayCommand(SeparateSteroPairMethod);
+            stereoPairViewModels = parentViewModel.StereoPairViewModels;
         }
 
-        private string leftUUID = string.Empty;
-        private string rightUUID = string.Empty;
+        public StereoPairViewModel(MainWindowViewModel parentViewModel)
+        {
+            SeparateSteroPair = new RelayCommand(SeparateSteroPairMethod);
+            stereoPairViewModels = parentViewModel.StereoPairViewModelsCollection;
+        }
+
+        private ObservableCollection<StereoPairViewModel> stereoPairViewModels;
+        private string _leftUUID = string.Empty;
+        private string _rightUUID = string.Empty;
         private string _pairName = string.Empty;
 
         public string PairName 
@@ -62,7 +69,20 @@ namespace SonosController.ViewModels
         {
             ServiceUtils serviceUtils = new ServiceUtils();
             string response = serviceUtils.SeparateStereoPair(ZonePlayers, StereoPair[0].LeftUUID);
-            //MessageBox.Show(response);
+            int spIndex = -1;
+
+                foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
+                {
+                    if (stereoPairViewModel._leftUUID == _leftUUID)
+                    {
+                        spIndex = stereoPairViewModels.IndexOf(stereoPairViewModel);
+                    }
+
+                }
+                if (spIndex != -1)
+                {
+                    stereoPairViewModels.RemoveAt(spIndex);
+                }
         }
     }
 }

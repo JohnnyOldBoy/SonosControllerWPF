@@ -12,13 +12,12 @@ namespace SonosController.ViewModels
 {
     public class CreateStereoPairViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private List<string> zoneGroupMembersUuids = new List<string>();
-        private string _leftUUID = string.Empty;
-        private string _rightUUID = string.Empty;
+        //public CreateStereoPairViewModel()
 
-        public CreateStereoPairViewModel()
+        public CreateStereoPairViewModel(MainWindowViewModel mainWindowViewModel)
         {
 
+            localMainWindowViewModel = mainWindowViewModel;
             CreateSteroPair = new RelayCommand(CreateStereoPairMethod);
             IsChecked = new RelayCommand<object>(IsCheckedMethod);
 
@@ -45,6 +44,11 @@ namespace SonosController.ViewModels
         }
         private readonly ServiceUtils _serviceUtils = new ServiceUtils();
 
+        private List<string> zoneGroupMembersUuids = new List<string>();
+        private string _leftUUID = string.Empty;
+        private string _rightUUID = string.Empty;
+
+        private MainWindowViewModel localMainWindowViewModel;
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
@@ -105,17 +109,17 @@ namespace SonosController.ViewModels
                 PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
                 ChannelMapSet =_leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF"
             };
-            StereoPairViewModel stereoPairViewModel = new StereoPairViewModel();
+            StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(localMainWindowViewModel);
             stereoPairViewModel.PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName;
             stereoPairViewModel.StereoPair.Add(stereoPair);
-            if (MainWindowViewModel.Instance.StereoPairViewModels != null)
+            if (localMainWindowViewModel.StereoPairViewModelsCollection != null)
             {
-                MainWindowViewModel.Instance.StereoPairViewModels.Add(stereoPairViewModel);
+                localMainWindowViewModel.StereoPairViewModelsCollection.Add(stereoPairViewModel);
             }
             else
             {
-                MainWindowViewModel.Instance.StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
-                MainWindowViewModel.Instance.StereoPairViewModels.Add(stereoPairViewModel);
+                localMainWindowViewModel.StereoPairViewModelsCollection = new ObservableCollection<StereoPairViewModel>();
+                localMainWindowViewModel.StereoPairViewModelsCollection.Add(stereoPairViewModel);
             }
         }
 

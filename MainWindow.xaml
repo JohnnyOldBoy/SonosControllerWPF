@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
          xmlns:local="clr-namespace:SonosController"
+        xmlns:viewmodels="clr-namespace:SonosController.ViewModels"        
         mc:Ignorable="d"
         Title="Sonos Controller">
     <Window.Resources>
@@ -26,7 +27,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <DataGrid Grid.Column="0" 
-                              ItemsSource="{Binding ZoneGroupCollection}" 
+                              ItemsSource="{Binding ZoneGroupViewModelCollection}" 
                               SelectedItem="{Binding SelectedZoneGroup}"
                               HeadersVisibility="None">
                         <DataGrid.CellStyle>
@@ -243,7 +244,7 @@
                                                 CommandParameter="CreateStereoPair"/>
                                     </StackPanel>
                                 </Expander.Header>
-                                <ListBox ItemsSource="{Binding StereoPairViewModels}"
+                                <ListBox ItemsSource="{Binding StereoPairViewModelsCollection}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
