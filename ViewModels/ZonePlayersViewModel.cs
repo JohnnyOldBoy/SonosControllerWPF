@@ -39,7 +39,7 @@ namespace SonosController.ViewModels
             set
             {
                 _zonePlayerCollection = value;
-                RaisePropertyChanged("SelctedZonePlayer");
+                RaisePropertyChanged("ZonePlayerCollection");
             }
         }
 

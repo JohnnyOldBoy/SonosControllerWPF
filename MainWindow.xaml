@@ -16,7 +16,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <TabControl>
@@ -26,6 +26,9 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                     <DataGrid Grid.Column="0" 
                               ItemsSource="{Binding ZoneGroupViewModelCollection}" 
                               SelectedItem="{Binding SelectedZoneGroup}"
@@ -211,7 +214,7 @@
                                        FontWeight="Bold"
                                        Margin="10,0,0,0"/>
                             <Expander Header="Groups" Margin="20,0,0,0">
-                                <ListBox ItemsSource="{Binding ZoneGroupViewModels}"
+                                <ListBox ItemsSource="{Binding ZoneGroupViewModelCollection}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>

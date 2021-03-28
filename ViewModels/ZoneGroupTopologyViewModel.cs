@@ -13,11 +13,11 @@ namespace SonosController.ViewModels
         {
             ZoneGroupTopology zoneGroupTopology = 
                 _serviceUtils.GetZoneGroupTopology(zonePlayersViewModel.ZonePlayers.ZonePlayersList.FirstOrDefault().PlayerIpAddress);
-            ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels = new ObservableCollection<ZoneGroupViewModel>();
-            ZoneGroupCollection = new ObservableCollection<ZoneGroup>();
+            ZoneGroupViewModels = new ObservableCollection<ZoneGroupViewModel>();
+            //ZoneGroupCollection = new ObservableCollection<ZoneGroup>();
             foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
             {
-                ZoneGroupCollection.Add(zoneGroup);
+                //ZoneGroupCollection.Add(zoneGroup);
                 ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(zonePlayersViewModel.ZonePlayers, zoneGroup);
                 ZoneGroupViewModels.Add(zoneGroupViewModel);
             }
@@ -50,16 +50,16 @@ namespace SonosController.ViewModels
             }
         }
 
-        private ObservableCollection<ZoneGroup> _zoneGroupCollection;
-        public ObservableCollection<ZoneGroup> ZoneGroupCollection
-        {
-            get => _zoneGroupCollection;
-            set
-            {
-                _zoneGroupCollection = value;
-                RaisePropertyChanged("SelectedZoneGroup");
-            }
-        }
+        //private ObservableCollection<ZoneGroup> _zoneGroupCollection;
+        //public ObservableCollection<ZoneGroup> ZoneGroupCollection
+        //{
+        //    get => _zoneGroupCollection;
+        //    set
+        //    {
+        //        _zoneGroupCollection = value;
+        //        RaisePropertyChanged("SelectedZoneGroup");
+        //    }
+        //}
 
         private ObservableCollection<StereoPairViewModel> _stereoPairViewModels;
         public ObservableCollection<StereoPairViewModel> StereoPairViewModels

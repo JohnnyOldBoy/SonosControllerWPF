@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 
 namespace SonosController
@@ -20,6 +21,8 @@ namespace SonosController
         /// Devices tab. A device is any Sonos product that can participate in a Sonos system, this includes all players -
         /// Play: 1, Play: 3, Play: 5, Beam etc and also non palyer devices such as Boost and Bridge.
         /// </summary>
+        /// 
+        //public ObservableCollection<ZonePlayer> ZonePlayerCollection;
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
@@ -27,10 +30,10 @@ namespace SonosController
             set
             {
                 _zonePlayerCollection = value;
-                RaisePropertyChanged("SelctedZonePlayer");
+                RaisePropertyChanged("ZonePlayerCollection");
             }
         }
-        
+
         private ZonePlayer _selectedZonePlayer;
         public ZonePlayer SelectedZonePlayer
         {
@@ -53,17 +56,16 @@ namespace SonosController
             }
         }
 
-        private ObservableCollection<ZonePlayerDetail> _zonePlayerDetailsView;
-
-        public ObservableCollection<ZonePlayerDetail> ZonePlayerDetailsView
-        {
-            get => _zonePlayerDetailsView;
-            set
-            {
-                _zonePlayerDetailsView = value;
-                RaisePropertyChanged("ZonePlayerDetailsView");
-            }
-        }
+        //private ObservableCollection<ZonePlayerDetail> _zonePlayerDetailsView;
+        //public ObservableCollection<ZonePlayerDetail> ZonePlayerDetailsView
+        //{
+        //    get => _zonePlayerDetailsView;
+        //    set
+        //    {
+        //        _zonePlayerDetailsView = value;
+        //        RaisePropertyChanged("ZonePlayerDetailsView");
+        //    }
+        //}
 
         public ICollectionView ZonePlayerDetailsViewCollection { get; }
 
@@ -74,8 +76,8 @@ namespace SonosController
         /// Devices such as Boost and Bridge are not normally visible here.
         /// /// </summary>
 
-        private ObservableCollection<ZoneGroup> _zoneGroupViewModelCollection;
-        public ObservableCollection<ZoneGroup> ZoneGroupViewModelCollection
+        private ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModelCollection;
+        public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModelCollection
         {
             get => _zoneGroupViewModelCollection;
             set
@@ -85,8 +87,8 @@ namespace SonosController
             }
         }
 
-        private ZoneGroup _selectedZoneGroup;
-        public ZoneGroup SelectedZoneGroup
+        private ZoneGroupViewModel _selectedZoneGroup;
+        public ZoneGroupViewModel SelectedZoneGroup
         {
             get => _selectedZoneGroup;
             set
@@ -98,7 +100,7 @@ namespace SonosController
 
         public ICollectionView ZoneGroupQueueViewCollection { get; }
 
-        public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels { get; } = new ObservableCollection<ZoneGroupViewModel>();
+        //public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels { get; } = new ObservableCollection<ZoneGroupViewModel>();
 
         private ObservableCollection<StereoPairViewModel> _stereoPairViewModelsCollection;
         public ObservableCollection<StereoPairViewModel> StereoPairViewModelsCollection
@@ -117,14 +119,14 @@ namespace SonosController
         /// Shared
         /// </summary>
 
-        private ZonePlayers _zonePlayers;
-        public ZonePlayers ZonePlayers
+        public ZonePlayersViewModel ZonePlayersViewModel;
+        private ZonePlayersViewModel _zonePlayersViewModel
         {
-            get => _zonePlayers;
+            get => _zonePlayersViewModel;
             set
             {
-                _zonePlayers = value;
-                RaisePropertyChanged("ZonePlayers");
+                _zonePlayersViewModel = value;
+                RaisePropertyChanged("ZonePlayersViewModel");
             }
         }
 
@@ -164,10 +166,10 @@ namespace SonosController
             PropertyChanged += OnPropertyChangedHandler;
             #region
             // Devices
-            ZonePlayersViewModel zonePlayersViewModel = new ZonePlayersViewModel();
-            ZonePlayerCollection = zonePlayersViewModel.ZonePlayerCollection;
+            ZonePlayersViewModel = new ZonePlayersViewModel();
+            ZonePlayerCollection = ZonePlayersViewModel.ZonePlayerCollection;
 
-            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(zonePlayersViewModel.ZonePlayers);
+            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayersViewModel.ZonePlayers);
             ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
             SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
             if (SelectedZonePlayer != null)
@@ -188,14 +190,14 @@ namespace SonosController
             #endregion
             #region
             // Rooms and group managemeent
-            if (zonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
+            if (ZonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
             {
-                ZoneGroupTopologyViewModel zoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(zonePlayersViewModel);
-                ZoneGroupViewModelCollection = zoneGroupTopologyViewModel.ZoneGroupCollection;
+                ZoneGroupTopologyViewModel zoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(ZonePlayersViewModel);
+                ZoneGroupViewModelCollection = zoneGroupTopologyViewModel.ZoneGroupViewModels;
                 StereoPairViewModelsCollection = zoneGroupTopologyViewModel.StereoPairViewModels;
                 SelectedZoneGroup = ZoneGroupViewModelCollection.FirstOrDefault();
                 SelectedZoneGroup.IsSelected = true;
-                SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(zonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator);
+                SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
 
                 //Queues
                 QueueViewModel queueViewModel = new QueueViewModel(this);
@@ -205,7 +207,7 @@ namespace SonosController
                     {
                         if (t is QueueItem queueItem)
                         {
-                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator)
+                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator.UUID)
                             {
                                 return true;
                             }
@@ -220,6 +222,8 @@ namespace SonosController
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
         {
+            //MessageBox.Show(e.PropertyName);
+            //if (SelectedZoneGroup != null) { MessageBox.Show(SelectedZoneGroup.ZoneGroupCoordinator); }
             if (e.PropertyName == nameof(SelectedZonePlayer))
             {
                 ZonePlayerDetailsViewCollection.Filter = t =>
@@ -243,7 +247,7 @@ namespace SonosController
                     {
                         if (t is QueueItem queueItem)
                         {
-                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator)
+                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator.UUID)
                             {
                                 return true;
                             }

@@ -2,15 +2,17 @@
 using GalaSoft.MvvmLight;
 using Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace SonosController.ViewModels
 {
-    public class ZoneGroupViewModel : ViewModelBase
+    public class ZoneGroupViewModel : ViewModelBase, INotifyPropertyChanged
     {
         public ZoneGroupViewModel(ZonePlayers zonePlayers, ZoneGroup zoneGroup)
         {
             ZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(zonePlayers, zoneGroup.ZoneGroupCoordinator);
             ZoneGroupName = ZoneGroupCoordinator.RoomName;
+            ZoneGroupMemberNames = zoneGroup.ZoneGroupMemberNames;
             ZoneGroupMembers = getZoneGroupMembers(zoneGroup);
         }
 
@@ -48,6 +50,20 @@ namespace SonosController.ViewModels
                 _zoneGroupMembers = value;
                 RaisePropertyChanged(nameof(ZoneGroupMembers));
             }
+        }
+
+        private bool isSelected = false;
+        public bool IsSelected
+        {
+            get => isSelected;
+            set => isSelected = value;
+        }
+
+        private string zoneGroupMemberNames = string.Empty;
+        public string ZoneGroupMemberNames
+        {
+            get => zoneGroupMemberNames;
+            set => zoneGroupMemberNames = value;
         }
 
         private ObservableCollection<ZoneGroupMember> getZoneGroupMembers(ZoneGroup zoneGroup)
