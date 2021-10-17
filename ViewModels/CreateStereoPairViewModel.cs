@@ -12,8 +12,6 @@ namespace SonosController.ViewModels
 {
     public class CreateStereoPairViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        //public CreateStereoPairViewModel()
-
         public CreateStereoPairViewModel(MainWindowViewModel mainWindowViewModel)
         {
 
@@ -21,13 +19,15 @@ namespace SonosController.ViewModels
             CreateSteroPair = new RelayCommand(CreateStereoPairMethod);
             IsChecked = new RelayCommand<object>(IsCheckedMethod);
 
-            ZonePlayers = _serviceUtils.GetZonePlayers();
+            ZonePlayers = localMainWindowViewModel.ZonePlayersViewModel.ZonePlayers;
+            ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels = localMainWindowViewModel.ZoneGroupViewModelCollection;
+            
             ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
-            ZoneGroupTopology _zoneGroupTopology = _serviceUtils.GetZoneGroupTopology(ZonePlayers.ZonePlayersList[0].PlayerIpAddress);
+            ZoneGroupTopologyViewModel _zoneGroupTopologyViewModel = localMainWindowViewModel.ZoneGroupTopologyViewModel;
 
-            foreach (ZoneGroup zoneGroup in _zoneGroupTopology.ZoneGroupList)
+            foreach (ZoneGroupViewModel zoneGroupViewModel in _zoneGroupViewModels)
             {
-                foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList)
+                foreach (ZoneGroupMember zoneGroupMember in zoneGroupViewModel.ZoneGroupMembers)
                 {
                     zoneGroupMembersUuids.Add(zoneGroupMember.UUID);
                 }
@@ -35,13 +35,14 @@ namespace SonosController.ViewModels
 
             foreach (ZonePlayer zonePlayer in ZonePlayers.ZonePlayersList)
             {
-                if (isVisible(_zoneGroupTopology, zonePlayer.UUID))
+                if (isVisible(_zoneGroupTopologyViewModel, zonePlayer.UUID))
                 {
                     ZonePlayerCollection.Add(zonePlayer);
                 }
             }
 
         }
+
         private readonly ServiceUtils _serviceUtils = new ServiceUtils();
 
         private List<string> zoneGroupMembersUuids = new List<string>();
@@ -60,6 +61,13 @@ namespace SonosController.ViewModels
             }
         }
 
+        private StereoPair _newStereoPair;
+        public StereoPair NewStereoPair
+        {
+            get => _newStereoPair;
+            set => _newStereoPair = value;
+        }
+
         private ZonePlayers _zonePlayers;
         public ZonePlayers ZonePlayers
         {
@@ -68,7 +76,7 @@ namespace SonosController.ViewModels
         }
 
 
-        private bool isVisible(ZoneGroupTopology _zoneGroupTopology, string UUID)
+        private bool isVisible(ZoneGroupTopologyViewModel _zoneGroupTopologyViewModel, string UUID)
         {
             bool deviceVisible = false;
 
@@ -79,13 +87,16 @@ namespace SonosController.ViewModels
             }
             else
             {
-                StereoPairs stereoPairs = _zoneGroupTopology.StereoPairs;
-                if (stereoPairs != null)
+                ObservableCollection<StereoPairViewModel> stereoPairViewModels= _zoneGroupTopologyViewModel.StereoPairViewModels;
+                if (stereoPairViewModels != null)
                 {
-                    StereoPair stereoPair = stereoPairs.StereoPairsList.Find(x => x.LeftUUID == UUID || x.RightUUID == UUID);
-                    if (stereoPair != null)
+                    foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
                     {
-                        deviceVisible = false;
+                        StereoPair stereoPair = stereoPairViewModel.StereoPair[0];
+                        if (stereoPair.LeftUUID == UUID || stereoPair.RightUUID == UUID)
+                        {
+                            deviceVisible = false;
+                        }
                     }
                 }
             }
@@ -101,25 +112,18 @@ namespace SonosController.ViewModels
 
         public void CreateStereoPairMethod()
         {
-            _serviceUtils.CreateStereoPair(ZonePlayers, _leftUUID, _rightUUID);
-            StereoPair stereoPair = new StereoPair()
+            string pairCreated = _serviceUtils.CreateStereoPair(ZonePlayers, _leftUUID, _rightUUID);
+            if (pairCreated == "Success")
             {
-                LeftUUID = _leftUUID,
-                RightUUID = _rightUUID,
-                PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
-                ChannelMapSet =_leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF"
-            };
-            StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(localMainWindowViewModel);
-            stereoPairViewModel.PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName;
-            stereoPairViewModel.StereoPair.Add(stereoPair);
-            if (localMainWindowViewModel.StereoPairViewModelsCollection != null)
-            {
-                localMainWindowViewModel.StereoPairViewModelsCollection.Add(stereoPairViewModel);
-            }
-            else
-            {
-                localMainWindowViewModel.StereoPairViewModelsCollection = new ObservableCollection<StereoPairViewModel>();
-                localMainWindowViewModel.StereoPairViewModelsCollection.Add(stereoPairViewModel);
+                StereoPair stereoPair = new StereoPair()
+                {
+                    LeftUUID = _leftUUID,
+                    RightUUID = _rightUUID,
+                    PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
+                    ChannelMapSet = _leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF"
+                };
+                NewStereoPair = stereoPair;
+                MessageBox.Show("Stereo pair created successfully");
             }
         }
 

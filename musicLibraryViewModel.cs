@@ -19,7 +19,7 @@ namespace SonosController
             set
             {
                 _selectedAlbum = value;
-                RaisePropertyChanged("SelectedAlbum");
+                RaisePropertyChanged(nameof(SelectedAlbum));
             }
         }
 
@@ -30,7 +30,7 @@ namespace SonosController
             set
             {
                 _selectedArtistSelectedAlbum = value;
-                RaisePropertyChanged("SelectedArtistAlbum");
+                RaisePropertyChanged(nameof(SelectedArtistSelectedAlbum));
             }
         }
 
@@ -41,7 +41,7 @@ namespace SonosController
             set
             {
                 _selectedGenre = value;
-                RaisePropertyChanged("SelectedGenre");
+                RaisePropertyChanged(nameof(SelectedGenre));
             }
         }
 

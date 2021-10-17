@@ -28,8 +28,10 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="120"/>
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Column="0" 
+                              Grid.Row="0"
                               ItemsSource="{Binding ZoneGroupViewModelCollection}" 
                               SelectedItem="{Binding SelectedZoneGroup}"
                               HeadersVisibility="None">
@@ -124,6 +126,20 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Button>Previous</Button>
+                            <Button>Play</Button>
+                            <Button>Pause</Button>
+                            <Button>Stop</Button>
+                            <Button>Next</Button>
+                            <ToggleButton>Mute</ToggleButton>
+                        </StackPanel>
+                        <TextBlock FontSize="10">Volume</TextBlock>
+                        <Slider Name="VolumeSlider" Value="0.75" Maximum="1"/>
+                        <TextBlock FontSize="10">Balance</TextBlock>
+                        <Slider Name="BalanceSlider" Value="0" Minimum="-1" Maximum="1"/>
+                    </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding SelectedZoneGroup.ZoneGroupName}"
@@ -213,26 +229,35 @@
                                        FontSize="15"
                                        FontWeight="Bold"
                                        Margin="10,0,0,0"/>
-                            <Expander Header="Groups" Margin="20,0,0,0">
+                            <Expander Margin="20,0,0,0">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Groups"/>
+                                        <Button Content="New group"/>
+                                    </StackPanel>
+                                </Expander.Header>
                                 <ListBox ItemsSource="{Binding ZoneGroupViewModelCollection}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Expander x:Name="GroupExpander" Header="{Binding ZoneGroupName}">
-                                                <DataGrid ItemsSource="{Binding ZoneGroupMembers}" 
-                                                          CanUserSortColumns="False"
-                                                          GridLinesVisibility="None">
-                                                    <DataGrid.Columns>
-                                                        <DataGridTextColumn Header="UUID" 
-                                                        Binding="{Binding UUID}"/>
-                                                        <DataGridTextColumn Header="Member name" 
-                                                        Binding="{Binding ZoneName}"/>
-                                                        <DataGridCheckBoxColumn Header="Coordinator" 
-                                                        Binding="{Binding IsCoordinator}"/>
-                                                        <DataGridCheckBoxColumn Header="Not visible" 
-                                                        Binding="{Binding Invisible}"/>
-                                                    </DataGrid.Columns>
-                                                </DataGrid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <DataGrid ItemsSource="{Binding ZoneGroupMembers}" 
+                                                              CanUserSortColumns="False"
+                                                              GridLinesVisibility="None">
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Header="UUID" 
+                                                            Binding="{Binding UUID}"/>
+                                                            <DataGridTextColumn Header="Member name" 
+                                                            Binding="{Binding ZoneName}"/>
+                                                            <DataGridCheckBoxColumn Header="Coordinator" 
+                                                            Binding="{Binding IsCoordinator}"/>
+                                                            <DataGridCheckBoxColumn Header="Not visible" 
+                                                            Binding="{Binding Invisible}"/>
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                    <Button Content="Edit group"/>
+                                                </StackPanel>
                                             </Expander>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>

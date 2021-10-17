@@ -12,8 +12,9 @@ namespace SonosController.ViewModels
     {
         public StereoPairViewModel(ZoneGroupTopologyViewModel parentViewModel)
         {
+            _parentViewModel = parentViewModel;
             SeparateSteroPair = new RelayCommand(SeparateSteroPairMethod);
-            stereoPairViewModels = parentViewModel.StereoPairViewModels;
+            stereoPairViewModels = _parentViewModel.StereoPairViewModels;
         }
 
         public StereoPairViewModel(MainWindowViewModel parentViewModel)
@@ -22,6 +23,7 @@ namespace SonosController.ViewModels
             stereoPairViewModels = parentViewModel.StereoPairViewModelsCollection;
         }
 
+        private ZoneGroupTopologyViewModel _parentViewModel;
         private ObservableCollection<StereoPairViewModel> stereoPairViewModels;
         private string _leftUUID = string.Empty;
         private string _rightUUID = string.Empty;
@@ -82,6 +84,7 @@ namespace SonosController.ViewModels
                 if (spIndex != -1)
                 {
                     stereoPairViewModels.RemoveAt(spIndex);
+                    _parentViewModel.RaisePropertyChanged();
                 }
         }
     }

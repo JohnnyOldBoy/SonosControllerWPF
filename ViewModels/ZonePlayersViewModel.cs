@@ -27,10 +27,9 @@ namespace SonosController.ViewModels
             set
             {
                 _zonePlayers = value;
-                RaisePropertyChanged("ZonePlayers");
+                RaisePropertyChanged(nameof(ZonePlayers));
             }
         }
-
 
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
@@ -39,10 +38,8 @@ namespace SonosController.ViewModels
             set
             {
                 _zonePlayerCollection = value;
-                RaisePropertyChanged("ZonePlayerCollection");
+                RaisePropertyChanged(nameof(ZonePlayerCollection));
             }
         }
-
-
     }
 }
