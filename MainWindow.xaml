@@ -128,17 +128,19 @@
                     </DataGrid>
                     <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <Button>Previous</Button>
-                            <Button>Play</Button>
-                            <Button>Pause</Button>
-                            <Button>Stop</Button>
-                            <Button>Next</Button>
-                            <ToggleButton>Mute</ToggleButton>
+                            <Button Content="Previous" />
+                            <Button Content="Start"/>
+                            <Button Content="Play"/>
+                            <Button Content="Pause"/>
+                            <Button Content="Stop"/>
+                            <Button Content="End"/>
+                            <Button Content="Next"/>
+                            <ToggleButton Content="Mute"/>
                         </StackPanel>
                         <TextBlock FontSize="10">Volume</TextBlock>
                         <Slider Name="VolumeSlider" Value="0.75" Maximum="1"/>
-                        <TextBlock FontSize="10">Balance</TextBlock>
-                        <Slider Name="BalanceSlider" Value="0" Minimum="-1" Maximum="1"/>
+                        <TextBlock FontSize="10">Position</TextBlock>
+                        <Slider Name="PoeitionSlider" Value="0" Minimum="-1" Maximum="1"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">

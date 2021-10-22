@@ -5,15 +5,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using SonosController.ViewModels;
-using SonosControllerWPF.ViewModels;
 
 namespace SonosController
 {
     sealed class MusicLibraryViewModel : ViewModelBase
     {
         private MusicLibrary _musicLibrary = new MusicLibrary();
-        
+
         private AlbumViewModel _selectedAlbum;
         public AlbumViewModel SelectedAlbum
         {
@@ -50,11 +48,11 @@ namespace SonosController
         public ObservableCollection<ArtistViewModel> Artists { get; } = new ObservableCollection<ArtistViewModel>();
 
         public ObservableCollection<TrackViewModel> Tracks { get; } = new ObservableCollection<TrackViewModel>();
-        
+
         public ObservableCollection<AlbumViewModel> Albums { get; } = new ObservableCollection<AlbumViewModel>();
 
         public ObservableCollection<string> Genres { get; } = new ObservableCollection<string>();
-        
+
         public ICollectionView ArtistTracksCollectionView { get; }
 
         public ICollectionView AlbumTracksCollectionView { get; }
@@ -69,7 +67,7 @@ namespace SonosController
                 var trackViewModel = new TrackViewModel(track, _musicLibrary.GetAlbumTitle(track.AlbumId));
                 Tracks.Add(trackViewModel);
             }
-            
+
             foreach (var album in _musicLibrary.AlbumInfo.AlbumList.OrderBy(s => s.AlbumName))
             {
                 Albums.Add(new AlbumViewModel(album));
@@ -97,7 +95,7 @@ namespace SonosController
 
                 return false;
             };
-            
+
             AlbumTracksCollectionView = new ListCollectionView(Tracks);
 
             SelectedAlbum = Albums.FirstOrDefault();
@@ -124,7 +122,7 @@ namespace SonosController
                     {
                         return true;
                     }
-                 }
+                }
                 return false;
             };
 
@@ -188,13 +186,12 @@ namespace SonosController
 
             if (e.PropertyName == nameof(SelectedAlbum))
             {
-                TracksCollectionView.Refresh();
+                AlbumTracksCollectionView.Refresh();
             }
-            //if (e.PropertyName == nameof(SelectedArtistSelectedAlbum))
-            //{
-            //    MessageBox.Show(SelectedArtistSelectedAlbum.AlbumName);
-            //    //TracksCollectionView.Refresh();
-            //}
+            if (e.PropertyName == nameof(SelectedGenre))
+            {
+                GenreTracksCollectionView.Refresh();
+            }
         }
     }
 }
