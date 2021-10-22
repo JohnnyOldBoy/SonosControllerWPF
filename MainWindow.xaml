@@ -128,13 +128,13 @@
                     </DataGrid>
                     <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="Previous" />
-                            <Button Content="Start"/>
-                            <Button Content="Play"/>
-                            <Button Content="Pause"/>
-                            <Button Content="Stop"/>
-                            <Button Content="End"/>
-                            <Button Content="Next"/>
+                            <Button Name="PrevBtn" Content="Previous" />
+                            <Button Name="StartBtn" Content="Start"/>
+                            <Button Name="PlayBtn"  Content="Play"/>
+                            <Button Name="PauseBtn" Content="Pause"/>
+                            <Button Name="StopBtn" Content="Stop"/>
+                            <Button Name="EndBtn" Content="End"/>
+                            <Button Name="NextBtn" Content="Next"/>
                             <ToggleButton Content="Mute"/>
                         </StackPanel>
                         <TextBlock FontSize="10">Volume</TextBlock>
