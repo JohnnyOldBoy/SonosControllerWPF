@@ -11,6 +11,9 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary>
+                    <viewmodels:ParamConverter x:Key="paramConverter"></viewmodels:ParamConverter>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -235,7 +238,16 @@
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Groups"/>
-                                        <Button Content="New group"/>
+                                        <Button Content="New group" 
+                                                Command="{Binding CommandEx}">
+                                            <!--<Button.CommandParameter>
+                                                <MultiBinding>
+                                                    <Binding ElementName="txtZip"/>
+                                                    <Binding ElementName="txtCity"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>-->
+                                        </Button>
+                                                <!--CommandParameter="GroupManagementNew"/>-->
                                     </StackPanel>
                                 </Expander.Header>
                                 <ListBox ItemsSource="{Binding ZoneGroupViewModelCollection}"
@@ -258,7 +270,9 @@
                                                             Binding="{Binding Invisible}"/>
                                                         </DataGrid.Columns>
                                                     </DataGrid>
-                                                    <Button Content="Edit group"/>
+                                                    <Button Content="Edit group" 
+                                                Command="{Binding CommandEx}"
+                                                CommandParameter="GroupManagementEdit"/>
                                                 </StackPanel>
                                             </Expander>
                                         </DataTemplate>

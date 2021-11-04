@@ -162,6 +162,29 @@ namespace SonosController
                     ZoneGroupTopologyViewModel.StereoPairViewModels = StereoPairViewModelsCollection;
                 }
             }
+            if (parameter as string == "CreateStereoPair")
+            {
+                CreateStereoPairWindow createStereoPairWindow = new CreateStereoPairWindow();
+                createStereoPairWindow.DataContext = new CreateStereoPairViewModel(this);
+                createStereoPairWindow.ShowDialog();
+                CreateStereoPairViewModel newCreateStereoPairViewModel = createStereoPairWindow.DataContext as CreateStereoPairViewModel;
+                if (newCreateStereoPairViewModel.NewStereoPair != null)
+                {
+                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(this);
+                    stereoPairViewModel.PairName = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID).RoomName;
+                    stereoPairViewModel.StereoPair.Add(newCreateStereoPairViewModel.NewStereoPair);
+                    if (StereoPairViewModelsCollection != null)
+                    {
+                        StereoPairViewModelsCollection.Add(stereoPairViewModel);
+                    }
+                    else
+                    {
+                        StereoPairViewModelsCollection = new ObservableCollection<StereoPairViewModel>();
+                        StereoPairViewModelsCollection.Add(stereoPairViewModel);
+                    }
+                    ZoneGroupTopologyViewModel.StereoPairViewModels = StereoPairViewModelsCollection;
+                }
+            }
         }
 
         public MainWindowViewModel()

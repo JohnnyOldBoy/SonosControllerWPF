@@ -80,6 +80,9 @@
     <Compile Include="CreateStereoPairWindow.xaml.cs">
       <DependentUpon>CreateStereoPairWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GroupManagementWindow.xaml.cs">
+      <DependentUpon>GroupManagementWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AlbumViewModel.cs" />
     <Compile Include="ViewModels\ArtistViewModel.cs" />
     <Compile Include="ViewModels\CommandEx.cs" />
@@ -95,6 +98,10 @@
     <Compile Include="ViewModels\ZoneGroupViewModel.cs" />
     <Compile Include="ViewModels\ZonePlayersViewModel.cs" />
     <Page Include="CreateStereoPairWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GroupManagementWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
