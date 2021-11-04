@@ -1,4 +1,5 @@
-﻿using MusicData;
+﻿using GalaSoft.MvvmLight;
+using MusicData;
 using SonosController.ViewModels;
 
 namespace SonosController.ViewModels

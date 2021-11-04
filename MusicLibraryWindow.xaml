@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SonosController"
         xmlns:viewModels="clr-namespace:SonosController.ViewModels"
         mc:Ignorable="d"
-        Title="Music Library" Height="768" Width="1024">
+        Title="Music Library" Height="768" Width="1024"
+        d:DataContext="{d:DesignInstance local:MusicLibraryViewModel}">
     <Grid>
         <TabControl>
             <TabItem Header="Albums">
@@ -16,14 +17,14 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <DataGrid Grid.Column="0" Name="AlbumsView" 
-                              ItemsSource="{Binding AlbumsOC}"
+                              ItemsSource="{Binding Albums}"
                               Grid.IsSharedSizeScope="True" 
                               IsReadOnly="True" 
                               AutoGenerateColumns="False"
                               SelectedItem="{Binding SelectedAlbum}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Album" Binding="{Binding AlbumName}"/>
-                            <DataGridTextColumn Header="Artist" Binding="{Binding AlbumArtist}"/>
+                            <DataGridTextColumn Header="Artist" Binding="{Binding Album.AlbumArtist}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid Grid.Column="1" Name="AlbumTracksView"
