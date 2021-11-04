@@ -3,9 +3,13 @@ using GalaSoft.MvvmLight;
 using MusicData;
 using Services;
 using SonosController.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Data;
 
 namespace SonosController
 {
@@ -138,29 +142,6 @@ namespace SonosController
                 musicLibraryWindow.Show();
             }
             if (parameter as string == "CreateStereoPair")
-            {   
-                CreateStereoPairWindow createStereoPairWindow = new CreateStereoPairWindow();
-                createStereoPairWindow.DataContext = new CreateStereoPairViewModel(this);
-                createStereoPairWindow.ShowDialog();
-                CreateStereoPairViewModel newCreateStereoPairViewModel = createStereoPairWindow.DataContext as CreateStereoPairViewModel;
-                if (newCreateStereoPairViewModel.NewStereoPair != null)
-                {
-                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(this);
-                    stereoPairViewModel.PairName = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID).RoomName;
-                    stereoPairViewModel.StereoPair.Add(newCreateStereoPairViewModel.NewStereoPair);
-                    if (StereoPairViewModelsCollection != null)
-                    {
-                        StereoPairViewModelsCollection.Add(stereoPairViewModel);
-                    }
-                    else
-                    {
-                        StereoPairViewModelsCollection = new ObservableCollection<StereoPairViewModel>();
-                        StereoPairViewModelsCollection.Add(stereoPairViewModel);
-                    }
-                    ZoneGroupTopologyViewModel.StereoPairViewModels = StereoPairViewModelsCollection;
-                }
-            }
-            if (parameter as string == "CreateStereoPair")
             {
                 CreateStereoPairWindow createStereoPairWindow = new CreateStereoPairWindow();
                 createStereoPairWindow.DataContext = new CreateStereoPairViewModel(this);
@@ -183,6 +164,15 @@ namespace SonosController
                     ZoneGroupTopologyViewModel.StereoPairViewModels = StereoPairViewModelsCollection;
                 }
             }
+            if (parameter as string == "GroupManagementNew")
+            {
+                GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
+                groupManagementWindow.DataContext = new CreateStereoPairViewModel(this);
+                groupManagementWindow.ShowDialog();
+                CreateStereoPairViewModel newCreateStereoPairViewModel = createStereoPairWindow.DataContext as CreateStereoPairViewModel;
+
+            }
+
         }
 
         public MainWindowViewModel()

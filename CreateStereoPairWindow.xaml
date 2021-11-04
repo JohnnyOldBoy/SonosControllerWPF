@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:SonosController"
         xmlns:viewmodels="clr-namespace:SonosController.ViewModels"
         mc:Ignorable="d"
@@ -15,6 +16,7 @@
                     <viewmodels:ParamConverter x:Key="paramConverter"></viewmodels:ParamConverter>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
+            <system:String x:Key="CreateStereoPair">CreateStereoPair</system:String>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -59,7 +61,7 @@
                                   Mode=Default}">
                             <CheckBox.CommandParameter>
                                 <MultiBinding Converter="{StaticResource paramConverter}">
-                                    <Binding ElementName="CreateStereoPair"/>
+                                    <Binding Source="CreateStereoPair"/>
                                     <Binding Path="IsChecked" RelativeSource="{RelativeSource Self}"/>
                                     <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
                                 </MultiBinding>

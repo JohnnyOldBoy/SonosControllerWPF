@@ -17,7 +17,10 @@ namespace SonosController.ViewModels
                     result = ProcessStereoPair(values);
                 }
 
-                //if 
+                if (mode == "GroupManagementNew")
+                {
+                    result = ConvertToTuple(values);
+                }
             }
             else
             {

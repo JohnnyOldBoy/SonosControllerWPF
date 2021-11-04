@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using SonosController.ViewModels;
-using SonosControllerWPF.ViewModels;
 
 namespace SonosController
 {

@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-         xmlns:local="clr-namespace:SonosController"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:SonosController"
         xmlns:viewmodels="clr-namespace:SonosController.ViewModels"        
         mc:Ignorable="d"
         Title="Sonos Controller">
@@ -239,15 +240,9 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Groups"/>
                                         <Button Content="New group" 
-                                                Command="{Binding CommandEx}">
-                                            <!--<Button.CommandParameter>
-                                                <MultiBinding>
-                                                    <Binding ElementName="txtZip"/>
-                                                    <Binding ElementName="txtCity"/>
-                                                </MultiBinding>
-                                            </Button.CommandParameter>-->
+                                                Command="{Binding CommandEx}"
+                                                CommandParameter="GroupManagementNew">
                                         </Button>
-                                                <!--CommandParameter="GroupManagementNew"/>-->
                                     </StackPanel>
                                 </Expander.Header>
                                 <ListBox ItemsSource="{Binding ZoneGroupViewModelCollection}"
