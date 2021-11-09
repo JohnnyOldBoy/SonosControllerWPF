@@ -26,7 +26,7 @@ namespace SonosController.ViewModels
         private ZoneGroupTopologyViewModel _parentViewModel;
         private ObservableCollection<StereoPairViewModel> stereoPairViewModels;
         private string _leftUUID = string.Empty;
-        private string _rightUUID = string.Empty;
+        //private string _rightUUID = string.Empty;
         private string _pairName = string.Empty;
 
         public string PairName 

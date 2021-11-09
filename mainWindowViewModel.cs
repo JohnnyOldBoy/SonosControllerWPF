@@ -167,9 +167,9 @@ namespace SonosController
             if (parameter as string == "GroupManagementNew")
             {
                 GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
-                groupManagementWindow.DataContext = new CreateStereoPairViewModel(this);
+                groupManagementWindow.DataContext = new GroupManagementViewModel(0);
                 groupManagementWindow.ShowDialog();
-                CreateStereoPairViewModel newCreateStereoPairViewModel = createStereoPairWindow.DataContext as CreateStereoPairViewModel;
+                GroupManagementViewModel newGroupManagementViewModel = groupManagementWindow.DataContext as GroupManagementViewModel;
 
             }
 
