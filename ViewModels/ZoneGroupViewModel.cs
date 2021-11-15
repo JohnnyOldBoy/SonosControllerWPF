@@ -14,13 +14,19 @@ namespace SonosController.ViewModels
             ZoneGroupName = ZoneGroupCoordinator.RoomName;
             ZoneGroupMemberNames = zoneGroup.ZoneGroupMemberNames;
             ZoneGroupMembers = getZoneGroupMembers(zoneGroup);
+
+            CommandEx = new CommandEx
+            {
+                CanExecuteFunc = obj => true,
+                ExecuteFunc = CommandExMethod
+            };
         }
 
         private readonly ServiceUtils _serviceUtils = new ServiceUtils();
 
         private string _zoneGroupName = string.Empty;
-        public string ZoneGroupName 
-        { 
+        public string ZoneGroupName
+        {
             get => _zoneGroupName;
             set
             {
@@ -31,8 +37,8 @@ namespace SonosController.ViewModels
 
         private ZonePlayer _zoneGroupCoordinator;
 
-        public ZonePlayer ZoneGroupCoordinator 
-        { 
+        public ZonePlayer ZoneGroupCoordinator
+        {
             get => _zoneGroupCoordinator;
             set
             {
@@ -42,8 +48,8 @@ namespace SonosController.ViewModels
         }
 
         private ObservableCollection<ZoneGroupMember> _zoneGroupMembers;
-        public ObservableCollection<ZoneGroupMember> ZoneGroupMembers 
-        { 
+        public ObservableCollection<ZoneGroupMember> ZoneGroupMembers
+        {
             get => _zoneGroupMembers;
             set
             {
@@ -66,13 +72,19 @@ namespace SonosController.ViewModels
             set => zoneGroupMemberNames = value;
         }
 
+        public CommandEx CommandEx
+        {
+            get;
+            set;
+        }
+
         private ObservableCollection<ZoneGroupMember> getZoneGroupMembers(ZoneGroup zoneGroup)
         {
             ObservableCollection<ZoneGroupMember> zoneGroupMembers = new ObservableCollection<ZoneGroupMember>();
 
             //Add the group coordinator first
             ZoneGroupMember zoneGroupCoordinator = zoneGroup.ZoneGroupMemeberList.Find(x => x.IsCoordinator == true);
-            zoneGroupMembers.Add(zoneGroupCoordinator); 
+            zoneGroupMembers.Add(zoneGroupCoordinator);
             //Add the rest of the members that are not invisible
             foreach (ZoneGroupMember zoneGroupMember in zoneGroup.ZoneGroupMemeberList.FindAll(x => x.IsCoordinator == false).FindAll(x => x.Invisible == false))
             {
@@ -85,6 +97,13 @@ namespace SonosController.ViewModels
             }
 
             return zoneGroupMembers;
+        }
+
+        public void CommandExMethod(object parameter)
+        {
+            GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
+            groupManagementWindow.DataContext = new GroupManagementViewModel(1, ref ZoneGroupTopologyViewModel);
+            groupManagementWindow.ShowDialog();
         }
     }
 }

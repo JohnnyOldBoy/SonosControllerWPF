@@ -266,8 +266,8 @@
                                                         </DataGrid.Columns>
                                                     </DataGrid>
                                                     <Button Content="Edit group" 
-                                                Command="{Binding CommandEx}"
-                                                CommandParameter="GroupManagementEdit"/>
+                                                            Command="{Binding CommandEx}"
+                                                            CommandParameter="GroupManagementEdit"/>
                                                 </StackPanel>
                                             </Expander>
                                         </DataTemplate>

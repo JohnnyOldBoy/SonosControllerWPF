@@ -167,12 +167,9 @@ namespace SonosController
             if (parameter as string == "GroupManagementNew")
             {
                 GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
-                groupManagementWindow.DataContext = new GroupManagementViewModel(0);
+                groupManagementWindow.DataContext = new GroupManagementViewModel(0, ref ZoneGroupTopologyViewModel);
                 groupManagementWindow.ShowDialog();
-                GroupManagementViewModel newGroupManagementViewModel = groupManagementWindow.DataContext as GroupManagementViewModel;
-
             }
-
         }
 
         public MainWindowViewModel()
