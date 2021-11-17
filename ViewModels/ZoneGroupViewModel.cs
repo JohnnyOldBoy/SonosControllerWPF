@@ -102,7 +102,7 @@ namespace SonosController.ViewModels
         public void CommandExMethod(object parameter)
         {
             GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
-            groupManagementWindow.DataContext = new GroupManagementViewModel(1, ref ZoneGroupTopologyViewModel);
+            groupManagementWindow.DataContext = new GroupManagementViewModel(1);
             groupManagementWindow.ShowDialog();
         }
     }

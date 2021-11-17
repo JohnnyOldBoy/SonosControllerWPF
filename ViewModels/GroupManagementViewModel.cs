@@ -6,7 +6,7 @@ namespace SonosController.ViewModels
 {
     public class GroupManagementViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public GroupManagementViewModel(int mode, ref ZoneGroupTopologyViewModel zoneGroupTopologyViewModel)
+        public GroupManagementViewModel(int mode)
         {
             switch(mode)
             {
@@ -23,7 +23,7 @@ namespace SonosController.ViewModels
 
         private void NewGroup()
         {
-
+        
         }
 
         private void EditGroup()

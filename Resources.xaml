@@ -109,18 +109,6 @@
                                 <Setter Property="Foreground" Value="DarkGray"/>
                             </MultiTrigger.Setters>
                         </MultiTrigger>
-                       <!-- <Trigger Property="IsChecked" Value="False"  >
-                            <Setter Property="Background" TargetName="border" Value="AliceBlue"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="DarkGray"/>
-                            <Setter Property="Foreground" Value="DarkGray"/>
-                            <Setter Property="BorderThickness" Value="0,0,2,2"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="Black"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Foreground" Value="DarkGray"/>
-                        </Trigger>-->
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="grid" Property="Opacity" Value="0.5"/>
                         </Trigger>

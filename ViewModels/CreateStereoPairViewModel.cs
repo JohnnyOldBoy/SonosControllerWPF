@@ -20,7 +20,7 @@ namespace SonosController.ViewModels
             IsChecked = new RelayCommand<object>(IsCheckedMethod);
 
             ZonePlayers = localMainWindowViewModel.ZonePlayersViewModel.ZonePlayers;
-            ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels = localMainWindowViewModel.ZoneGroupViewModelCollection;
+            ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels = localMainWindowViewModel.ZoneGroupViewModels;
             
             ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
             ZoneGroupTopologyViewModel _zoneGroupTopologyViewModel = localMainWindowViewModel.ZoneGroupTopologyViewModel;
@@ -112,7 +112,8 @@ namespace SonosController.ViewModels
 
         public void CreateStereoPairMethod()
         {
-            string pairCreated = _serviceUtils.CreateStereoPair(ZonePlayers, _leftUUID, _rightUUID);
+            string masterPlayerIpAddress = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).PlayerIpAddress;
+            string pairCreated = _serviceUtils.CreateStereoPair(masterPlayerIpAddress, _leftUUID, _rightUUID);
             if (pairCreated == "Success")
             {
                 StereoPair stereoPair = new StereoPair()
@@ -120,7 +121,7 @@ namespace SonosController.ViewModels
                     LeftUUID = _leftUUID,
                     RightUUID = _rightUUID,
                     PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
-                    ChannelMapSet = _leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF"
+                    ChannelMapSet = _leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF",
                 };
                 NewStereoPair = stereoPair;
                 MessageBox.Show("Stereo pair created successfully");

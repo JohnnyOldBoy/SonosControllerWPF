@@ -36,7 +36,7 @@
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Column="0" 
                               Grid.Row="0"
-                              ItemsSource="{Binding ZoneGroupViewModelCollection}" 
+                              ItemsSource="{Binding ZoneGroupViewModels}" 
                               SelectedItem="{Binding SelectedZoneGroup}"
                               HeadersVisibility="None">
                         <DataGrid.CellStyle>
@@ -245,7 +245,7 @@
                                         </Button>
                                     </StackPanel>
                                 </Expander.Header>
-                                <ListBox ItemsSource="{Binding ZoneGroupViewModelCollection}"
+                                <ListBox ItemsSource="{Binding ZoneGroupViewModels}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
@@ -283,7 +283,7 @@
                                                 CommandParameter="CreateStereoPair"/>
                                     </StackPanel>
                                 </Expander.Header>
-                                <ListBox ItemsSource="{Binding StereoPairViewModelsCollection}"
+                                <ListBox ItemsSource="{Binding StereoPairViewModels}"
                                          BorderBrush="White">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
@@ -298,7 +298,7 @@
                                                         </DataGrid.Columns>
                                                     </DataGrid>
                                                     <Button Name="SeparateSteroPairBtn"
-                                                            Command="{Binding SeparateSteroPair}" Content="Separate"
+                                                            Command="{Binding SeparateStereoPair}" Content="Separate"
                                                             />
                                                 </StackPanel>
                                             </Expander>
@@ -309,7 +309,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-            </TabItem>
+            </TabItem>               
         </TabControl>
         <Grid Grid.Row="1" >
             <Button Name="MusicLibraryBtn" 

@@ -13,22 +13,16 @@ namespace SonosController.ViewModels
         public StereoPairViewModel(ZoneGroupTopologyViewModel parentViewModel)
         {
             _parentViewModel = parentViewModel;
-            SeparateSteroPair = new RelayCommand(SeparateSteroPairMethod);
-            stereoPairViewModels = _parentViewModel.StereoPairViewModels;
-        }
-
-        public StereoPairViewModel(MainWindowViewModel parentViewModel)
-        {
-            SeparateSteroPair = new RelayCommand(SeparateSteroPairMethod);
-            stereoPairViewModels = parentViewModel.StereoPairViewModelsCollection;
+            //stereoPairViewModels = _parentViewModel.StereoPairViewModels;
+            SeparateStereoPair = new RelayCommand(SeparateSteroPairMethod);
         }
 
         private ZoneGroupTopologyViewModel _parentViewModel;
-        private ObservableCollection<StereoPairViewModel> stereoPairViewModels;
+        //private ObservableCollection<StereoPairViewModel> stereoPairViewModels;
         private string _leftUUID = string.Empty;
         //private string _rightUUID = string.Empty;
-        private string _pairName = string.Empty;
 
+        private string _pairName = string.Empty;
         public string PairName 
         { 
             get => _pairName;
@@ -61,31 +55,54 @@ namespace SonosController.ViewModels
             }
         }
 
-        public ICommand SeparateSteroPair
+        //private string _masterPlayerIpAddress;
+        //public string MasterPlayerIpAddress
+        //{
+        //    get => _masterPlayerIpAddress;
+        //    set => _masterPlayerIpAddress = value;
+        //}
+
+        //private bool _separated = false;
+        //public bool Separated 
+        //{ 
+        //    get => _separated;
+        //    set
+        //    {
+        //        _separated = value;
+        //        RaisePropertyChanged(nameof(Separated));
+        //    }
+        //}
+
+        public ICommand SeparateStereoPair
         {
             get;
             private set;
         }
-        
+
         private void SeparateSteroPairMethod()
         {
+            //Separated = true;
             ServiceUtils serviceUtils = new ServiceUtils();
-            string response = serviceUtils.SeparateStereoPair(ZonePlayers, StereoPair[0].LeftUUID);
+            
+            string response = serviceUtils.SeparateStereoPair(StereoPair[0].LeftUUID);
+
             int spIndex = -1;
 
-                foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
-                {
-                    if (stereoPairViewModel._leftUUID == _leftUUID)
-                    {
-                        spIndex = stereoPairViewModels.IndexOf(stereoPairViewModel);
-                    }
+            ObservableCollection<StereoPairViewModel> stereoPairViewModels = _parentViewModel.StereoPairViewModels;
 
-                }
-                if (spIndex != -1)
+            foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
+            {
+                if (stereoPairViewModel._leftUUID == _leftUUID)
                 {
-                    stereoPairViewModels.RemoveAt(spIndex);
-                    _parentViewModel.RaisePropertyChanged();
+                    spIndex = stereoPairViewModels.IndexOf(stereoPairViewModel);
                 }
+
+            }
+            if (spIndex != -1)
+            {
+                stereoPairViewModels.RemoveAt(spIndex);
+                _parentViewModel.RaisePropertyChanged();
+            }
         }
     }
 }
