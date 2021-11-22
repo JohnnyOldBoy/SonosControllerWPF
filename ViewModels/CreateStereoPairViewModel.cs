@@ -112,7 +112,9 @@ namespace SonosController.ViewModels
 
         public void CreateStereoPairMethod()
         {
-            string masterPlayerIpAddress = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).PlayerIpAddress;
+            ServiceUtils serviceUtils = new ServiceUtils();
+            ZonePlayer _zonePlayer = serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID);
+            string masterPlayerIpAddress = _zonePlayer.PlayerIpAddress;
             string pairCreated = _serviceUtils.CreateStereoPair(masterPlayerIpAddress, _leftUUID, _rightUUID);
             if (pairCreated == "Success")
             {
@@ -122,6 +124,7 @@ namespace SonosController.ViewModels
                     RightUUID = _rightUUID,
                     PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
                     ChannelMapSet = _leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF",
+                    MasterPlayerIpAddress = masterPlayerIpAddress
                 };
                 NewStereoPair = stereoPair;
                 MessageBox.Show("Stereo pair created successfully");

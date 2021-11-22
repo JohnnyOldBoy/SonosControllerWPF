@@ -151,10 +151,10 @@ namespace SonosController
                 if (newCreateStereoPairViewModel.NewStereoPair != null)
                 {
                     StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(ZoneGroupTopologyViewModel);
-                    stereoPairViewModel.PairName = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID).RoomName;
-                    stereoPairViewModel.MasterPlayerIpAddress = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID).PlayerIpAddress;
+                    ZonePlayer masterZonePlayer = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID);
+                    stereoPairViewModel.PairName = masterZonePlayer.RoomName;
+                    //stereoPairViewModel.MasterPlayerIpAddress = masterZonePlayer.PlayerIpAddress;
                     stereoPairViewModel.StereoPair.Add(newCreateStereoPairViewModel.NewStereoPair);
-                    stereoPairViewModel.Separated = false;
                     if (StereoPairViewModels != null)
                     {
                         StereoPairViewModels.Add(stereoPairViewModel);

@@ -34,5 +34,12 @@
             set => rightUUID = value;
         }
 
+        private string _masterPlayerIpAddress;
+        public string MasterPlayerIpAddress
+        {
+            get => _masterPlayerIpAddress;
+            set => _masterPlayerIpAddress = value;
+        }
+
     }
 }
