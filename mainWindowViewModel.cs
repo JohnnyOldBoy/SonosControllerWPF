@@ -188,35 +188,40 @@ namespace SonosController
             PropertyChanged += OnPropertyChangedHandler;
             #region
             // Devices
-            ZonePlayersViewModel = new ZonePlayersViewModel();
-            ZonePlayerCollection = ZonePlayersViewModel.ZonePlayerCollection;
 
-            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayersViewModel.ZonePlayers);
-            ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
-            SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
-            if (SelectedZonePlayer != null)
-            {
-                ZonePlayerDetailsViewCollection.Filter = t =>
-                {
-                    if (t is ZonePlayerDetail zonePlayerDetail)
-                    {
-                        if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-                ZonePlayerDetailsViewCollection.Refresh();
-            }
-            #endregion
-            #region
+            string playerIpAddress = _serviceUtils.GetPlayerIPAdress();
+
+            ZoneGroupTopologyViewModel zoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(playerIpAddress);
+
+            //ZonePlayersViewModel = new ZonePlayersViewModel();
+            //ZonePlayerCollection = ZonePlayersViewModel.ZonePlayerCollection;
+
+            //List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayersViewModel.ZonePlayers);
+            //ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
+            //SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
+            //if (SelectedZonePlayer != null)
+            //{
+            //    ZonePlayerDetailsViewCollection.Filter = t =>
+            //    {
+            //        if (t is ZonePlayerDetail zonePlayerDetail)
+            //        {
+            //            if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+            //            {
+            //                return true;
+            //            }
+            //        }
+            //        return false;
+            //    };
+            //    ZonePlayerDetailsViewCollection.Refresh();
+            //}
+            //#endregion
+            //#region
             // Rooms and group managemeent
-            if (ZonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
-            {
-                ZoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(ZonePlayersViewModel);
-                ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
-                ZoneGroupViewModelsCollection = new ListCollectionView(ZoneGroupViewModels);           
+            //if (ZonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
+            //{
+            //    ZoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(ZonePlayersViewModel);
+            //    ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
+            //    ZoneGroupViewModelsCollection = new ListCollectionView(ZoneGroupViewModels);           
                 //if (SelectedZonePlayer != null)
                 //{
                 //    ZonePlayerDetailsViewCollection.Filter = t =>
@@ -233,29 +238,29 @@ namespace SonosController
                 //    ZonePlayerDetailsViewCollection.Refresh();
 
 
-                StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
-                SelectedZoneGroup = ZoneGroupViewModels.FirstOrDefault();
-                SelectedZoneGroup.IsSelected = true;
-                SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
+                //StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
+                //SelectedZoneGroup = ZoneGroupViewModels.FirstOrDefault();
+                //SelectedZoneGroup.IsSelected = true;
+                //SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
 
-                //Queues
-                QueueViewModel queueViewModel = new QueueViewModel(this);
-                ZoneGroupViewModelsCollection = new ListCollectionView(queueViewModel.QueueItemList)
-                {
-                    Filter = t =>
-                    {
-                        if (t is QueueItem queueItem)
-                        {
-                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator.UUID)
-                            {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }
-                };
-                ZoneGroupViewModelsCollection.Refresh();
-            }
+                ////Queues
+                //QueueViewModel queueViewModel = new QueueViewModel(this);
+                //ZoneGroupViewModelsCollection = new ListCollectionView(queueViewModel.QueueItemList)
+                //{
+                //    Filter = t =>
+                //    {
+                //        if (t is QueueItem queueItem)
+                //        {
+                //            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator.UUID)
+                //            {
+                //                return true;
+                //            }
+                //        }
+                //        return false;
+                //    }
+                //};
+                //ZoneGroupViewModelsCollection.Refresh();
+            //}
         }
         #endregion
 

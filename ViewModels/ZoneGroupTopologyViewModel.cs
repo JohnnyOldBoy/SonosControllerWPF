@@ -9,32 +9,33 @@ namespace SonosController.ViewModels
 {
     public class ZoneGroupTopologyViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public ZoneGroupTopologyViewModel(ZonePlayersViewModel zonePlayersViewModel)
+        public ZoneGroupTopologyViewModel(string zonePlayerIpAddress)
         {
             ZoneGroupTopology zoneGroupTopology = 
-                _serviceUtils.GetZoneGroupTopology(zonePlayersViewModel.ZonePlayers.ZonePlayersList.FirstOrDefault().PlayerIpAddress);
-            ZoneGroupViewModels = new ObservableCollection<ZoneGroupViewModel>();
-            foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
-            {
-                ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(zonePlayersViewModel.ZonePlayers, zoneGroup);
-                ZoneGroupViewModels.Add(zoneGroupViewModel);
-            }
-            if (zoneGroupTopology.StereoPairs.StereoPairsList.Count > 0)
-            {
-                StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
-                foreach (StereoPair stereoPair in zoneGroupTopology.StereoPairs.StereoPairsList)
-                {
-                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(this)
-                    {
-                        PairName = stereoPair.PairName
-                    };
-                    stereoPairViewModel.StereoPair.Add(stereoPair);
-                    stereoPairViewModel.ZonePlayers = zonePlayersViewModel.ZonePlayers;
-                    StereoPairViewModels.Add(stereoPairViewModel);
-                }
+                _serviceUtils.GetZoneGroupTopology(zonePlayerIpAddress);
+            //ZoneGroupViewModels = new ObservableCollection<ZoneGroupViewModel>();
+            //foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
+            //{
+            //    ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(zonePlayersViewModel.ZonePlayers, zoneGroup);
+            //    ZoneGroupViewModels.Add(zoneGroupViewModel);
+            //}
+            //if (zoneGroupTopology.StereoPairs.StereoPairsList.Count > 0)
+            //{
+            //    StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
+            //    foreach (StereoPair stereoPair in zoneGroupTopology.StereoPairs.StereoPairsList)
+            //    {
+            //        StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(this)
+            //        {
+            //            PairName = stereoPair.PairName
+            //        };
+            //        stereoPairViewModel.StereoPair.Add(stereoPair);
+            //        stereoPairViewModel.ZonePlayers = zonePlayersViewModel.ZonePlayers;
+            //        StereoPairViewModels.Add(stereoPairViewModel);
+            //    }
 
-            }
+            //}
         }
+
         ServiceUtils _serviceUtils = new ServiceUtils();
 
         private ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels;
