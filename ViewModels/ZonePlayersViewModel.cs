@@ -8,10 +8,10 @@ namespace SonosController.ViewModels
 {
     public class ZonePlayersViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public ZonePlayersViewModel()
+        public ZonePlayersViewModel(string[] zonePlayerDescUrls)
         {
             ServiceUtils _serviceUtils = new ServiceUtils();
-            _zonePlayers = _serviceUtils.GetZonePlayers();
+            _zonePlayers = _serviceUtils.GetZonePlayers(zonePlayerDescUrls);
             ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
             foreach (ZonePlayer zonePlayer in _zonePlayers.ZonePlayersList)
             {
