@@ -14,14 +14,10 @@ namespace SonosController.ViewModels
         public StereoPairViewModel(ZoneGroupTopologyViewModel parentViewModel)
         {
             _parentViewModel = parentViewModel;
-            //stereoPairViewModels = _parentViewModel.StereoPairViewModels;
             SeparateStereoPair = new RelayCommand(SeparateSteroPairMethod);
         }
 
         private ZoneGroupTopologyViewModel _parentViewModel;
-        //private ObservableCollection<StereoPairViewModel> stereoPairViewModels;
-        private string _leftUUID = string.Empty;
-        //private string _rightUUID = string.Empty;
 
         private string _pairName = string.Empty;
         public string PairName 
@@ -56,17 +52,6 @@ namespace SonosController.ViewModels
             }
         }
 
-        //private bool _separated = false;
-        //public bool Separated 
-        //{ 
-        //    get => _separated;
-        //    set
-        //    {
-        //        _separated = value;
-        //        RaisePropertyChanged(nameof(Separated));
-        //    }
-        //}
-
         public ICommand SeparateStereoPair
         {
             get;
@@ -75,11 +60,10 @@ namespace SonosController.ViewModels
 
         private void SeparateSteroPairMethod()
         {
-            StereoPair stereoPair = StereoPair[0];//Separated = true;
+            StereoPair stereoPair = StereoPair[0];
             ServiceUtils serviceUtils = new ServiceUtils();
-            //MessageBox.Show(StereoPair[0].LeftUUID);
             
-            string response = serviceUtils.SeparateStereoPair(StereoPair[0].LeftUUID, StereoPair[0].MasterPlayerIpAddress);
+            string response = serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
 
             int spIndex = -1;
 
@@ -87,7 +71,7 @@ namespace SonosController.ViewModels
 
             foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
             {
-                if (stereoPairViewModel._leftUUID == _leftUUID)
+                if (stereoPairViewModel.Equals(this))
                 {
                     spIndex = stereoPairViewModels.IndexOf(stereoPairViewModel);
                 }
