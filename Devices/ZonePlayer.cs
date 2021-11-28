@@ -58,7 +58,7 @@
             set => uUID = value;
         }
 
-        string playerIpAddress;
+        private string playerIpAddress;
         public string PlayerIpAddress
         {
             get => playerIpAddress;
@@ -71,13 +71,5 @@
             get => iconURL;
             set => iconURL = value;
         }
-
-        //private PlayerQueue queue;
-        //public PlayerQueue Queue
-        //{
-        //  get => queue;
-        //  set => queue = value;
-        //}
-
     }
 }

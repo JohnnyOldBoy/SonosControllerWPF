@@ -23,12 +23,18 @@
             set => channelMapSet = value;
         }
 
+        private bool isCoordinator = false;
+        public bool IsCoordinator 
+        { 
+            get => isCoordinator; 
+            set => isCoordinator = value; 
+        }
+
         private bool invisible = false;
         public bool Invisible
         {
             get => invisible;
             set => invisible = value;
         }
-
     }
 }

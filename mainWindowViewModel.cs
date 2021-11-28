@@ -1,51 +1,329 @@
-﻿using GalaSoft.MvvmLight;
-using Devices;
+﻿using Devices;
+using GalaSoft.MvvmLight;
+using MusicData;
 using Services;
+using SonosController.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Data;
+using System.Xml;
 
 namespace SonosController
 {
-    sealed class mainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public ServiceUtils serviceUtils;
 
-        private ObservableCollection<ZonePlayer> _ZonePlayersOC;
-        public ObservableCollection<ZonePlayer> ZonePlayersOC
+        private readonly ServiceUtils _serviceUtils;
+        #region
+        /// <summary>
+        /// Devices tab. A device is any Sonos product that can participate in a Sonos system, this includes all players -
+        /// Play: 1, Play: 3, Play: 5, Beam etc and also non palyer devices such as Boost and Bridge.
+        /// </summary>
+        /// 
+        private ObservableCollection<ZonePlayer> _zonePlayerCollection;
+        public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
-            get { return _ZonePlayersOC; }
-            set { _ZonePlayersOC = value; }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public mainWindowViewModel()
-        {
-            serviceUtils = new ServiceUtils();
-            ZonePlayers zonePlayers = serviceUtils.GetZonePlayers();
-            _ZonePlayersOC = new ObservableCollection<ZonePlayer>();
-            
-            foreach (ZonePlayer zonePlayer in zonePlayers.ZonePlayersList)
+            get { return _zonePlayerCollection; }
+            set
             {
-                _ZonePlayersOC.Add(zonePlayer);
-            }
-
-            if (zonePlayers.ZonePlayersList.Any())
-            {
-                ZoneGroupTopology zoneGroupTopology =
-                    serviceUtils.GetZoneGroupTopology(zonePlayers.ZonePlayersList[0].PlayerIpAddress);
+                _zonePlayerCollection = value;
+                RaisePropertyChanged(nameof(ZonePlayerCollection));
             }
         }
 
-        protected void OnPropertyChange(string propertyName)
+        private ZonePlayer _selectedZonePlayer;
+        public ZonePlayer SelectedZonePlayer
         {
-            if (PropertyChanged != null)
+            get => _selectedZonePlayer;
+            set
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                _selectedZonePlayer = value;
+                RaisePropertyChanged(nameof(SelectedZonePlayer));
             }
         }
 
+        private ZonePlayer _selectedZoneGroupCoordinator;
+        public ZonePlayer SelectedZoneGroupCoordinator
+        {
+            get => _selectedZoneGroupCoordinator;
+            set
+            {
+                _selectedZoneGroupCoordinator = value;
+                RaisePropertyChanged(nameof(SelectedZoneGroupCoordinator));
+            }
+        }
 
+        public ICollectionView ZonePlayerDetailsViewCollection { get; }
+
+        #endregion
+        #region
+        /// <summary>
+        /// Rooms tab. A room is basically a single zone player or a groups of zone players, this will include stereo pairs.
+        /// Devices such as Boost and Bridge are not normally visible here.
+        /// /// </summary>
+
+        private ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels;
+        public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels
+        {
+            get => _zoneGroupViewModels;
+            set
+            {
+                _zoneGroupViewModels = value;
+                RaisePropertyChanged(nameof(ZoneGroupViewModels));
+            }
+        }
+
+        public ICollectionView ZoneGroupQueueViewCollection { get; }
+
+        private ZoneGroupViewModel _selectedZoneGroup;
+        public ZoneGroupViewModel SelectedZoneGroup
+        {
+            get => _selectedZoneGroup;
+            set
+            {
+                _selectedZoneGroup = value;
+                RaisePropertyChanged(nameof(SelectedZoneGroup));
+            }
+        }
+
+        public ICollectionView ZoneGroupViewModelsCollection { get; }
+
+        private ObservableCollection<StereoPairViewModel> _stereoPairViewModels;
+        public ObservableCollection<StereoPairViewModel> StereoPairViewModels
+        {
+            get => _stereoPairViewModels;
+            set
+            {
+                _stereoPairViewModels = value;
+                RaisePropertyChanged(nameof(StereoPairViewModels));
+            }
+        }
+
+        #endregion
+        /// <summary>
+        /// Shared
+        /// </summary>
+
+        private ZoneGroupTopologyViewModel _zoneGroupTopologyViewModel;
+        public ZoneGroupTopologyViewModel ZoneGroupTopologyViewModel
+        {
+            get => _zoneGroupTopologyViewModel;
+            set
+            {
+                _zoneGroupTopologyViewModel = value;
+                RaisePropertyChanged(nameof(ZoneGroupTopologyViewModel));
+            }
+        }
+
+        public ZonePlayersViewModel ZonePlayersViewModel;
+        private ZonePlayersViewModel _zonePlayersViewModel
+        {
+            get => _zonePlayersViewModel;
+            set
+            {
+                _zonePlayersViewModel = value;
+                RaisePropertyChanged(nameof(ZonePlayersViewModel));
+            }
+        }
+
+        public CommandEx CommandEx
+        {
+            get;
+            set;
+        }
+
+        public void CommandExMethod(object parameter)
+        {
+            if (parameter as string == "ViewMusicLibrary")
+            {
+                MusicLibraryWindow musicLibraryWindow = new MusicLibraryWindow();
+                musicLibraryWindow.Show();
+            }
+            if (parameter as string == "CreateStereoPair")
+            {
+                CreateStereoPairWindow createStereoPairWindow = new CreateStereoPairWindow();
+                createStereoPairWindow.DataContext = new CreateStereoPairViewModel(this);
+                createStereoPairWindow.ShowDialog();
+                CreateStereoPairViewModel newCreateStereoPairViewModel = createStereoPairWindow.DataContext as CreateStereoPairViewModel;
+                if (newCreateStereoPairViewModel.NewStereoPair != null)
+                {
+                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(ZoneGroupTopologyViewModel);
+                    ZonePlayer masterZonePlayer = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID);
+                    stereoPairViewModel.PairName = masterZonePlayer.RoomName;
+                    stereoPairViewModel.StereoPair.Add(newCreateStereoPairViewModel.NewStereoPair);
+                    stereoPairViewModel.StereoPair[0].MasterPlayerIpAddress = masterZonePlayer.PlayerIpAddress;
+                    if (StereoPairViewModels != null)
+                    {
+                        StereoPairViewModels.Add(stereoPairViewModel);
+                    }
+                    else
+                    {
+                        StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
+                        StereoPairViewModels.Add(stereoPairViewModel);
+                    }
+                    ZoneGroupTopologyViewModel.StereoPairViewModels = StereoPairViewModels;
+                }
+            }
+            if (parameter as string == "GroupManagementNew")
+            {
+                GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
+                groupManagementWindow.DataContext = new GroupManagementViewModel(0);
+                groupManagementWindow.ShowDialog();
+            }
+        }
+
+        public MainWindowViewModel()
+        {
+            _serviceUtils = new ServiceUtils();
+
+            CommandEx = new CommandEx
+            {
+                CanExecuteFunc = obj => true,
+                ExecuteFunc = CommandExMethod
+            };
+
+            PropertyChanged += OnPropertyChangedHandler;
+
+            //Get a zone player Ip address using iPnP, only one is required
+            string playerIpAddress = _serviceUtils.GetPlayerIPAdress();
+
+            //Get the Zone Group Topology XML from using the IP address found above
+            //The whole system can be obtained from this
+            XmlDocument _sonosSystem = _serviceUtils.GetSonosSystem(playerIpAddress);
+
+            string[] playerDescLocations = _serviceUtils.GetPlayerDescLocations(_sonosSystem);
+
+            #region
+            // Devices
+
+            ZonePlayersViewModel = new ZonePlayersViewModel(playerDescLocations);
+            ZonePlayerCollection = ZonePlayersViewModel.ZonePlayerCollection;
+
+            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayersViewModel.ZonePlayers);
+            ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
+            SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
+            if (SelectedZonePlayer != null)
+            {
+                ZonePlayerDetailsViewCollection.Filter = t =>
+                {
+                    if (t is ZonePlayerDetail zonePlayerDetail)
+                    {
+                        if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                ZonePlayerDetailsViewCollection.Refresh();
+            }
+            #endregion
+            #region
+            // Rooms and group managemeent
+            ZoneGroupTopologyViewModel  = new ZoneGroupTopologyViewModel(_sonosSystem, ZonePlayersViewModel);
+            if (ZonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
+            {
+                ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
+                ZoneGroupViewModelsCollection = new ListCollectionView(ZoneGroupViewModels);
+                if (SelectedZonePlayer != null)
+                {
+                    ZonePlayerDetailsViewCollection.Filter = t =>
+                    {
+                        if (t is ZonePlayerDetail zonePlayerDetail)
+                        {
+                            if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                    ZonePlayerDetailsViewCollection.Refresh();
+                }
+
+                StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
+                SelectedZoneGroup = ZoneGroupViewModels.FirstOrDefault();
+                SelectedZoneGroup.IsSelected = true;
+                SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
+
+                //Queues
+                QueueViewModel queueViewModel = new QueueViewModel(this);
+                ZoneGroupViewModelsCollection = new ListCollectionView(queueViewModel.QueueItemList)
+                {
+                    Filter = t =>
+                    {
+                        if (t is QueueItem queueItem)
+                        {
+                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator.UUID)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                };
+                ZoneGroupViewModelsCollection.Refresh();
+            }
+        }
+        #endregion
+
+        public void SeparateStereoPair()
+        {
+
+        }
+
+        private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+        {
+            //MessageBox.Show(e.PropertyName);
+            if (e.PropertyName == nameof(SelectedZonePlayer))
+            {
+                ZonePlayerDetailsViewCollection.Filter = t =>
+                {
+                    if (t is ZonePlayerDetail zonePlayerDetail)
+                    {
+                        if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                ZonePlayerDetailsViewCollection.Refresh();
+            }
+            if (e.PropertyName == nameof(SelectedZoneGroup))
+            {
+                if (SelectedZoneGroup != null && ZoneGroupQueueViewCollection != null)
+                {
+                    ZoneGroupQueueViewCollection.Filter = t =>
+                    {
+                        if (t is QueueItem queueItem)
+                        {
+                            if (queueItem.ZoneGroupCoordinator == SelectedZoneGroup.ZoneGroupCoordinator.UUID)
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                    ZoneGroupQueueViewCollection.Refresh();
+                }
+            }
+            if (e.PropertyName == nameof(StereoPairViewModels))
+            {
+                if (StereoPairViewModels != null && ZoneGroupQueueViewCollection != null)
+                {
+                    ZoneGroupQueueViewCollection.Refresh();
+                }
+            }
+            if (e.PropertyName == nameof(StereoPairViewModel))
+            {
+                MessageBox.Show("Separated");
+                ZoneGroupViewModelsCollection.Refresh();
+            }
+        }
     }
 }

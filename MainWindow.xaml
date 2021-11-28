@@ -3,40 +3,188 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:SonosController"
+        xmlns:viewmodels="clr-namespace:SonosController.ViewModels"        
         mc:Ignorable="d"
-        Title="Sonos Controller" >
-    <Grid Background="LightBlue">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        Title="Sonos Controller">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary>
+                    <viewmodels:ParamConverter x:Key="paramConverter"></viewmodels:ParamConverter>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Column="0" Grid.Row="0" Name="tabControl1" >
-            <TabItem Header="Rooms" Name="tabItem1">
-                <TabItem.Background>
-                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </TabItem.Background>
-            </TabItem>
-
-            <TabItem Header="Devices" Name="tabItem2">
-                <TabItem.Background>
-                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </TabItem.Background>
+        <TabControl>
+            <TabItem Header="Rooms" Name="TopologyTab" Background="White">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <ListBox Name="zonePlayersList" ItemsSource="{Binding ZonePlayersOC}" SelectionChanged="zonePlayersList_SelectionChanged">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="120"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Column="0" 
+                              Grid.Row="0"
+                              ItemsSource="{Binding ZoneGroupViewModels}" 
+                              SelectedItem="{Binding SelectedZoneGroup}"
+                              HeadersVisibility="None">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="BorderBrush" Value="White"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="BorderBrush" Value="White"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <RadioButton Padding="20" 
+                                                     Margin="4" 
+                                                     GroupName="RoomButtons" 
+                                                     HorizontalAlignment="Left" 
+                                                     IsChecked="{Binding IsSelected}">
+                                            <RadioButton.Resources>
+                                                <Style TargetType="{x:Type RadioButton}">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="Padding" Value="3,2,3,2"/>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                    <Setter Property="Height" Value="auto"/>
+                                                    <Setter Property="SnapsToDevicePixels" Value="true"/>
+                                                    <Setter Property="BorderBrush" Value="Blue"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type RadioButton}">
+                                                                <Border x:Name="border"
+                                                                        Width="{TemplateBinding Width}"
+                                                                        Height="{TemplateBinding Height}"
+                                                                        HorizontalAlignment="Center"
+                                                                        Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        CornerRadius="5">
+                                                                    <Grid x:Name="grid" VerticalAlignment="Center">
+                                                                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                                                          HorizontalAlignment="Center"
+                                                                                          VerticalAlignment="Center"
+                                                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                                    </Grid>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsChecked" Value="true">
+                                                                        <Setter Property="Background" TargetName="border" Value="AliceBlue"/>
+                                                                        <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                                                                        <Setter Property="Foreground" Value="Black"/>
+                                                                        <Setter Property="BorderThickness" Value="2,2,0,0"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsChecked" Value="False">
+                                                                        <Setter Property="Background" TargetName="border" Value="AliceBlue"/>
+                                                                        <Setter Property="BorderBrush" TargetName="border" Value="DarkGray"/>
+                                                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                                                        <Setter Property="BorderThickness" Value="0,0,2,2"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Foreground" Value="Black"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsEnabled" Value="False">
+                                                                        <Setter TargetName="grid" Property="Opacity" Value="0.5"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </RadioButton.Resources>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock 
+                                                    Text="{Binding ZoneGroupName}"
+                                                    FontSize="20" 
+                                                    FontWeight="Bold"
+                                                    HorizontalAlignment="Left"/>
+                                                <TextBlock Text="{Binding ZoneGroupMemberNames}" Margin="20,0,0,0"/>
+                                            </StackPanel>
+                                        </RadioButton>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Name="PrevBtn" Content="Previous" />
+                            <Button Name="StartBtn" Content="Start"/>
+                            <Button Name="PlayBtn"  Content="Play"/>
+                            <Button Name="PauseBtn" Content="Pause"/>
+                            <Button Name="StopBtn" Content="Stop"/>
+                            <Button Name="EndBtn" Content="End"/>
+                            <Button Name="NextBtn" Content="Next"/>
+                            <ToggleButton Content="Mute"/>
+                        </StackPanel>
+                        <TextBlock FontSize="10">Volume</TextBlock>
+                        <Slider Name="VolumeSlider" Value="0.75" Maximum="1"/>
+                        <TextBlock FontSize="10">Position</TextBlock>
+                        <Slider Name="PoeitionSlider" Value="0" Minimum="-1" Maximum="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding SelectedZoneGroup.ZoneGroupName}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Margin="5"/>
+                            <TextBlock Text="- Queue"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Margin="5"/>
+                        </StackPanel>
+                        <ListBox Name="QueueListBox"
+                                 Grid.Column="1"
+                                 ItemsSource="{Binding ZoneGroupQueueViewCollection}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Expander x:Name="QueueExpander" Header="{Binding QiTitle}">
+                                        <StackPanel Orientation="Vertical" Margin="30,0,0,0">
+                                            <TextBlock Text="{Binding QiArtist}"/>
+                                            <TextBlock Text="{Binding QiAlbum}"/>
+                                            <TextBlock Text="{Binding QiUri}"/>
+                                        </StackPanel>
+                                    </Expander>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Devices" Name="DevicesTab" Background="White">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="0" 
+                             Name="ZonePlayersList" 
+                             ItemsSource="{Binding ZonePlayerCollection}" 
+                             SelectedItem="{Binding SelectedZonePlayer}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -58,25 +206,116 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Grid Grid.Column="1">
-                        <Grid.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="Black" Offset="0"/>
-                                <GradientStop Color="White" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Grid.Background>
-                        <DataGrid Name="DetailsView" 
-                                  HeadersVisibility="None" 
-                                  Grid.IsSharedSizeScope="True" 
-                                  IsReadOnly="True" Background="White">
-                        </DataGrid>
+                    <Grid Grid.Column="1" OpacityMask="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <TextBlock Text="Device details"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Margin="10,0,0,0"/>
+                            <DataGrid Name="DetailsView" 
+                                      Margin="10,0,0,0"
+                                      AutoGenerateColumns="False"
+                                      ItemsSource="{Binding ZonePlayerDetailsViewCollection}"
+                                      CanUserSortColumns="False"
+                                      HeadersVisibility="Column" HorizontalAlignment="Left">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Detail" 
+                                                        Binding="{Binding DetailName}"/>
+                                    <DataGridTextColumn Header="Value" 
+                                                        Binding="{Binding DetailValue}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <TextBlock Text="Group management"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Margin="10,0,0,0"/>
+                            <Expander Margin="20,0,0,0">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Groups"/>
+                                        <Button Content="New group" 
+                                                Command="{Binding CommandEx}"
+                                                CommandParameter="GroupManagementNew">
+                                        </Button>
+                                    </StackPanel>
+                                </Expander.Header>
+                                <ListBox ItemsSource="{Binding ZoneGroupViewModels}"
+                                         BorderBrush="White">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Expander x:Name="GroupExpander" Header="{Binding ZoneGroupName}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <DataGrid ItemsSource="{Binding ZoneGroupMembers}" 
+                                                              CanUserSortColumns="False"
+                                                              GridLinesVisibility="None">
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Header="UUID" 
+                                                            Binding="{Binding UUID}"/>
+                                                            <DataGridTextColumn Header="Member name" 
+                                                            Binding="{Binding ZoneName}"/>
+                                                            <DataGridCheckBoxColumn Header="Coordinator" 
+                                                            Binding="{Binding IsCoordinator}"/>
+                                                            <DataGridCheckBoxColumn Header="Not visible" 
+                                                            Binding="{Binding Invisible}"/>
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                    <Button Content="Edit group" 
+                                                            Command="{Binding CommandEx}"
+                                                            CommandParameter="GroupManagementEdit"/>
+                                                </StackPanel>
+                                            </Expander>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Expander>
+                            <Expander Margin="20,0,0,0">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Stereo pairs"/>
+                                        <Button Content="Create stereo pair" 
+                                                Command="{Binding CommandEx}" 
+                                                CommandParameter="CreateStereoPair"/>
+                                    </StackPanel>
+                                </Expander.Header>
+                                <ListBox ItemsSource="{Binding StereoPairViewModels}"
+                                         BorderBrush="White">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Expander x:Name="GroupExpander" Header="{Binding PairName}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <DataGrid ItemsSource="{Binding StereoPair}"
+                                                              CanUserSortColumns="False"
+                                                              GridLinesVisibility="None">
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Header="Left Channel" Binding="{Binding LeftUUID}"/>
+                                                            <DataGridTextColumn Header="Right Channel" Binding="{Binding RightUUID}"/>
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                    <Button Name="SeparateSteroPairBtn"
+                                                            Command="{Binding SeparateStereoPair}" Content="Separate"
+                                                            />
+                                                </StackPanel>
+                                            </Expander>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Expander>
+                        </StackPanel>
                     </Grid>
                 </Grid>
-             </TabItem>
+            </TabItem>               
         </TabControl>
-        <Button Grid.Column="0" Grid.Row="1" Name="MusicLibraryBtn" Content="Browse Music Library" HorizontalAlignment="Left" VerticalAlignment="Center" Click="MusicLibraryBtn_Click"/>
+        <Grid Grid.Row="1" >
+            <Button Name="MusicLibraryBtn" 
+                    Content="Browse Music Library" 
+                    Command="{Binding CommandEx}"
+                    CommandParameter="ViewMusicLibrary"/>
+        </Grid>
     </Grid>
-
-
-
 </Window>

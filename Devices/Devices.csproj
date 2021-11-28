@@ -49,6 +49,7 @@
     <Compile Include="ZoneGroupMember.cs" />
     <Compile Include="ZoneGroupTopology.cs" />
     <Compile Include="ZonePlayer.cs" />
+    <Compile Include="ZonePlayerDetail.cs" />
     <Compile Include="ZonePlayers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

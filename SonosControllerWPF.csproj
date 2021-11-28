@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SonosController.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
@@ -74,12 +77,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreateStereoPairWindow.xaml.cs">
+      <DependentUpon>CreateStereoPairWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GroupManagementWindow.xaml.cs">
+      <DependentUpon>GroupManagementWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AlbumViewModel.cs" />
     <Compile Include="ViewModels\ArtistViewModel.cs" />
+    <Compile Include="ViewModels\CommandEx.cs" />
+    <Compile Include="ViewModels\CreateStereoPairViewModel.cs" />
+    <Compile Include="ViewModels\GroupManagementViewModel.cs" />
     <Compile Include="ViewModels\IsSelectedItemChangedEventArgs.cs" />
     <Compile Include="ViewModels\ITreeViewItemViewModel.cs" />
+    <Compile Include="ViewModels\ParamConverter.cs" />
+    <Compile Include="ViewModels\QueueViewModel.cs" />
+    <Compile Include="ViewModels\StereoPairViewModel.cs" />
     <Compile Include="ViewModels\TrackViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModelBase.cs" />
+    <Compile Include="ViewModels\ZoneGroupTopologyViewModel.cs" />
+    <Compile Include="ViewModels\ZoneGroupViewModel.cs" />
+    <Compile Include="ViewModels\ZonePlayersViewModel.cs" />
+    <Page Include="CreateStereoPairWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GroupManagementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -89,12 +115,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MusicLibraryViewModel.cs" />
-    <Compile Include="mainWindowViewModel.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MusicLibraryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -125,6 +155,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

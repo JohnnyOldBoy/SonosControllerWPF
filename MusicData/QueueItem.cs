@@ -6,18 +6,46 @@ namespace MusicData
     [Serializable()]
     public class QueueItem
     {
-        private List<KeyValuePair<string, string>> item = new List<KeyValuePair<string, string>>();
-        public List<KeyValuePair<string, string>> Item
+        private string zoneGroupCoordinator = string.Empty;
+        public string ZoneGroupCoordinator
         {
-            get => item;
-            set => item = value;
+            get => zoneGroupCoordinator;
+            set => zoneGroupCoordinator = value;
         }
 
-        private int count;
-        public int Count
-        {
-            get => count;
-            set => count = value;
+        private string qiTitle = string.Empty;
+        public string QiTitle 
+        { 
+            get => qiTitle; 
+            set => qiTitle = value; 
+        }
+
+        private string qiArtist = string.Empty;
+        public string QiArtist
+        { 
+            get => qiArtist; 
+            set => qiArtist = value; 
+        }
+
+        private string qiAlbum = string.Empty;
+        public string QiAlbum
+        { 
+            get => qiAlbum; 
+            set => qiAlbum = value; 
+        }
+
+        private string qiAlbumArt = string.Empty;
+        public string QiAlbumArt
+        { 
+            get => qiAlbumArt; 
+            set => qiAlbumArt = value; 
+        }
+
+        private string qiUri = string.Empty;
+        public string QiUri
+        { 
+            get => qiUri; 
+            set => qiUri = value; 
         }
     }
 }

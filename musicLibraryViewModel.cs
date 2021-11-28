@@ -1,12 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
-using MusicData;
 using Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using SonosController.ViewModels;
-using SonosControllerWPF.ViewModels;
 
 namespace SonosController
 {
@@ -21,8 +20,7 @@ namespace SonosController
             set
             {
                 _selectedAlbum = value;
-                RaisePropertyChanged("SelectedAlbum");
-
+                RaisePropertyChanged(nameof(SelectedAlbum));
             }
         }
 
@@ -33,12 +31,20 @@ namespace SonosController
             set
             {
                 _selectedArtistSelectedAlbum = value;
-                RaisePropertyChanged("SelectedArtistAlbum");
-
+                RaisePropertyChanged(nameof(SelectedArtistSelectedAlbum));
             }
         }
 
-        private ObservableCollection<ArtistViewModel> artists;
+        private string _selectedGenre;
+        public string SelectedGenre
+        {
+            get => _selectedGenre;
+            set
+            {
+                _selectedGenre = value;
+                RaisePropertyChanged(nameof(SelectedGenre));
+            }
+        }
 
         public ObservableCollection<ArtistViewModel> Artists { get; } = new ObservableCollection<ArtistViewModel>();
 
@@ -46,7 +52,13 @@ namespace SonosController
 
         public ObservableCollection<AlbumViewModel> Albums { get; } = new ObservableCollection<AlbumViewModel>();
 
-        public ICollectionView TracksCollectionView { get; }
+        public ObservableCollection<string> Genres { get; } = new ObservableCollection<string>();
+
+        public ICollectionView ArtistTracksCollectionView { get; }
+
+        public ICollectionView AlbumTracksCollectionView { get; }
+
+        public ICollectionView GenreTracksCollectionView { get; }
 
         public MusicLibraryViewModel()
         {
@@ -62,36 +74,59 @@ namespace SonosController
                 Albums.Add(new AlbumViewModel(album));
             }
 
+            foreach (var genre in _musicLibrary.GenreInfo.GenreList.OrderBy(s => s))
+            {
+                Genres.Add(genre);
+            }
+
             PropertyChanged += OnPropertyChangedHandler;
 
 
-            //TracksCollectionView = new ListCollectionView(Tracks);
-            //SelectedAlbum = Albums[0];
-            //TracksCollectionView.Filter = t =>
-            //{
-            //    if (t is TrackViewModel trackDisplay)
-            //    {
-            //        if (trackDisplay.Track.AlbumId == SelectedAlbum.AlbumId)
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //    //if (t is AlbumViewModel albumInfo)
-            //    //{
-            //    //    if (trackDisplay.Track.AlbumId == )
-            //    //    {
-            //    //        return true;
-            //    //    }
-            //    //}
+            ArtistTracksCollectionView = new ListCollectionView(Tracks);
 
+            ArtistTracksCollectionView.Filter = t =>
+            {
+                if (t is TrackViewModel trackDisplay)
+                {
+                    if (trackDisplay.Track.AlbumId != "")
+                    {
+                        return false;
+                    }
+                }
 
-            //    return false;
-            //};
+                return false;
+            };
 
-            TracksCollectionView = new ListCollectionView(Tracks);
+            AlbumTracksCollectionView = new ListCollectionView(Tracks);
+
             SelectedAlbum = Albums.FirstOrDefault();
+            AlbumTracksCollectionView.Filter = t =>
+            {
+                if (t is TrackViewModel trackDisplay)
+                {
+                    if (SelectedAlbum != null && trackDisplay.Track.AlbumId == SelectedAlbum.AlbumId)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            };
 
-            //Don't use fields to initialize stuff, use properties, they have the PropertyChanged call inside
+            GenreTracksCollectionView = new ListCollectionView(Tracks);
+
+            SelectedGenre = Genres.FirstOrDefault();
+            GenreTracksCollectionView.Filter = t =>
+            {
+                if (t is TrackViewModel trackDisplay)
+                {
+                    if (SelectedGenre != null && trackDisplay.Genre == SelectedGenre)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
             foreach (var artist in _musicLibrary.ArtistInfo.ArtistList.OrderBy(s => s.ArtistName))
             {
                 var artistDisplay = new ArtistViewModel(artist);
@@ -115,23 +150,23 @@ namespace SonosController
                 if (e.Item is ArtistViewModel artist)
                 {
 
-                    TracksCollectionView.Filter = t =>
+                    ArtistTracksCollectionView.Filter = t =>
                     {
                         if (t is TrackViewModel trackDisplay)
                         {
                             if (trackDisplay.Track.ArtistName == artist.Artist.ArtistName)
                             {
-                                return true;
+                                return false; //To clear the selected album track grid if what is selected is not an album
                             }
                         }
-
                         return false;
                     };
 
                 }
                 else if (e.Item is AlbumViewModel album)
                 {
-                    TracksCollectionView.Filter = t =>
+
+                    ArtistTracksCollectionView.Filter = t =>
                     {
                         if (t is TrackViewModel trackDisplay)
                         {
@@ -140,12 +175,11 @@ namespace SonosController
                                 return true;
                             }
                         }
-
                         return false;
                     };
                 }
             }
-            TracksCollectionView.Refresh();
+            ArtistTracksCollectionView.Refresh();
         }
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
@@ -153,13 +187,12 @@ namespace SonosController
 
             if (e.PropertyName == nameof(SelectedAlbum))
             {
-                TracksCollectionView.Refresh();
+                AlbumTracksCollectionView.Refresh();
             }
-            //if (e.PropertyName == nameof(SelectedArtistSelectedAlbum))
-            //{
-            //    MessageBox.Show(SelectedArtistSelectedAlbum.AlbumName);
-            //    //TracksCollectionView.Refresh();
-            //}
+            if (e.PropertyName == nameof(SelectedGenre))
+            {
+                GenreTracksCollectionView.Refresh();
+            }
         }
     }
 }

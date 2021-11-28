@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿
+using System.Windows;
 using System.Windows.Controls;
 using Devices;
 using Services;
@@ -12,7 +13,7 @@ namespace SonosController
 
     public partial class MainWindow : Window
     {
-        private readonly mainWindowViewModel _viewModel;
+        private readonly MainWindowViewModel _viewModel;
 
         public MainWindow()
         {
@@ -21,26 +22,9 @@ namespace SonosController
             Top = SystemParameters.WorkArea.Top;
             Width = SystemParameters.WorkArea.Width;
             Height = SystemParameters.WorkArea.Height;
-            _viewModel = new mainWindowViewModel();
+            _viewModel = new MainWindowViewModel();
             // The DataContext serves as the starting point of Binding Paths
             DataContext = _viewModel;
-        }
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
-
-        private void zonePlayersList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ZonePlayer zonePlayer = _viewModel.ZonePlayersOC[zonePlayersList.SelectedIndex];
-            
-            DetailsView.ItemsSource = _viewModel.serviceUtils.getPlayerDetails(zonePlayer);
-        }
-
-        private void MusicLibraryBtn_Click(object sender, RoutedEventArgs e)
-        {
-            MusicLibraryWindow musicLibraryWindow = new MusicLibraryWindow();
-            musicLibraryWindow.Show();
         }
 
     }

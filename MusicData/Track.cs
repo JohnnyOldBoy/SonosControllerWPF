@@ -19,8 +19,8 @@ namespace MusicData
             set => artistName = value;
         }
 
-        private string genres;
-        public string Genres
+        private string[] genres;
+        public string[] Genres
         {
             get => genres;
             set => genres = value;
