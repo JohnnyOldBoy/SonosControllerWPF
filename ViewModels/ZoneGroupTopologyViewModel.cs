@@ -10,15 +10,16 @@ namespace SonosController.ViewModels
 {
     public class ZoneGroupTopologyViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public ZoneGroupTopologyViewModel(XmlDocument doc, ZonePlayersViewModel zonePlayersViewModel)
+        public ZoneGroupTopologyViewModel(XmlDocument doc, ZonePlayersViewModel zonePlayersViewModel, MainWindowViewModel mainWindowViewModel)
         {
+            localMainWindowViewModel = mainWindowViewModel;
+            _serviceUtils = localMainWindowViewModel._serviceUtils;
             ZoneGroupTopology zoneGroupTopology = new ZoneGroupTopology();
             zoneGroupTopology.ZoneGroupList = _serviceUtils.GetZoneGroups(doc);
             StereoPairs stereoPairs = new StereoPairs();
             zoneGroupTopology.StereoPairs = stereoPairs;
             zoneGroupTopology.StereoPairs.StereoPairsList = _serviceUtils.GetStereoPairs(doc);
 
-            //    _serviceUtils.GetZoneGroupTopology(zonePlayerIpAddress);
             ZoneGroupViewModels = new ObservableCollection<ZoneGroupViewModel>();
             foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
             {
@@ -42,7 +43,8 @@ namespace SonosController.ViewModels
             }
         }
 
-        ServiceUtils _serviceUtils = new ServiceUtils();
+        private MainWindowViewModel localMainWindowViewModel;
+        ServiceUtils _serviceUtils;
 
         private ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels;
         public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels

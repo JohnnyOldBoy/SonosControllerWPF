@@ -4,8 +4,6 @@ using MusicData;
 using Services;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Windows;
 
 namespace SonosController.ViewModels
 {
@@ -13,14 +11,14 @@ namespace SonosController.ViewModels
     {
         public QueueViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            ServiceUtils _serviceUtils = new ServiceUtils();
+            //ServiceUtils _serviceUtils = new ServiceUtils();
             localMainWindowViewModel = mainWindowViewModel;
 
             QueueItemList = new List<QueueItem>();
             foreach (ZoneGroupViewModel zoneGroupViewModel in localMainWindowViewModel.ZoneGroupViewModels)
             {
-                ZonePlayer SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(localMainWindowViewModel.ZonePlayersViewModel.ZonePlayers, zoneGroupViewModel.ZoneGroupCoordinator.UUID);
-                PlayerQueue playerQueue = _serviceUtils.GetPlayerQueue(zoneGroupViewModel.ZoneGroupCoordinator.UUID, SelectedZoneGroupCoordinator.PlayerIpAddress);
+                ZonePlayer SelectedZoneGroupCoordinator = localMainWindowViewModel._serviceUtils.GetPlayerByUUID(localMainWindowViewModel.ZonePlayersViewModel.ZonePlayers, zoneGroupViewModel.ZoneGroupCoordinator.UUID);
+                PlayerQueue playerQueue = localMainWindowViewModel._serviceUtils.GetPlayerQueue(zoneGroupViewModel.ZoneGroupCoordinator.UUID, SelectedZoneGroupCoordinator.PlayerIpAddress);
 
                 if (playerQueue.QueueItems.Count == 0)
                 {

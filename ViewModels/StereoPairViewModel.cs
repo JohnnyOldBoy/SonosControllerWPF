@@ -4,7 +4,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Input;
 
 namespace SonosController.ViewModels
@@ -61,9 +60,9 @@ namespace SonosController.ViewModels
         private void SeparateSteroPairMethod()
         {
             StereoPair stereoPair = StereoPair[0];
-            ServiceUtils serviceUtils = new ServiceUtils();
+            //ServiceUtils serviceUtils = new ServiceUtils();
             
-            string response = serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
+            string response = parentViewModel.serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
 
             int spIndex = -1;
 

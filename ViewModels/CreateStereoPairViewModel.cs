@@ -43,13 +43,13 @@ namespace SonosController.ViewModels
 
         }
 
-        private readonly ServiceUtils _serviceUtils = new ServiceUtils();
 
         private List<string> zoneGroupMembersUuids = new List<string>();
         private string _leftUUID = string.Empty;
         private string _rightUUID = string.Empty;
 
         private MainWindowViewModel localMainWindowViewModel;
+//        private readonly ServiceUtils _serviceUtils = localMainWindowViewModel._serviceUtils;
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
@@ -112,17 +112,17 @@ namespace SonosController.ViewModels
 
         public void CreateStereoPairMethod()
         {
-            ServiceUtils serviceUtils = new ServiceUtils();
-            ZonePlayer _zonePlayer = serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID);
+            //ServiceUtils serviceUtils = new ServiceUtils();
+            ZonePlayer _zonePlayer = localMainWindowViewModel._serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID);
             string masterPlayerIpAddress = _zonePlayer.PlayerIpAddress;
-            string pairCreated = _serviceUtils.CreateStereoPair(masterPlayerIpAddress, _leftUUID, _rightUUID);
+            string pairCreated = localMainWindowViewModel._serviceUtils.CreateStereoPair(masterPlayerIpAddress, _leftUUID, _rightUUID);
             if (pairCreated == "Success")
             {
                 StereoPair stereoPair = new StereoPair()
                 {
                     LeftUUID = _leftUUID,
                     RightUUID = _rightUUID,
-                    PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
+                    PairName = localMainWindowViewModel._serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
                     ChannelMapSet = _leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF",
                     MasterPlayerIpAddress = masterPlayerIpAddress
                 };
