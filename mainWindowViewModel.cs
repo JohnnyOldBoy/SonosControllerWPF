@@ -150,7 +150,7 @@ namespace SonosController
                 CreateStereoPairViewModel newCreateStereoPairViewModel = createStereoPairWindow.DataContext as CreateStereoPairViewModel;
                 if (newCreateStereoPairViewModel.NewStereoPair != null)
                 {
-                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(ZoneGroupTopologyViewModel);
+                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(this);//(ZoneGroupTopologyViewModel);
                     ZonePlayer masterZonePlayer = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID);
                     stereoPairViewModel.PairName = masterZonePlayer.RoomName;
                     stereoPairViewModel.StereoPair.Add(newCreateStereoPairViewModel.NewStereoPair);
@@ -254,7 +254,7 @@ namespace SonosController
 
         private void GetCurrentTopology()
         {
-            ZoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(SonosSystem, ZonePlayersViewModel);
+            ZoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(SonosSystem, ZonePlayersViewModel, this);
             if (ZonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
             {
                 ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
@@ -274,13 +274,8 @@ namespace SonosController
                     };
                     ZonePlayerDetailsViewCollection.Refresh();
                 }
-
-                //StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
-                //SelectedZoneGroup = ZoneGroupViewModels.FirstOrDefault();
-                //SelectedZoneGroup.IsSelected = true;
-                //SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
             }
-       }
+        }
 
         private void GetQueues()
         {

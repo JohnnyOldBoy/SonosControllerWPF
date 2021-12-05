@@ -11,14 +11,14 @@ namespace SonosController.ViewModels
     {
         public QueueViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            //ServiceUtils _serviceUtils = new ServiceUtils();
             localMainWindowViewModel = mainWindowViewModel;
+            _serviceUtils = localMainWindowViewModel._serviceUtils;
 
             QueueItemList = new List<QueueItem>();
             foreach (ZoneGroupViewModel zoneGroupViewModel in localMainWindowViewModel.ZoneGroupViewModels)
             {
-                ZonePlayer SelectedZoneGroupCoordinator = localMainWindowViewModel._serviceUtils.GetPlayerByUUID(localMainWindowViewModel.ZonePlayersViewModel.ZonePlayers, zoneGroupViewModel.ZoneGroupCoordinator.UUID);
-                PlayerQueue playerQueue = localMainWindowViewModel._serviceUtils.GetPlayerQueue(zoneGroupViewModel.ZoneGroupCoordinator.UUID, SelectedZoneGroupCoordinator.PlayerIpAddress);
+                ZonePlayer SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(localMainWindowViewModel.ZonePlayersViewModel.ZonePlayers, zoneGroupViewModel.ZoneGroupCoordinator.UUID);
+                PlayerQueue playerQueue = _serviceUtils.GetPlayerQueue(zoneGroupViewModel.ZoneGroupCoordinator.UUID, SelectedZoneGroupCoordinator.PlayerIpAddress);
 
                 if (playerQueue.QueueItems.Count == 0)
                 {
@@ -40,6 +40,7 @@ namespace SonosController.ViewModels
         }
 
         private MainWindowViewModel localMainWindowViewModel;
+        private ServiceUtils _serviceUtils;
 
         private List<QueueItem> _queueItemList;
         public List<QueueItem> QueueItemList

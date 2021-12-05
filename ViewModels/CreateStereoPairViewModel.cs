@@ -16,6 +16,7 @@ namespace SonosController.ViewModels
         {
 
             localMainWindowViewModel = mainWindowViewModel;
+            _serviceUtils = localMainWindowViewModel._serviceUtils;
             CreateSteroPair = new RelayCommand(CreateStereoPairMethod);
             IsChecked = new RelayCommand<object>(IsCheckedMethod);
 
@@ -49,7 +50,7 @@ namespace SonosController.ViewModels
         private string _rightUUID = string.Empty;
 
         private MainWindowViewModel localMainWindowViewModel;
-//        private readonly ServiceUtils _serviceUtils = localMainWindowViewModel._serviceUtils;
+        private ServiceUtils _serviceUtils;
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
@@ -112,17 +113,16 @@ namespace SonosController.ViewModels
 
         public void CreateStereoPairMethod()
         {
-            //ServiceUtils serviceUtils = new ServiceUtils();
-            ZonePlayer _zonePlayer = localMainWindowViewModel._serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID);
+            ZonePlayer _zonePlayer = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID);
             string masterPlayerIpAddress = _zonePlayer.PlayerIpAddress;
-            string pairCreated = localMainWindowViewModel._serviceUtils.CreateStereoPair(masterPlayerIpAddress, _leftUUID, _rightUUID);
+            string pairCreated = _serviceUtils.CreateStereoPair(masterPlayerIpAddress, _leftUUID, _rightUUID);
             if (pairCreated == "Success")
             {
                 StereoPair stereoPair = new StereoPair()
                 {
                     LeftUUID = _leftUUID,
                     RightUUID = _rightUUID,
-                    PairName = localMainWindowViewModel._serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
+                    PairName = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID).RoomName,
                     ChannelMapSet = _leftUUID + ":LF,LF;" + _rightUUID + ":RF,RF",
                     MasterPlayerIpAddress = masterPlayerIpAddress
                 };

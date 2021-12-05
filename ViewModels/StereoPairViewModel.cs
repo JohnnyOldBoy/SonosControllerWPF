@@ -10,13 +10,15 @@ namespace SonosController.ViewModels
 {
     public class StereoPairViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public StereoPairViewModel(ZoneGroupTopologyViewModel parentViewModel)
+        public StereoPairViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            _parentViewModel = parentViewModel;
+            localMainWindowViewModel = mainWindowViewModel;
+            _serviceUtils = localMainWindowViewModel._serviceUtils;
             SeparateStereoPair = new RelayCommand(SeparateSteroPairMethod);
         }
 
-        private ZoneGroupTopologyViewModel _parentViewModel;
+        private MainWindowViewModel localMainWindowViewModel;
+        private ServiceUtils _serviceUtils;
 
         private string _pairName = string.Empty;
         public string PairName 
@@ -60,13 +62,12 @@ namespace SonosController.ViewModels
         private void SeparateSteroPairMethod()
         {
             StereoPair stereoPair = StereoPair[0];
-            //ServiceUtils serviceUtils = new ServiceUtils();
-            
-            string response = parentViewModel.serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
+           
+            string response = _serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
 
             int spIndex = -1;
 
-            ObservableCollection<StereoPairViewModel> stereoPairViewModels = _parentViewModel.StereoPairViewModels;
+            ObservableCollection<StereoPairViewModel> stereoPairViewModels = localMainWindowViewModel.StereoPairViewModels;
 
             foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
             {
@@ -79,7 +80,7 @@ namespace SonosController.ViewModels
             if (spIndex != -1)
             {
                 stereoPairViewModels.RemoveAt(spIndex);
-                _parentViewModel.RaisePropertyChanged();
+                localMainWindowViewModel.RaisePropertyChanged();
             }
         }
     }
