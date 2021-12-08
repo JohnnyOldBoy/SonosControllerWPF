@@ -147,25 +147,12 @@ namespace SonosController
                 CreateStereoPairWindow createStereoPairWindow = new CreateStereoPairWindow();
                 createStereoPairWindow.DataContext = new CreateStereoPairViewModel(this);
                 createStereoPairWindow.ShowDialog();
-                CreateStereoPairViewModel newCreateStereoPairViewModel = createStereoPairWindow.DataContext as CreateStereoPairViewModel;
-                if (newCreateStereoPairViewModel.NewStereoPair != null)
-                {
-                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(this);//(ZoneGroupTopologyViewModel);
-                    ZonePlayer masterZonePlayer = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, newCreateStereoPairViewModel.NewStereoPair.LeftUUID);
-                    stereoPairViewModel.PairName = masterZonePlayer.RoomName;
-                    stereoPairViewModel.StereoPair.Add(newCreateStereoPairViewModel.NewStereoPair);
-                    stereoPairViewModel.StereoPair[0].MasterPlayerIpAddress = masterZonePlayer.PlayerIpAddress;
-                    if (StereoPairViewModels != null)
-                    {
-                        StereoPairViewModels.Add(stereoPairViewModel);
-                    }
-                    else
-                    {
-                        StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
-                        StereoPairViewModels.Add(stereoPairViewModel);
-                    }
-                    ZoneGroupTopologyViewModel.StereoPairViewModels = StereoPairViewModels;
-                }
+                SonosSystem = _serviceUtils.GetSonosSystem(playerIpAddress);
+                GetCurrentTopology();
+                StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
+                SelectedZoneGroup = ZoneGroupViewModels.FirstOrDefault();
+                SelectedZoneGroup.IsSelected = true;
+                SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
             }
             if (parameter as string == "GroupManagementNew")
             {
@@ -182,7 +169,7 @@ namespace SonosController
             set => _sonosSystem = value; 
         }
 
-        string playerIpAddress = string.Empty;
+        public string playerIpAddress = string.Empty;
 
         public MainWindowViewModel()
         {
@@ -219,7 +206,7 @@ namespace SonosController
             #endregion
         }
 
-        private void GetDevices()
+        public void GetDevices()
         {
             //Get the Zone Group Topology XML from using the IP address found above
             //The whole system can be obtained from this
@@ -252,13 +239,14 @@ namespace SonosController
             }
         }
 
-        private void GetCurrentTopology()
+        public void GetCurrentTopology()
         {
             ZoneGroupTopologyViewModel = new ZoneGroupTopologyViewModel(SonosSystem, ZonePlayersViewModel, this);
             if (ZonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
             {
                 ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
                 ZoneGroupViewModelsCollection = new ListCollectionView(ZoneGroupViewModels);
+                
                 if (SelectedZonePlayer != null)
                 {
                     ZonePlayerDetailsViewCollection.Filter = t =>
@@ -277,7 +265,7 @@ namespace SonosController
             }
         }
 
-        private void GetQueues()
+        public void GetQueues()
         {
             //Queues
             QueueViewModel queueViewModel = new QueueViewModel(this);

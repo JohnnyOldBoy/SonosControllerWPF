@@ -62,7 +62,10 @@ namespace SonosController.ViewModels
         private void SeparateSteroPairMethod()
         {
             StereoPair stereoPair = StereoPair[0];
-           
+
+            // We need to get the ZoneGroupTopology from the master player of the stereo pair as the other players may
+            // not yet have updated, otherwise the room and group information may be incorrect in the GUI.
+            localMainWindowViewModel.playerIpAddress = stereoPair.MasterPlayerIpAddress;
             string response = _serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
 
             int spIndex = -1;
@@ -80,8 +83,10 @@ namespace SonosController.ViewModels
             if (spIndex != -1)
             {
                 stereoPairViewModels.RemoveAt(spIndex);
-                localMainWindowViewModel.RaisePropertyChanged();
             }
+            localMainWindowViewModel.SonosSystem = _serviceUtils.GetSonosSystem(localMainWindowViewModel.playerIpAddress);
+            localMainWindowViewModel.GetCurrentTopology();
+            localMainWindowViewModel.RaisePropertyChanged();
         }
     }
 }
