@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Devices
 {
-    public class ZoneGroup
+    public class ZoneGroup : IComparable
     {
 
         private string zoneGroupCoordinator = string.Empty;
@@ -47,6 +48,21 @@ namespace Devices
             set => isSelected = value; 
         }
 
+        public int CompareTo(object obj)
+        {
+            ZoneGroup zoneGroupToCompare = obj as ZoneGroup;
+            if (String.Compare(zoneGroupToCompare.ZoneGroupName, ZoneGroupName) < 0)
+            {
+                return 1;
+            }
+            if (String.Compare(zoneGroupToCompare.ZoneGroupName, ZoneGroupName) > 0)
+            {
+                return -1;
+            }
+
+            // The orders are equivalent.
+            return 0;
+        }
     }
 
 }

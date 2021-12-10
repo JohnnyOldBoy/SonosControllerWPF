@@ -17,7 +17,6 @@ namespace SonosController.ViewModels
             {
                 ZonePlayerCollection.Add(zonePlayer);
             }
-
         }
 
         private ZonePlayers _zonePlayers;
