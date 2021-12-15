@@ -1,12 +1,13 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using System.ComponentModel;
+using System.Xml;
 
 namespace SonosController.ViewModels
 {
     public class GroupManagementViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public GroupManagementViewModel(int mode)
+        public GroupManagementViewModel(int mode, XmlDocument sonosSystem)
         {
             switch(mode)
             {

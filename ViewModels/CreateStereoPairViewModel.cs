@@ -128,6 +128,7 @@ namespace SonosController.ViewModels
                 };
                 NewStereoPair = stereoPair;
                 MessageBox.Show("Stereo pair created successfully");
+                localMainWindowViewModel.RaisePropertyChanged(nameof(CreateStereoPairViewModel));
             }
         }
 
@@ -184,17 +185,17 @@ namespace SonosController.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        // NotifyPropertyChanged will raise the PropertyChanged event passing the
-        // source property that is being updated.
-        public void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+        //// NotifyPropertyChanged will raise the PropertyChanged event passing the
+        //// source property that is being updated.
+        //public void NotifyPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //    {
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
     }
 
 }

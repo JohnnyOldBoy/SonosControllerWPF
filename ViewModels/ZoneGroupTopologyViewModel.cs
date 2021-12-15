@@ -23,7 +23,7 @@ namespace SonosController.ViewModels
             ZoneGroupViewModels = new ObservableCollection<ZoneGroupViewModel>();
             foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
             {
-                ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(zonePlayersViewModel.ZonePlayers, zoneGroup);
+                ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(zonePlayersViewModel.ZonePlayers, zoneGroup, doc);
                 ZoneGroupViewModels.Add(zoneGroupViewModel);
             }
             if (zoneGroupTopology.StereoPairs.StereoPairsList.Count > 0)

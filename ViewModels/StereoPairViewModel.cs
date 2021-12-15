@@ -93,9 +93,20 @@ namespace SonosController.ViewModels
                     stereoPairViewModels.RemoveAt(spIndex);
                 }
                 localMainWindowViewModel.SonosSystem = _serviceUtils.GetSonosSystem(localMainWindowViewModel.playerIpAddress);
-                localMainWindowViewModel.GetCurrentTopology();
-                localMainWindowViewModel.RaisePropertyChanged();
+                localMainWindowViewModel.RaisePropertyChanged(nameof(StereoPairViewModel));
             }
         }
+        
+        //public event PropertyChangedEventHandler PropertyChanged;
+
+        //// NotifyPropertyChanged will raise the PropertyChanged event passing the
+        //// source property that is being updated.
+        //public void NotifyPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //    {
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
     }
 }

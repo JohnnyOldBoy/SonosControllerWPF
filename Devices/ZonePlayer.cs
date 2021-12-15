@@ -74,6 +74,13 @@ namespace Devices
             set => iconURL = value;
         }
 
+        private bool visible;
+        public bool Visible 
+        { 
+            get => visible; 
+            set => visible = value; 
+        }
+
         public int CompareTo(object obj)
         {
             ZonePlayer zonePlayerToCompare = obj as ZonePlayer;
