@@ -92,7 +92,6 @@ namespace SonosController.ViewModels
                 {
                     stereoPairViewModels.RemoveAt(spIndex);
                 }
-                localMainWindowViewModel.SonosSystem = _serviceUtils.GetSonosSystem(localMainWindowViewModel.playerIpAddress);
                 localMainWindowViewModel.RaisePropertyChanged(nameof(StereoPairViewModel));
             }
         }

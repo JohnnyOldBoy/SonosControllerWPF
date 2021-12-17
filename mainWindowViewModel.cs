@@ -148,7 +148,6 @@ namespace SonosController
                 CreateStereoPairWindow createStereoPairWindow = new CreateStereoPairWindow();
                 createStereoPairWindow.DataContext = new CreateStereoPairViewModel(this);
                 createStereoPairWindow.ShowDialog();
-                //RaisePropertyChanged(nameof(CreateStereoPairViewModel));
                 SonosSystem = _serviceUtils.GetSonosSystem(playerIpAddress);
                 GetCurrentTopology();
                 StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
@@ -248,22 +247,6 @@ namespace SonosController
             {
                 ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
                 ZoneGroupViewModelsCollection = new ListCollectionView(ZoneGroupViewModels);
-                
-                if (SelectedZonePlayer != null)
-                {
-                    ZonePlayerDetailsViewCollection.Filter = t =>
-                    {
-                        if (t is ZonePlayerDetail zonePlayerDetail)
-                        {
-                            if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
-                            {
-                                return true;
-                            }
-                        }
-                        return false;
-                    };
-                    ZonePlayerDetailsViewCollection.Refresh();
-                }
             }
         }
 
@@ -293,18 +276,21 @@ namespace SonosController
             //MessageBox.Show(e.PropertyName);
             if (e.PropertyName == nameof(SelectedZonePlayer))
             {
-                ZonePlayerDetailsViewCollection.Filter = t =>
+                if (SelectedZonePlayer != null)
                 {
-                    if (t is ZonePlayerDetail zonePlayerDetail)
+                    ZonePlayerDetailsViewCollection.Filter = t =>
                     {
-                        if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                        if (t is ZonePlayerDetail zonePlayerDetail)
                         {
-                            return true;
+                            if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                            {
+                                return true;
+                            }
                         }
-                    }
-                    return false;
-                };
-                ZonePlayerDetailsViewCollection.Refresh();
+                        return false;
+                    };
+                    ZonePlayerDetailsViewCollection.Refresh();
+                }
             }
             if (e.PropertyName == nameof(SelectedZoneGroup))
             {
@@ -326,26 +312,14 @@ namespace SonosController
             }
             if (e.PropertyName == nameof(CreateStereoPairViewModel))
             {
-                ZonePlayerCollection.Clear();
-                ZonePlayerViewCollection.Refresh();
                 GetDevices();
                 GetCurrentTopology();
-                ZonePlayerViewCollection.Refresh();
-                SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
-                ZoneGroupViewModelsCollection.Refresh();
-                ZonePlayerDetailsViewCollection.Refresh();
             }
 
             if (e.PropertyName == nameof(StereoPairViewModel))
             {
-                ZonePlayerCollection.Clear();
-                ZonePlayerViewCollection.Refresh();
                 GetDevices();
                 GetCurrentTopology();
-                ZonePlayerViewCollection.Refresh();
-                SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
-                ZoneGroupViewModelsCollection.Refresh();
-                ZonePlayerDetailsViewCollection.Refresh();
             }
         }
     }

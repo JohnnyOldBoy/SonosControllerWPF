@@ -41,9 +41,7 @@ namespace SonosController.ViewModels
                     ZonePlayerCollection.Add(zonePlayer);
                 }
             }
-
         }
-
 
         private List<string> zoneGroupMembersUuids = new List<string>();
         private string _leftUUID = string.Empty;
