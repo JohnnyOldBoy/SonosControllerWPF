@@ -37,7 +37,7 @@
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Column="0" 
                               Grid.Row="0"
-                              ItemsSource="{Binding ZoneGroupViewModels}" 
+                              ItemsSource="{Binding ZoneGroupViewModelsCollectionView}" 
                               SelectedItem="{Binding SelectedZoneGroup}"
                               HeadersVisibility="None">
                         <DataGrid.CellStyle>
@@ -145,7 +145,7 @@
                         <TextBlock FontSize="10">Volume</TextBlock>
                         <Slider Name="VolumeSlider" Value="0.75" Maximum="1"/>
                         <TextBlock FontSize="10">Position</TextBlock>
-                        <Slider Name="PoeitionSlider" Value="0" Minimum="-1" Maximum="1"/>
+                        <Slider Name="PositionSlider" Value="0" Minimum="-1" Maximum="1"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
@@ -160,7 +160,7 @@
                         </StackPanel>
                         <ListBox Name="QueueListBox"
                                  Grid.Column="1"
-                                 ItemsSource="{Binding ZoneGroupQueueViewCollection}">
+                                 ItemsSource="{Binding ZoneGroupQueueCollectionView}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Expander x:Name="QueueExpander" Header="{Binding QiTitle}">
@@ -184,7 +184,7 @@
                     </Grid.ColumnDefinitions>
                     <ListBox Grid.Column="0" 
                              Name="ZonePlayersList" 
-                             ItemsSource="{Binding ZonePlayerCollection}" 
+                             ItemsSource="{Binding ZonePlayerCollectionView}" 
                              SelectedItem="{Binding SelectedZonePlayer}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -220,7 +220,7 @@
                             <DataGrid Name="DetailsView" 
                                       Margin="10,0,0,0"
                                       AutoGenerateColumns="False"
-                                      ItemsSource="{Binding ZonePlayerDetailsViewCollection}"
+                                      ItemsSource="{Binding ZonePlayerDetailsCollectionView}"
                                       CanUserSortColumns="False"
                                       HeadersVisibility="Column" HorizontalAlignment="Left">
                                 <DataGrid.Columns>

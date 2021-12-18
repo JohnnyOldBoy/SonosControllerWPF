@@ -33,7 +33,7 @@ namespace SonosController
                 RaisePropertyChanged(nameof(ZonePlayerCollection));
             }
         }
-        public ICollectionView ZonePlayerViewCollection { get; set; }
+        public ICollectionView ZonePlayerCollectionView { get; set; }
 
         private ZonePlayer _selectedZonePlayer;
         public ZonePlayer SelectedZonePlayer
@@ -57,7 +57,7 @@ namespace SonosController
             }
         }
 
-        public ICollectionView ZonePlayerDetailsViewCollection { get; set; }
+        public ICollectionView ZonePlayerDetailsCollectionView { get; set; }
 
         #endregion
         #region
@@ -77,7 +77,7 @@ namespace SonosController
             }
         }
 
-        public ICollectionView ZoneGroupQueueViewCollection { get; set; }
+        public ICollectionView ZoneGroupQueueCollectionView { get; set; }
 
         private ZoneGroupViewModel _selectedZoneGroup;
         public ZoneGroupViewModel SelectedZoneGroup
@@ -90,7 +90,7 @@ namespace SonosController
             }
         }
 
-        public ICollectionView ZoneGroupViewModelsCollection { get; set; }
+        public ICollectionView ZoneGroupViewModelsCollectionView { get; set; }
 
         private ObservableCollection<StereoPairViewModel> _stereoPairViewModels;
         public ObservableCollection<StereoPairViewModel> StereoPairViewModels
@@ -217,15 +217,15 @@ namespace SonosController
 
             ZonePlayersViewModel = new ZonePlayersViewModel(SonosSystem);
             ZonePlayerCollection = ZonePlayersViewModel.ZonePlayerCollection;
-            ZonePlayerViewCollection = new ListCollectionView(ZonePlayerCollection);
-            ZonePlayerViewCollection.Refresh();
+            ZonePlayerCollectionView = new ListCollectionView(ZonePlayerCollection);
+            ZonePlayerCollectionView.Refresh();
 
             List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayersViewModel.ZonePlayers);
-            ZonePlayerDetailsViewCollection = new ListCollectionView(zonePlayerDetails);
+            ZonePlayerDetailsCollectionView = new ListCollectionView(zonePlayerDetails);
             SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
             if (SelectedZonePlayer != null)
             {
-                ZonePlayerDetailsViewCollection.Filter = t =>
+                ZonePlayerDetailsCollectionView.Filter = t =>
                 {
                     if (t is ZonePlayerDetail zonePlayerDetail)
                     {
@@ -236,7 +236,7 @@ namespace SonosController
                     }
                     return false;
                 };
-                ZonePlayerDetailsViewCollection.Refresh();
+                ZonePlayerDetailsCollectionView.Refresh();
             }
         }
 
@@ -246,7 +246,7 @@ namespace SonosController
             if (ZonePlayersViewModel.ZonePlayers.ZonePlayersList.Any())
             {
                 ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
-                ZoneGroupViewModelsCollection = new ListCollectionView(ZoneGroupViewModels);
+                ZoneGroupViewModelsCollectionView = new ListCollectionView(ZoneGroupViewModels);
             }
         }
 
@@ -254,7 +254,7 @@ namespace SonosController
         {
             //Queues
             QueueViewModel queueViewModel = new QueueViewModel(this);
-            ZoneGroupQueueViewCollection = new ListCollectionView(queueViewModel.QueueItemList)
+            ZoneGroupQueueCollectionView = new ListCollectionView(queueViewModel.QueueItemList)
             {
                 Filter = t =>
                 {
@@ -268,7 +268,7 @@ namespace SonosController
                     return false;
                 }
             };
-            ZoneGroupQueueViewCollection.Refresh();
+            ZoneGroupQueueCollectionView.Refresh();
         }
 
         private void OnPropertyChangedHandler(object sender, PropertyChangedEventArgs e)
@@ -278,7 +278,7 @@ namespace SonosController
             {
                 if (SelectedZonePlayer != null)
                 {
-                    ZonePlayerDetailsViewCollection.Filter = t =>
+                    ZonePlayerDetailsCollectionView.Filter = t =>
                     {
                         if (t is ZonePlayerDetail zonePlayerDetail)
                         {
@@ -289,14 +289,14 @@ namespace SonosController
                         }
                         return false;
                     };
-                    ZonePlayerDetailsViewCollection.Refresh();
+                    ZonePlayerDetailsCollectionView.Refresh();
                 }
             }
             if (e.PropertyName == nameof(SelectedZoneGroup))
             {
-                if (SelectedZoneGroup != null && ZoneGroupQueueViewCollection != null)
+                if (SelectedZoneGroup != null && ZoneGroupQueueCollectionView != null)
                 {
-                    ZoneGroupQueueViewCollection.Filter = t =>
+                    ZoneGroupQueueCollectionView.Filter = t =>
                     {
                         if (t is QueueItem queueItem)
                         {
@@ -307,7 +307,7 @@ namespace SonosController
                         }
                         return false;
                     };
-                    ZoneGroupQueueViewCollection.Refresh();
+                    ZoneGroupQueueCollectionView.Refresh();
                 }
             }
             if (e.PropertyName == nameof(CreateStereoPairViewModel))
