@@ -189,7 +189,7 @@ namespace SonosController
 
             #region
             // Devices
-            GetDevices();
+            GetDevices(true);
 
             #endregion
             #region
@@ -207,7 +207,7 @@ namespace SonosController
             #endregion
         }
 
-        public void GetDevices()
+        public void GetDevices(bool refresh)
         {
             //Get the Zone Group Topology XML from using the IP address found above
             //The whole system can be obtained from this
@@ -220,23 +220,26 @@ namespace SonosController
             ZonePlayerCollectionView = new ListCollectionView(ZonePlayerCollection);
             ZonePlayerCollectionView.Refresh();
 
-            List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayersViewModel.ZonePlayers);
-            ZonePlayerDetailsCollectionView = new ListCollectionView(zonePlayerDetails);
-            SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
-            if (SelectedZonePlayer != null)
+            if (refresh)
             {
-                ZonePlayerDetailsCollectionView.Filter = t =>
+                List<ZonePlayerDetail> zonePlayerDetails = _serviceUtils.GetPlayerDetails(ZonePlayersViewModel.ZonePlayers);
+                ZonePlayerDetailsCollectionView = new ListCollectionView(zonePlayerDetails);
+                SelectedZonePlayer = ZonePlayerCollection.FirstOrDefault();
+                if (SelectedZonePlayer != null)
                 {
-                    if (t is ZonePlayerDetail zonePlayerDetail)
+                    ZonePlayerDetailsCollectionView.Filter = t =>
                     {
-                        if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                        if (t is ZonePlayerDetail zonePlayerDetail)
                         {
-                            return true;
+                            if (zonePlayerDetail.PlayerIpAddress == SelectedZonePlayer.PlayerIpAddress)
+                            {
+                                return true;
+                            }
                         }
-                    }
-                    return false;
-                };
-                ZonePlayerDetailsCollectionView.Refresh();
+                        return false;
+                    };
+                    ZonePlayerDetailsCollectionView.Refresh();
+                }
             }
         }
 
@@ -312,13 +315,13 @@ namespace SonosController
             }
             if (e.PropertyName == nameof(CreateStereoPairViewModel))
             {
-                GetDevices();
+                GetDevices(false);
                 GetCurrentTopology();
             }
 
             if (e.PropertyName == nameof(StereoPairViewModel))
             {
-                GetDevices();
+                GetDevices(false);
                 GetCurrentTopology();
             }
         }
