@@ -3,13 +3,15 @@ using GalaSoft.MvvmLight;
 using Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Xml;
 
 namespace SonosController.ViewModels
 {
     public class ZoneGroupViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public ZoneGroupViewModel(ZonePlayers zonePlayers, ZoneGroup zoneGroup)
+        public ZoneGroupViewModel(ZonePlayers zonePlayers, ZoneGroup zoneGroup, XmlDocument sonosSystem)
         {
+            _sonosSystem = sonosSystem;
             ZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(zonePlayers, zoneGroup.ZoneGroupCoordinator);
             ZoneGroupName = ZoneGroupCoordinator.RoomName;
             ZoneGroupMemberNames = zoneGroup.ZoneGroupMemberNames;
@@ -21,6 +23,8 @@ namespace SonosController.ViewModels
                 ExecuteFunc = CommandExMethod
             };
         }
+
+        private XmlDocument _sonosSystem;
 
         private readonly ServiceUtils _serviceUtils = new ServiceUtils();
 
@@ -102,7 +106,7 @@ namespace SonosController.ViewModels
         public void CommandExMethod(object parameter)
         {
             GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
-            groupManagementWindow.DataContext = new GroupManagementViewModel(1);
+            groupManagementWindow.DataContext = new GroupManagementViewModel(1, _sonosSystem);
             groupManagementWindow.ShowDialog();
         }
     }

@@ -1,9 +1,6 @@
-﻿using System;
-using MusicData;
+﻿using MusicData;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using GalaSoft.MvvmLight;
-using SonosController.ViewModels;
 
 namespace SonosController.ViewModels
 {

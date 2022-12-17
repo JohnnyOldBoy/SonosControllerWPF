@@ -1,11 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using Services;
-using System.Collections.Generic;
+using SonosController.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using SonosController.ViewModels;
 
 namespace SonosController
 {

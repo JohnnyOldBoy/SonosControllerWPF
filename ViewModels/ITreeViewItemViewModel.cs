@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using SonosController.ViewModels;
+﻿using System.ComponentModel;
 
 namespace SonosController.ViewModels
 {

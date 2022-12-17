@@ -2,6 +2,8 @@
 
 This project is intended to be a replacement for the official sonos S1 controller which has certain undesirable features and some expected features not present.
 
+Thanks to https://github.com/SoCo/SoCo for pointing me in the right direction.
+
 Projects in the solution.
 
 - Devices - this project contains all the base objects for plaers, zones etc.

@@ -11,13 +11,15 @@ namespace SonosController.ViewModels
 {
     public class StereoPairViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public StereoPairViewModel(ZoneGroupTopologyViewModel parentViewModel)
+        public StereoPairViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            _parentViewModel = parentViewModel;
+            localMainWindowViewModel = mainWindowViewModel;
+            _serviceUtils = localMainWindowViewModel._serviceUtils;
             SeparateStereoPair = new RelayCommand(SeparateSteroPairMethod);
         }
 
-        private ZoneGroupTopologyViewModel _parentViewModel;
+        private MainWindowViewModel localMainWindowViewModel;
+        private ServiceUtils _serviceUtils;
 
         private string _pairName = string.Empty;
         public string PairName 
@@ -61,27 +63,49 @@ namespace SonosController.ViewModels
         private void SeparateSteroPairMethod()
         {
             StereoPair stereoPair = StereoPair[0];
-            ServiceUtils serviceUtils = new ServiceUtils();
-            
-            string response = serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
+
+            // We need to get the ZoneGroupTopology from the master player of the stereo pair as the other players may
+            // not yet have updated, otherwise the room and group information may be incorrect in the GUI.
+            localMainWindowViewModel.playerIpAddress = stereoPair.MasterPlayerIpAddress;
+            int result = _serviceUtils.SeparateStereoPair(stereoPair.LeftUUID, stereoPair.MasterPlayerIpAddress);
 
             int spIndex = -1;
-
-            ObservableCollection<StereoPairViewModel> stereoPairViewModels = _parentViewModel.StereoPairViewModels;
-
-            foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
+            
+            if (result != 0)
             {
-                if (stereoPairViewModel.Equals(this))
-                {
-                    spIndex = stereoPairViewModels.IndexOf(stereoPairViewModel);
-                }
-
+                MessageBox.Show("Faled to separate stereo pair");
             }
-            if (spIndex != -1)
+            else
             {
-                stereoPairViewModels.RemoveAt(spIndex);
-                _parentViewModel.RaisePropertyChanged();
+                MessageBox.Show("Stereo pair separated successfully");
+
+                ObservableCollection<StereoPairViewModel> stereoPairViewModels = localMainWindowViewModel.StereoPairViewModels;
+
+                foreach (StereoPairViewModel stereoPairViewModel in stereoPairViewModels)
+                {
+                    if (stereoPairViewModel.Equals(this))
+                    {
+                        spIndex = stereoPairViewModels.IndexOf(stereoPairViewModel);
+                    }
+                }
+                if (spIndex != -1)
+                {
+                    stereoPairViewModels.RemoveAt(spIndex);
+                }
+                localMainWindowViewModel.RaisePropertyChanged(nameof(StereoPairViewModel));
             }
         }
+        
+        //public event PropertyChangedEventHandler PropertyChanged;
+
+        //// NotifyPropertyChanged will raise the PropertyChanged event passing the
+        //// source property that is being updated.
+        //public void NotifyPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //    {
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
     }
 }

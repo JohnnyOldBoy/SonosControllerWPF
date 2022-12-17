@@ -16,6 +16,7 @@ namespace SonosController.ViewModels
         {
 
             localMainWindowViewModel = mainWindowViewModel;
+            _serviceUtils = localMainWindowViewModel._serviceUtils;
             CreateSteroPair = new RelayCommand(CreateStereoPairMethod);
             IsChecked = new RelayCommand<object>(IsCheckedMethod);
 
@@ -40,16 +41,14 @@ namespace SonosController.ViewModels
                     ZonePlayerCollection.Add(zonePlayer);
                 }
             }
-
         }
-
-        private readonly ServiceUtils _serviceUtils = new ServiceUtils();
 
         private List<string> zoneGroupMembersUuids = new List<string>();
         private string _leftUUID = string.Empty;
         private string _rightUUID = string.Empty;
 
         private MainWindowViewModel localMainWindowViewModel;
+        private ServiceUtils _serviceUtils;
         private ObservableCollection<ZonePlayer> _zonePlayerCollection;
         public ObservableCollection<ZonePlayer> ZonePlayerCollection
         {
@@ -112,8 +111,7 @@ namespace SonosController.ViewModels
 
         public void CreateStereoPairMethod()
         {
-            ServiceUtils serviceUtils = new ServiceUtils();
-            ZonePlayer _zonePlayer = serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID);
+            ZonePlayer _zonePlayer = _serviceUtils.GetPlayerByUUID(ZonePlayers, _leftUUID);
             string masterPlayerIpAddress = _zonePlayer.PlayerIpAddress;
             string pairCreated = _serviceUtils.CreateStereoPair(masterPlayerIpAddress, _leftUUID, _rightUUID);
             if (pairCreated == "Success")
@@ -128,6 +126,7 @@ namespace SonosController.ViewModels
                 };
                 NewStereoPair = stereoPair;
                 MessageBox.Show("Stereo pair created successfully");
+                localMainWindowViewModel.RaisePropertyChanged(nameof(CreateStereoPairViewModel));
             }
         }
 
@@ -184,17 +183,17 @@ namespace SonosController.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        // NotifyPropertyChanged will raise the PropertyChanged event passing the
-        // source property that is being updated.
-        public void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+        //// NotifyPropertyChanged will raise the PropertyChanged event passing the
+        //// source property that is being updated.
+        //public void NotifyPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //    {
+        //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
     }
 
 }

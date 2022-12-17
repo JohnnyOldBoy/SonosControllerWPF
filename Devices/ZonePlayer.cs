@@ -1,6 +1,8 @@
-﻿namespace Devices
+﻿using System;
+
+namespace Devices
 {
-    public class ZonePlayer
+    public class ZonePlayer : System.IComparable
     {
         private string roomName;
         public string RoomName
@@ -70,6 +72,29 @@
         {
             get => iconURL;
             set => iconURL = value;
+        }
+
+        private bool visible;
+        public bool Visible 
+        { 
+            get => visible; 
+            set => visible = value; 
+        }
+
+        public int CompareTo(object obj)
+        {
+            ZonePlayer zonePlayerToCompare = obj as ZonePlayer;
+            if (String.Compare(zonePlayerToCompare.RoomName, RoomName) < 0)
+            {
+                return 1;
+            }
+            if (String.Compare(zonePlayerToCompare.RoomName, RoomName) > 0)
+            {
+                return -1;
+            }
+
+            // The orders are equivalent.
+            return 0;
         }
     }
 }

@@ -10,19 +10,20 @@ namespace SonosController.ViewModels
 {
     public class ZoneGroupTopologyViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public ZoneGroupTopologyViewModel(XmlDocument doc, ZonePlayersViewModel zonePlayersViewModel)
+        public ZoneGroupTopologyViewModel(XmlDocument doc, ZonePlayersViewModel zonePlayersViewModel, MainWindowViewModel mainWindowViewModel)
         {
+            localMainWindowViewModel = mainWindowViewModel;
+            _serviceUtils = localMainWindowViewModel._serviceUtils;
             ZoneGroupTopology zoneGroupTopology = new ZoneGroupTopology();
             zoneGroupTopology.ZoneGroupList = _serviceUtils.GetZoneGroups(doc);
             StereoPairs stereoPairs = new StereoPairs();
             zoneGroupTopology.StereoPairs = stereoPairs;
             zoneGroupTopology.StereoPairs.StereoPairsList = _serviceUtils.GetStereoPairs(doc);
 
-            //    _serviceUtils.GetZoneGroupTopology(zonePlayerIpAddress);
             ZoneGroupViewModels = new ObservableCollection<ZoneGroupViewModel>();
             foreach (ZoneGroup zoneGroup in zoneGroupTopology.ZoneGroupList)
             {
-                ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(zonePlayersViewModel.ZonePlayers, zoneGroup);
+                ZoneGroupViewModel zoneGroupViewModel = new ZoneGroupViewModel(zonePlayersViewModel.ZonePlayers, zoneGroup, doc);
                 ZoneGroupViewModels.Add(zoneGroupViewModel);
             }
             if (zoneGroupTopology.StereoPairs.StereoPairsList.Count > 0)
@@ -30,7 +31,7 @@ namespace SonosController.ViewModels
                 StereoPairViewModels = new ObservableCollection<StereoPairViewModel>();
                 foreach (StereoPair stereoPair in zoneGroupTopology.StereoPairs.StereoPairsList)
                 {
-                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(this)
+                    StereoPairViewModel stereoPairViewModel = new StereoPairViewModel(mainWindowViewModel)
                     {
                         PairName = stereoPair.PairName
                     };
@@ -42,7 +43,8 @@ namespace SonosController.ViewModels
             }
         }
 
-        ServiceUtils _serviceUtils = new ServiceUtils();
+        private MainWindowViewModel localMainWindowViewModel;
+        private ServiceUtils _serviceUtils;
 
         private ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels;
         public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels

@@ -3,21 +3,22 @@ using GalaSoft.MvvmLight;
 using Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Xml;
 
 namespace SonosController.ViewModels
 {
     public class ZonePlayersViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public ZonePlayersViewModel(string[] zonePlayerDescUrls)
+        public ZonePlayersViewModel(XmlDocument sonosSystem)
         {
+
             ServiceUtils _serviceUtils = new ServiceUtils();
-            _zonePlayers = _serviceUtils.GetZonePlayers(zonePlayerDescUrls);
+            _zonePlayers = _serviceUtils.GetZonePlayers(sonosSystem);
             ZonePlayerCollection = new ObservableCollection<ZonePlayer>();
             foreach (ZonePlayer zonePlayer in _zonePlayers.ZonePlayersList)
             {
                 ZonePlayerCollection.Add(zonePlayer);
             }
-
         }
 
         private ZonePlayers _zonePlayers;
