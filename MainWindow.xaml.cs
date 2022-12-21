@@ -1,6 +1,7 @@
 ﻿
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Devices;
 using Services;
 
@@ -17,6 +18,7 @@ namespace SonosController
 
         public MainWindow()
         {
+            this.Cursor = Cursors.AppStarting;
             InitializeComponent();
             Left = SystemParameters.WorkArea.Left;
             Top = SystemParameters.WorkArea.Top;
@@ -25,6 +27,8 @@ namespace SonosController
             _viewModel = new MainWindowViewModel();
             // The DataContext serves as the starting point of Binding Paths
             DataContext = _viewModel;
+            this.Cursor = Cursors.Arrow;
+
         }
 
     }
