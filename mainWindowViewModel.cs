@@ -66,17 +66,6 @@ namespace SonosController
         /// Devices such as Boost and Bridge are not normally visible here.
         /// /// </summary>
 
-        private ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels;
-        public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels
-        {
-            get => _zoneGroupViewModels;
-            set
-            {
-                _zoneGroupViewModels = value;
-                RaisePropertyChanged(nameof(ZoneGroupViewModels));
-            }
-        }
-
         public ICollectionView ZoneGroupQueueCollectionView { get; set; }
 
         private ZoneGroupViewModel _selectedZoneGroup;
@@ -103,6 +92,16 @@ namespace SonosController
             }
         }
 
+        private ObservableCollection<ZoneGroupViewModel> _zoneGroupViewModels;
+        public ObservableCollection<ZoneGroupViewModel> ZoneGroupViewModels
+        {
+            get => _zoneGroupViewModels;
+            set
+            {
+                _zoneGroupViewModels = value;
+                RaisePropertyChanged(nameof(ZoneGroupViewModels));
+            }
+        }
         #endregion
         /// <summary>
         /// Shared
@@ -150,7 +149,7 @@ namespace SonosController
                 createStereoPairWindow.ShowDialog();
                 SonosSystem = _serviceUtils.GetSonosSystem(playerIpAddress);
                 GetCurrentTopology();
-                StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
+                ZoneGroupTopologyViewModel.StereoPairViewModels = ZoneGroupTopologyViewModel.StereoPairViewModels;
                 SelectedZoneGroup = ZoneGroupViewModels.FirstOrDefault();
                 SelectedZoneGroup.IsSelected = true;
                 SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
@@ -160,6 +159,12 @@ namespace SonosController
                 GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
                 groupManagementWindow.DataContext = new GroupManagementViewModel(0, _sonosSystem);
                 groupManagementWindow.ShowDialog();
+                SonosSystem = _serviceUtils.GetSonosSystem(playerIpAddress);
+                GetCurrentTopology();
+               // ZoneGroupTopologyViewModel.ZoneGroupViewModels = ZoneGroupTopologyViewModel.ZoneGroupViewModels;
+                SelectedZoneGroup = ZoneGroupViewModels.FirstOrDefault();
+                SelectedZoneGroup.IsSelected = true;
+                SelectedZoneGroupCoordinator = _serviceUtils.GetPlayerByUUID(ZonePlayersViewModel.ZonePlayers, SelectedZoneGroup.ZoneGroupCoordinator.UUID);
             }
         }
 

@@ -26,10 +26,11 @@
         </Grid.RowDefinitions>
         <TabControl>
             <TabItem Header="Rooms" Name="TopologyTab" Background="White">
-                <Grid Margin="4,-14,-4,14">
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="62*"/>
+                        <ColumnDefinition Width="315*"/>
+                        <ColumnDefinition Width="377*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -39,7 +40,7 @@
                               Grid.Row="0"
                               ItemsSource="{Binding ZoneGroupViewModelsCollectionView}" 
                               SelectedItem="{Binding SelectedZoneGroup}"
-                              HeadersVisibility="None">
+                              HeadersVisibility="None" Grid.ColumnSpan="2">
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Style.Triggers>
@@ -131,7 +132,7 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical">
+                    <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Grid.ColumnSpan="2">
                         <StackPanel Orientation="Horizontal">
                             <Button Name="PrevBtn" Content="Previous" />
                             <Button Name="StartBtn" Content="Start"/>
@@ -147,7 +148,7 @@
                         <TextBlock FontSize="10">Position</TextBlock>
                         <Slider Name="PositionSlider" Value="0" Minimum="-1" Maximum="1"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <StackPanel Grid.Column="2" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding SelectedZoneGroup.ZoneGroupName}"
                                    FontSize="15"
@@ -177,7 +178,15 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Devices" Name="DevicesTab" Background="White">
+            <TabItem Header="Devices" Name="DevicesTab" Background="White" RenderTransformOrigin="0.5,0.5">
+                <TabItem.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.401"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </TabItem.RenderTransform>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -311,7 +320,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-            </TabItem>               
+            </TabItem>
         </TabControl>
         <Grid Grid.Row="1" >
             <Button Name="MusicLibraryBtn" 
